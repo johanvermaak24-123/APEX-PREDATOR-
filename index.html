@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="af">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#071018"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<title>TITAN GOD 7.0 — FORENSIC EVIDENCE ENGINE</title>
+<style>
+:root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.app{max-width:980px;margin:auto;padding:14px 14px 40px}.top{display:flex;justify-content:space-between;align-items:center;padding:7px 2px 12px}.brand{font-weight:1000;letter-spacing:.3px;font-size:20px}.brand span{color:var(--cyan)}.lab{font-size:10px;padding:5px 8px;border-radius:999px;border:1px solid #28506a;color:#9bddff;background:#0a1a26}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}.tabs button{margin:0;background:#0b1620;border:1px solid #1d3142;color:#9db3c6;border-radius:11px;padding:10px;font-weight:800}.tabs button.active{background:#15395c;color:#fff}
+.card{background:linear-gradient(180deg,rgba(14,24,34,.98),rgba(8,14,20,.98));border:1px solid var(--line);border-radius:20px;padding:15px;margin:10px 0;box-shadow:0 16px 38px rgba(0,0,0,.22)}
+.grid2{display:grid;grid-template-columns:1.4fr .8fr;gap:8px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+label{font-size:10px;color:var(--mut);font-weight:800;letter-spacing:.4px;display:block;margin:0 0 6px}
+select,input{width:100%;background:#071019;color:#fff;border:1px solid #273b4d;border-radius:12px;padding:12px;font-size:15px;outline:none}
+button{width:100%;border:0;border-radius:13px;padding:13px;font-size:14px;font-weight:900;color:#fff;background:linear-gradient(90deg,#126de8,#5d9fff);margin-top:9px}
+button.secondary{background:#0f1d29;border:1px solid #2b4358}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}.sig{font-size:44px;font-weight:1000;line-height:1}.buy{color:var(--green)}.sell{color:var(--red)}.wait{color:var(--amber)}.mut{color:var(--mut)}.small{font-size:11px;color:var(--mut);line-height:1.45}.conf{text-align:right}.conf strong{font-size:30px}
+.k{background:#071018;border:1px solid #1c2c3a;border-radius:12px;padding:10px}.k span{display:block;color:var(--mut);font-size:9px;text-transform:uppercase}.k b{font-size:13px;line-height:1.2}.badge{display:inline-block;border:1px solid #29445a;background:#0d2030;color:#9ad9ff;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900}
+.title{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.title h3{margin:0;font-size:14px}.item{padding:10px 0;border-bottom:1px solid #172532}.item:last-child{border-bottom:0}.item h4{margin:0 0 4px;font-size:13px}.item p{margin:0;color:var(--mut);font-size:10px;line-height:1.45}.event{display:grid;grid-template-columns:90px 1fr 68px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #172532}.event:last-child{border-bottom:0}.impact{font-size:10px;font-weight:900;text-align:right}.pos{color:var(--green)}.neg{color:var(--red)}.neu{color:var(--amber)}.warn{padding:10px;border:1px solid #6e5720;background:#211b09;color:#ffdc7c;border-radius:11px;font-size:11px}.good{padding:10px;border:1px solid #1c6143;background:#08241a;color:#8fffc7;border-radius:11px;font-size:11px}
+.op{display:grid;grid-template-columns:40px 1fr auto;gap:9px;align-items:center;padding:12px 0;border-bottom:1px solid #172532}.rank{width:34px;height:34px;border-radius:10px;background:#102233;display:grid;place-items:center;font-weight:1000}.op b{font-size:14px}.op small{display:block;color:var(--mut);margin-top:3px}.right{text-align:right}.meter{height:8px;background:#061019;border-radius:99px;overflow:hidden;margin-top:10px}.meter div{height:100%;background:linear-gradient(90deg,#ff5266,#ffc857,#19de83);width:0}.hidden{display:none!important}.scoreline{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #172532}.scoreline:last-child{border-bottom:0}.scoreline span{font-size:11px;color:var(--mut)}.scoreline b{font-size:11px}
+.note{font-size:10px;color:#6f8495;line-height:1.5;padding:8px 2px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.grid4{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:repeat(2,1fr)}.sig{font-size:39px}.tabs{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== TITAN MODE BACKGROUND v6.2 ===== */
+html {
+  background:#02070d;
+}
+body {
+  position:relative;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(0,168,255,.16), transparent 28%),
+    radial-gradient(circle at 86% 22%, rgba(255,35,83,.09), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(19,95,145,.10), transparent 42%),
+    linear-gradient(180deg,#06121e 0%,#02080e 46%,#010408 100%);
+  background-attachment:fixed;
+}
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background-image:url("data:image/svg+xml,%0A%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20900%201200%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2344d7ff%22%20stop-opacity%3D%22.55%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22.45%22%20stop-color%3D%22%230b4f8a%22%20stop-opacity%3D%22.28%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ff315f%22%20stop-opacity%3D%22.20%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22blur%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2218%22/%3E%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%3Cellipse%20cx%3D%22450%22%20cy%3D%22620%22%20rx%3D%22330%22%20ry%3D%22420%22%20fill%3D%22%230b2438%22%20opacity%3D%22.30%22%20filter%3D%22url%28%23blur%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M450%2090%20L650%20180%20L730%20350%20L690%20770%20L575%201000%20L450%201110%20L325%201000%20L210%20770%20L170%20350%20L250%20180%20Z%22%0A%20%20%20%20%20%20%20%20fill%3D%22none%22%20stroke%3D%22url%28%23g1%29%22%20stroke-width%3D%2222%22%20opacity%3D%22.30%22/%3E%0A%20%20%3Cpath%20d%3D%22M450%20150%20L585%20215%20L650%20355%20L600%20480%20L520%20430%20L450%20300%20L380%20430%20L300%20480%20L250%20355%20L315%20215%20Z%22%0A%20%20%20%20%20%20%20%20fill%3D%22%2306111c%22%20stroke%3D%22%2344d7ff%22%20stroke-opacity%3D%22.24%22%20stroke-width%3D%2210%22/%3E%0A%20%20%3Cpath%20d%3D%22M260%20495%20L385%20455%20L450%20520%20L515%20455%20L640%20495%20L610%20635%20L510%20675%20L450%20620%20L390%20675%20L290%20635%20Z%22%0A%20%20%20%20%20%20%20%20fill%3D%22%23071724%22%20stroke%3D%22%2375e8ff%22%20stroke-opacity%3D%22.22%22%20stroke-width%3D%229%22/%3E%0A%20%20%3Cpath%20d%3D%22M340%20530%20L420%20500%20L390%20590%20L315%20610%20Z%22%20fill%3D%22%235de5ff%22%20opacity%3D%22.26%22/%3E%0A%20%20%3Cpath%20d%3D%22M560%20530%20L480%20500%20L510%20590%20L585%20610%20Z%22%20fill%3D%22%23ff4f78%22%20opacity%3D%22.20%22/%3E%0A%20%20%3Cpath%20d%3D%22M355%20680%20L450%20735%20L545%20680%20L530%20830%20L450%20925%20L370%20830%20Z%22%0A%20%20%20%20%20%20%20%20fill%3D%22%2307121d%22%20stroke%3D%22%2348cfff%22%20stroke-opacity%3D%22.18%22%20stroke-width%3D%228%22/%3E%0A%20%20%3Cpath%20d%3D%22M450%20735%20L450%20925%22%20stroke%3D%22%2344d7ff%22%20stroke-opacity%3D%22.18%22%20stroke-width%3D%228%22/%3E%0A%20%20%3Cpath%20d%3D%22M225%20360%20L120%20500%20L175%20760%20L275%20870%22%20fill%3D%22none%22%20stroke%3D%22%2340d8ff%22%20stroke-opacity%3D%22.14%22%20stroke-width%3D%2216%22/%3E%0A%20%20%3Cpath%20d%3D%22M675%20360%20L780%20500%20L725%20760%20L625%20870%22%20fill%3D%22none%22%20stroke%3D%22%23ff3f6d%22%20stroke-opacity%3D%22.10%22%20stroke-width%3D%2216%22/%3E%0A%3C/svg%3E%0A");
+  background-repeat:no-repeat;
+  background-position:center 18vh;
+  background-size:min(92vw,760px) auto;
+  opacity:.30;
+  filter:drop-shadow(0 0 38px rgba(62,216,255,.14));
+  pointer-events:none;
+}
+body::after {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(2,8,14,.18),rgba(2,7,12,.74) 55%,rgba(1,4,8,.92)),
+    repeating-linear-gradient(90deg,rgba(91,218,255,.018) 0 1px,transparent 1px 44px),
+    repeating-linear-gradient(0deg,rgba(91,218,255,.012) 0 1px,transparent 1px 44px);
+}
+.wrap {
+  position:relative;
+  z-index:1;
+}
+.card, .panel, .item, .op {
+  background-color:rgba(5,15,24,.82) !important;
+  backdrop-filter:blur(14px) saturate(118%);
+  -webkit-backdrop-filter:blur(14px) saturate(118%);
+}
+.card {
+  box-shadow:0 14px 40px rgba(0,0,0,.26), inset 0 1px 0 rgba(104,220,255,.03);
+}
+header, .hero {
+  position:relative;
+}
+header::after {
+  content:"TITAN";
+  position:absolute;
+  right:18px;
+  top:10px;
+  font-weight:900;
+  letter-spacing:.38em;
+  font-size:11px;
+  color:rgba(103,224,255,.24);
+  pointer-events:none;
+}
+button.primary, #scan, #scanAll {
+  box-shadow:0 0 28px rgba(44,145,255,.18);
+}
+#signal.buy, .buy {
+  text-shadow:0 0 24px rgba(51,239,163,.18);
+}
+#signal.sell, .sell {
+  text-shadow:0 0 24px rgba(255,75,105,.18);
+}
+@media (max-width:700px){
+  body::before {
+    background-position:center 24vh;
+    background-size:112vw auto;
+    opacity:.25;
+  }
+  .card, .panel, .item, .op {
+    background-color:rgba(4,14,23,.86) !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+ <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 7.0 • FORENSIC EVIDENCE</div></div>
+ <div class="tabs">
+   <button class="active" data-tab="brain">WORLD BRAIN</button>
+   <button data-tab="opps">BEST NOW</button>
+   <button data-tab="events">EVENTS</button>
+   <button data-tab="settings">SETTINGS</button>
+ </div>
+
+ <section id="brainTab">
+  <div class="card">
+   <div class="grid2">
+    <div><label>SYMBOL</label><select id="symbol">
+      <optgroup label="Crypto"><option>BTC/USD</option><option>ETH/USD</option><option>SOL/USD</option><option>XRP/USD</option></optgroup>
+      <optgroup label="Metals"><option>XAU/USD</option><option>XAG/USD</option></optgroup>
+      <optgroup label="Forex"><option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>USD/CHF</option><option>AUD/USD</option><option>USD/CAD</option><option>NZD/USD</option><option>EUR/JPY</option><option>GBP/JPY</option></optgroup>
+      <optgroup label="Stocks"><option>AAPL</option><option>MSFT</option><option>NVDA</option><option>TSLA</option><option>AMZN</option><option>META</option><option>GOOGL</option></optgroup>
+    </select></div>
+    <div><label>ENTRY TIMEFRAME</label><select id="tf"><option value="5min">M5</option><option value="15min">M15</option><option value="30min" selected>M30</option><option value="1h">H1</option><option value="4h">H4</option></select></div>
+   </div>
+   <button id="scan">⚡ RUN WORLD → TRADE SCAN</button>
+   <div class="small" style="margin-top:8px">This forensic build scans a broad global-event matrix, keyword radar, source/freshness/severity signals, symbol-specific news and multi-timeframe market structure.</div>
+  </div>
+
+  <div class="card">
+   <div class="hero">
+    <div><div class="small">TITAN DECISION</div><div id="signal" class="sig wait">WAIT</div><div id="status" class="small">Ready.</div></div>
+    <div class="conf"><span class="small">Model Score</span><br><strong id="conf">—</strong></div>
+   </div>
+   <div class="meter"><div id="meter"></div></div>
+   <div id="riskBox" class="warn" style="margin-top:10px">World-event risk not scanned yet.</div>
+  </div>
+
+
+
+  <div class="card">
+   <div class="title"><h3>🔒 ACTIVE SIGNAL STATE</h3><span id="lockBadge" class="badge">NO ACTIVE SIGNAL</span></div>
+   <div class="grid4">
+    <div class="k"><span>Committed signal</span><b id="lockSignal">—</b></div>
+    <div class="k"><span>Minimum hold</span><b id="lockHold">—</b></div>
+    <div class="k"><span>Signal age</span><b id="lockAge">—</b></div>
+    <div class="k"><span>Current raw scan</span><b id="lockRaw">—</b></div>
+   </div>
+   <div id="lockNarrative" class="small" style="margin-top:10px">
+    TITAN only commits when a BUY/SELL is actionable. A later weak WAIT does not cancel a live signal.
+   </div>
+  </div>
+
+  <div class="card">
+   <div class="title"><h3>🌐 GLOBAL COVERAGE RADAR</h3><span id="coverageBadge" class="badge">NOT SCANNED</span></div>
+   <div class="grid4">
+    <div class="k"><span>Headlines</span><b id="covHeadlines">—</b></div>
+    <div class="k"><span>Sources</span><b id="covSources">—</b></div>
+    <div class="k"><span>Event themes</span><b id="covThemes">—</b></div>
+    <div class="k"><span>Keywords hit</span><b id="covKeywords">—</b></div>
+   </div>
+   <div id="keywordRadar" class="small" style="margin-top:10px">Turbo mode uses 4 broad global intelligence queries in parallel and caches them for 5 minutes. Deep mode uses the full 18-theme sweep.</div>
+  </div>
+
+
+
+
+
+  <div class="card">
+   <div class="title"><h3>🧠 ADAPTIVE ENSEMBLE</h3><span id="ensBadge" class="badge">BASE WEIGHTS</span></div>
+   <div class="grid4">
+    <div class="k"><span>Technical W</span><b id="wTech">—</b></div>
+    <div class="k"><span>News W</span><b id="wNews">—</b></div>
+    <div class="k"><span>Causal W</span><b id="wCausal">—</b></div>
+    <div class="k"><span>TF W</span><b id="wTF">—</b></div>
+   </div>
+   <div id="ensNarrative" class="small" style="margin-top:10px">Weights remain conservative until enough real outcomes exist.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🌲 SCENARIO TREE</h3><span id="scenarioBadge" class="badge">WAITING</span></div>
+   <div class="grid3">
+    <div class="k"><span>Bull case</span><b id="scBull">—</b></div>
+    <div class="k"><span>Base case</span><b id="scBase">—</b></div>
+    <div class="k"><span>Bear case</span><b id="scBear">—</b></div>
+   </div>
+   <div id="scenarioNarrative" class="small" style="margin-top:10px">No scenario distribution yet.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🛡️ LIVE EDGE CONTROL</h3><span id="driftBadge" class="badge">LEARNING</span></div>
+   <div class="grid4">
+    <div class="k"><span>TP first-hit</span><b id="fhWin">—</b></div>
+    <div class="k"><span>SL first-hit</span><b id="fhLoss">—</b></div>
+    <div class="k"><span>Expectancy</span><b id="expR">—</b></div>
+    <div class="k"><span>Drift</span><b id="driftState">—</b></div>
+   </div>
+   <div id="driftNarrative" class="small" style="margin-top:10px">TITAN will not call an edge proven without enough first-hit outcomes.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🧬 SIGNAL MEMORY / ANALOGS</h3><span id="memoryBadge" class="badge">NO MEMORY YET</span></div>
+   <div class="grid4">
+    <div class="k"><span>Similar cases</span><b id="memN">0</b></div>
+    <div class="k"><span>2h hit rate</span><b id="memHit">—</b></div>
+    <div class="k"><span>Avg move</span><b id="memMove">—</b></div>
+    <div class="k"><span>Memory vote</span><b id="memVote">—</b></div>
+   </div>
+   <div id="memoryNarrative" class="small" style="margin-top:10px">TITAN needs real completed signals before analog memory becomes meaningful.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>📐 EXPECTANCY GATE</h3><span id="edgeBadge" class="badge">UNPROVEN</span></div>
+   <div class="grid4">
+    <div class="k"><span>Edge state</span><b id="edgeState">—</b></div>
+    <div class="k"><span>Risk state</span><b id="edgeRisk">—</b></div>
+    <div class="k"><span>Trade gate</span><b id="edgeGate">—</b></div>
+    <div class="k"><span>Evidence</span><b id="edgeEvidence">—</b></div>
+   </div>
+   <div id="edgeNarrative" class="small" style="margin-top:10px">No edge verdict yet.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🧠 ADAPTIVE META-BRAIN</h3><span id="metaBadge" class="badge">LEARNING MODE</span></div>
+   <div class="grid4">
+    <div class="k"><span>Uncertainty</span><b id="metaUnc">—</b></div>
+    <div class="k"><span>Regime</span><b id="metaRegime">—</b></div>
+    <div class="k"><span>Conflict</span><b id="metaConflict">—</b></div>
+    <div class="k"><span>Calibration</span><b id="metaCal">—</b></div>
+   </div>
+   <div id="metaNarrative" class="small" style="margin-top:10px">Waiting for evidence fusion.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>⏱️ HORIZON INTELLIGENCE</h3><span class="badge">MULTI-HORIZON</span></div>
+   <div class="grid4">
+    <div class="k"><span>Scalp</span><b id="hzScalp">—</b></div>
+    <div class="k"><span>Intraday</span><b id="hzDay">—</b></div>
+    <div class="k"><span>Swing</span><b id="hzSwing">—</b></div>
+    <div class="k"><span>Consensus</span><b id="hzConsensus">—</b></div>
+   </div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🧠 TITAN INTELLIGENCE CORE</h3><span id="brainState" class="badge">WAITING</span></div>
+   <div class="grid4">
+    <div class="k"><span>Technical</span><b id="brainTech">—</b></div>
+    <div class="k"><span>News relevance</span><b id="brainNews">—</b></div>
+    <div class="k"><span>Event risk</span><b id="brainRisk">—</b></div>
+    <div class="k"><span>Agreement</span><b id="brainAgree">—</b></div>
+   </div>
+   <div id="brainNarrative" class="small" style="margin-top:10px">TITAN has not formed a thesis yet.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🛰️ LIVE NEWS RADAR</h3><span id="newsLiveBadge" class="badge">NOT SCANNED</span></div>
+   <div class="grid4">
+    <div class="k"><span>Relevant news</span><b id="newsLiveCount">0</b></div>
+    <div class="k"><span>News bias</span><b id="newsLiveBias">—</b></div>
+    <div class="k"><span>High impact</span><b id="newsLiveHigh">0</b></div>
+    <div class="k"><span>Last scan</span><b id="newsLiveTime">—</b></div>
+   </div>
+   <div id="newsLiveList" style="margin-top:10px"><div class="item"><p>Run a scan to see the actual headlines TITAN used.</p></div></div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🕰️ HISTORICAL NEWS EVIDENCE</h3><span id="histNewsBadge" class="badge">BUILDING MEMORY</span></div>
+   <div class="grid4">
+    <div class="k"><span>Comparable events</span><b id="histNewsN">0</b></div>
+    <div class="k"><span>Direction hit</span><b id="histNewsHit">—</b></div>
+    <div class="k"><span>Avg 2h move</span><b id="histNewsMove">—</b></div>
+    <div class="k"><span>Historical vote</span><b id="histNewsVote">—</b></div>
+   </div>
+   <div id="histNewsList" style="margin-top:10px"><div class="item"><p>TITAN will preserve the exact news evidence used at each decision and compare future BUY/SELL decisions with resolved historical event patterns.</p></div></div>
+   <div class="small" style="margin-top:8px">Forensic rule: this panel only uses news that was actually available at the original decision time. It does not backfill future headlines.</div>
+  </div>
+
+  <div class="card">
+   <div class="title"><h3>⚡ WHAT CHANGED?</h3><span class="badge">STATE ENGINE</span></div>
+   <div id="changedBox" class="item"><p>No prior scan for this symbol in this browser.</p></div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🧬 EVENT DNA</h3><span class="badge">CAUSAL MAP</span></div>
+   <div id="eventDNA" class="item"><p>Waiting for event-to-asset analysis.</p></div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🎯 LIVE EXECUTION MAP</h3><span id="grade" class="badge">NO DATA</span></div>
+   <div class="grid4">
+    <div class="k"><span>Original entry</span><b id="origEntry">—</b></div>
+    <div class="k"><span>Live entry</span><b id="entry">—</b></div>
+    <div class="k"><span>Entry state</span><b id="entryState">—</b></div>
+    <div class="k"><span>Plan updated</span><b id="planUpdated">—</b></div>
+    <div class="k"><span>Invalidation</span><b id="sl">—</b></div>
+    <div class="k"><span>TP1</span><b id="tp1">—</b></div>
+    <div class="k"><span>TP2</span><b id="tp2">—</b></div>
+    <div class="k"><span>TP3</span><b id="tp3">—</b></div>
+   </div>
+   <div class="small" style="margin-top:9px">Original entry is preserved for learning. Live entry/targets can update on each new scan while the locked thesis remains valid.</div>
+  </div>
+
+
+  <div class="card">
+   <div class="title"><h3>📚 TITAN AUTOPSY JOURNAL</h3><button id="clearJournal" class="secondary" style="width:auto;margin:0;padding:7px 10px">CLEAR</button></div>
+   <div class="grid4">
+    <div class="k"><span>Signals stored</span><b id="jCount">0</b></div>
+    <div class="k"><span>BUY</span><b id="jBuy">0</b></div>
+    <div class="k"><span>SELL</span><b id="jSell">0</b></div>
+    <div class="k"><span>WAIT</span><b id="jWait">0</b></div>
+   </div>
+   <div id="journalList" style="margin-top:10px"><div class="item"><p>No signals stored yet.</p></div></div>
+  </div>
+
+  <div class="card">
+   <div class="title"><h3>🧠 WHY NOW</h3><span class="badge">WORLD + MARKET</span></div>
+   <div id="scores">
+    <div class="scoreline"><span>Market structure</span><b>—</b></div>
+    <div class="scoreline"><span>World news</span><b>—</b></div>
+    <div class="scoreline"><span>Macro risk</span><b>—</b></div>
+    <div class="scoreline"><span>Timeframe alignment</span><b>—</b></div>
+   </div>
+   <div id="why" class="item"><p>No scan yet.</p></div>
+  </div>
+
+  <div class="card">
+   <div class="title"><h3>🌍 MARKET IMPACT MAP</h3><span class="badge">CAUSAL ENGINE</span></div>
+   <div id="impactMap"><div class="item"><p>Run scan to infer which markets are being pushed by the same world events.</p></div></div>
+  </div>
+ </section>
+
+ <section id="oppsTab" class="hidden">
+  <div class="card">
+   <div class="title"><h3>🔥 WHAT SHOULD I TRADE RIGHT NOW?</h3><span class="badge">BASKET SCAN</span></div>
+   <div class="small">Scans a curated cross-asset basket, then deep-checks the leader through the SAME World Brain safety gates. Raw score alone is never treated as a final trade.</div>
+   <button id="scanAll">SCAN BEST OPPORTUNITIES</button>
+   <div id="oppList" style="margin-top:8px"><div class="item"><p>Not scanned yet.</p></div></div>
+  </div>
+ </section>
+
+ <section id="eventsTab" class="hidden">
+  <div class="card">
+   <div class="title"><h3>🌐 LIVE WORLD EVENT FEED</h3><span id="eventCount" class="badge">0 EVENTS</span></div>
+   <button id="refreshEvents" class="secondary">REFRESH WORLD EVENTS</button>
+   <div id="eventList" style="margin-top:8px"><div class="item"><p>No events loaded.</p></div></div>
+  </div>
+ </section>
+
+ <section id="settingsTab" class="hidden">
+  <div class="card">
+   <div class="title"><h3>⚙️ CONNECTIONS</h3><span class="badge">TEST MODE</span></div>
+   <label>TWELVE DATA API KEY</label><input id="tdKey" type="password" placeholder="Required for broad market data"/>
+   <div class="grid2" style="margin-top:10px">
+    <div><label>WORLD NEWS LOOKBACK</label><select id="hours"><option value="6">6 hours</option><option value="12">12 hours</option><option value="24" selected>24 hours</option><option value="48">48 hours</option></select></div><div><label>NEWS SCAN MODE</label><select id="newsMode"><option value="turbo" selected>TURBO</option><option value="deep">DEEP</option></select></div>
+    <div><label>MINIMUM MODEL SCORE</label><select id="minConf"><option>65</option><option selected>72</option><option>78</option><option>82</option></select></div>
+   </div>
+   <button id="save">SAVE SETTINGS</button>
+   <button id="testData" class="secondary">TEST MARKET DATA CONNECTION</button>
+   <div id="connMsg" class="small" style="margin-top:9px">Keys stay in this browser only.</div>
+   <div class="good" id="integrityBox" style="margin-top:10px">UI integrity check: waiting…</div>
+   <div class="card" style="margin-top:14px;padding:14px">
+    <div class="title"><h3>🧠 AUTO MEMORY + LEARNING</h3><span id="autoMemBadge" class="badge">STARTING</span></div>
+    <div class="grid4">
+     <div class="k"><span>Auto memory</span><b id="autoMemStatus">ON</b></div>
+     <div class="k"><span>Last saved</span><b id="autoMemLast">—</b></div>
+     <div class="k"><span>Records</span><b id="autoMemRecords">0</b></div>
+     <div class="k"><span>Resolved learning</span><b id="autoLearnN">0</b></div>
+    </div>
+    <div id="autoMemNarrative" class="small" style="margin-top:9px">TITAN keeps a redundant brain snapshot inside this browser. API credentials are excluded.</div>
+   </div>
+   <div class="card" style="margin-top:14px;padding:14px">
+    <div class="title"><h3>💾 TITAN BACKUP</h3><span class="badge">MEMORY SAFE</span></div>
+    <button id="exportTitan" class="secondary">EXPORT TITAN MEMORY</button>
+    <textarea id="importTitanText" placeholder="Paste a TITAN backup here to restore…" style="width:100%;min-height:90px;margin-top:10px"></textarea>
+    <button id="importTitan" class="secondary">RESTORE TITAN MEMORY</button>
+    <div id="backupMsg" class="small" style="margin-top:8px">AUTO MEMORY is active inside this app. Manual Export/Restore remains an emergency backup.</div>
+   </div>
+  </div>
+ </section>
+
+ <div class="note">Prototype only. TITAN World Brain produces model scores and evidence gates; it does not guarantee future price direction. Coverage is deliberately broad and multilingual through GDELT's global index, but no system can literally access every private, paywalled, unpublished or unindexed article on Earth.</div>
+</div>
+<script>
+const $=x=>document.getElementById(x), must=x=>{const e=$(x);if(!e)throw new Error("UI element missing: #"+x);return e}, clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
+$("tdKey").value=localStorage.titan_td||"";$("hours").value=localStorage.titan_hours||"24";$("minConf").value=localStorage.titan_min||"72";$("newsMode").value=localStorage.titan_news_mode||"turbo";
+$("save").onclick=()=>{localStorage.titan_td=$("tdKey").value.trim();localStorage.titan_hours=$("hours").value;localStorage.titan_min=$("minConf").value;localStorage.titan_news_mode=$("newsMode").value;$("connMsg").textContent="Saved."};
+
+function ema(v,p){const k=2/(p+1),o=[v[0]];for(let i=1;i<v.length;i++)o.push(v[i]*k+o[i-1]*(1-k));return o}
+function rsi(v,p=14){let o=Array(v.length).fill(50);if(v.length<p+2)return o;let g=0,l=0;for(let i=1;i<=p;i++){let d=v[i]-v[i-1];if(d>=0)g+=d;else l-=d}let ag=g/p,al=l/p;o[p]=al===0?100:100-100/(1+ag/al);for(let i=p+1;i<v.length;i++){let d=v[i]-v[i-1],gg=Math.max(d,0),ll=Math.max(-d,0);ag=(ag*(p-1)+gg)/p;al=(al*(p-1)+ll)/p;o[i]=al===0?100:100-100/(1+ag/al)}return o}
+function atr(h,l,c,p=14){let tr=[h[0]-l[0]];for(let i=1;i<c.length;i++)tr.push(Math.max(h[i]-l[i],Math.abs(h[i]-c[i-1]),Math.abs(l[i]-c[i-1])));return ema(tr,p)}
+function fmt(x){if(!isFinite(x))return"—";let a=Math.abs(x);return a>=1000?x.toFixed(2):a>=10?x.toFixed(3):a>=1?x.toFixed(4):x.toFixed(6)}
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function marketAnalyze(rows){
+ const c=rows.map(x=>+x.close),h=rows.map(x=>+x.high),l=rows.map(x=>+x.low),i=c.length-1;
+ const E9=ema(c,9),E21=ema(c,21),E50=ema(c,50),R=rsi(c),A=atr(h,l,c);
+ let s=0,why=[];const add=(v,t)=>{s+=v;why.push({v,t})};
+ add(E9[i]>E21[i]?1:-1,E9[i]>E21[i]?"fast trend above medium":"fast trend below medium");
+ add(E21[i]>E50[i]?1.1:-1.1,E21[i]>E50[i]?"medium trend above slow":"medium trend below slow");
+ add(c[i]>E50[i]?.8:-.8,c[i]>E50[i]?"price above EMA50":"price below EMA50");
+ if(R[i]>55&&R[i]<72)add(.65,"RSI supports buyers");else if(R[i]<45&&R[i]>28)add(-.65,"RSI supports sellers");else if(R[i]>=72)add(-.25,"RSI overbought risk");else if(R[i]<=28)add(.25,"RSI oversold bounce risk");
+ const sh=Math.max(...h.slice(-50)),sl=Math.min(...l.slice(-50));
+ let breakout=0;
+ if(c[i]>Math.max(...h.slice(-21,-1))){add(.9,"20-bar upside breakout");breakout=1}
+ if(c[i]<Math.min(...l.slice(-21,-1))){add(-.9,"20-bar downside breakout");breakout=-1}
+ const atrNow=A[i]||0,atrPct=c[i]?atrNow/c[i]*100:0;
+ const slope9=E9[i-5]?((E9[i]-E9[i-5])/Math.max(Math.abs(E9[i-5]),1e-9))*100:0;
+ const slope21=E21[i-8]?((E21[i]-E21[i-8])/Math.max(Math.abs(E21[i-8]),1e-9))*100:0;
+ const rets=[];for(let k=Math.max(1,c.length-25);k<c.length;k++)rets.push((c[k]-c[k-1])/Math.max(Math.abs(c[k-1]),1e-9));
+ const rv=Math.sqrt(avg(rets.map(x=>x*x)))*100;
+ const dist50=(c[i]-E50[i])/Math.max(Math.abs(c[i]),1e-9)*100;
+ const barTime=rows[i]?.datetime||"";
+ return{score:s,price:c[i],rsi:R[i],atr:atrNow,atrPct,support:sl,resistance:sh,why,breakout,slope9,slope21,rv,dist50,barTime}
+}
+const tdCache=new Map();
+async function td(symbol,tf){const key=$("tdKey").value.trim();if(!key)throw new Error("Add your Twelve Data key in SETTINGS.");const ck=symbol+"|"+tf, now=Date.now(), hit=tdCache.get(ck);if(hit&&now-hit.t<60000)return hit.v;const u=`https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(symbol)}&interval=${tf}&outputsize=220&apikey=${encodeURIComponent(key)}`;const r=await fetch(u);const j=await r.json();if(j.status==="error"||!j.values)throw new Error(j.message||"No market data.");const v=j.values.reverse();tdCache.set(ck,{t:now,v});return v}
+$("testData").onclick=async()=>{try{$("connMsg").textContent="Testing...";let x=await td("BTC/USD","30min");$("connMsg").textContent=`Connected ✓ ${x.length} BTC/USD candles returned.`}catch(e){$("connMsg").textContent="ERROR: "+e.message}}
+
+const cats=[
+ {name:"Central Banks",q:'("Federal Reserve" OR Fed OR FOMC OR ECB OR BOE OR "Bank of England" OR BOJ OR "Bank of Japan" OR PBOC OR "central bank" OR "interest rate")',icon:"🏦"},
+ {name:"Inflation & Jobs",q:'(inflation OR CPI OR PCE OR payrolls OR NFP OR unemployment OR wages OR "jobless claims")',icon:"📊"},
+ {name:"Bonds & Yields",q:'("Treasury yield" OR bond OR yields OR "yield curve" OR auction OR debt)',icon:"📉"},
+ {name:"Geopolitics",q:'(war OR invasion OR attack OR missile OR drone OR military OR ceasefire OR geopolitical OR conflict)',icon:"🌍"},
+ {name:"Sanctions & Trade",q:'(sanctions OR tariff OR tariffs OR embargo OR export OR imports OR "trade war" OR restrictions)',icon:"🚧"},
+ {name:"Energy",q:'(oil OR crude OR Brent OR WTI OR OPEC OR gas OR LNG OR refinery OR pipeline OR "energy supply")',icon:"🛢️"},
+ {name:"Metals & Mining",q:'(gold OR silver OR copper OR platinum OR palladium OR mining OR mine OR "critical minerals" OR lithium)',icon:"⛏️"},
+ {name:"Shipping & Supply Chain",q:'(shipping OR freight OR port OR ports OR "supply chain" OR canal OR "Red Sea" OR "Strait of Hormuz")',icon:"🚢"},
+ {name:"Disasters & Weather",q:'(earthquake OR hurricane OR cyclone OR flood OR wildfire OR drought OR disaster OR storm)',icon:"🌪️"},
+ {name:"Cyber & Outages",q:'(cyberattack OR ransomware OR hack OR exploit OR outage OR blackout OR disruption)',icon:"🛡️"},
+ {name:"Regulation & Legal",q:'(regulation OR regulator OR lawsuit OR antitrust OR investigation OR ban OR approval OR SEC OR CFTC)',icon:"⚖️"},
+ {name:"Crypto",q:'(Bitcoin OR Ethereum OR crypto OR cryptocurrency OR stablecoin OR blockchain OR ETF OR exchange OR liquidation)',icon:"₿"},
+ {name:"Equities & Earnings",q:'(stocks OR shares OR earnings OR revenue OR guidance OR profit OR Nasdaq OR S&P OR Dow OR IPO)',icon:"📈"},
+ {name:"AI & Semiconductors",q:'("artificial intelligence" OR AI OR semiconductor OR chip OR Nvidia OR TSMC OR datacenter)',icon:"🤖"},
+ {name:"China & Asia",q:'(China OR Chinese OR PBOC OR yuan OR Japan OR yen OR Korea OR Taiwan)',icon:"🌏"},
+ {name:"Europe & UK",q:'(Europe OR Eurozone OR ECB OR Germany OR France OR UK OR Britain OR sterling OR euro)',icon:"🇪🇺"},
+ {name:"US Fiscal & Policy",q:'("US government" OR Congress OR Treasury OR deficit OR debt OR shutdown OR election OR White House)',icon:"🇺🇸"},
+ {name:"Health & Pandemic",q:'(pandemic OR epidemic OR outbreak OR virus OR WHO OR emergency)',icon:"🧬"}
+];
+const turboQueries=[
+ {name:"Macro & Policy",icon:"🏦",q:'("Federal Reserve" OR FOMC OR ECB OR BOE OR BOJ OR inflation OR CPI OR PCE OR payrolls OR unemployment OR "Treasury yield" OR recession OR GDP OR tariff OR sanctions)'},
+ {name:"Geopolitics & Supply",icon:"🌍",q:'(war OR invasion OR attack OR missile OR drone OR ceasefire OR OPEC OR oil OR gas OR shipping OR "Red Sea" OR "Strait of Hormuz" OR earthquake OR hurricane OR flood OR wildfire)'},
+ {name:"Markets & Corporate",icon:"📈",q:'(stocks OR shares OR earnings OR guidance OR revenue OR profit OR Nasdaq OR S&P OR Dow OR merger OR acquisition OR downgrade OR upgrade OR semiconductor OR Nvidia OR TSMC)'},
+ {name:"Crypto & Risk",icon:"₿",q:'(Bitcoin OR Ethereum OR crypto OR stablecoin OR ETF OR SEC OR CFTC OR exchange OR liquidation OR hack OR exploit OR ransomware OR outage)'}
+];
+
+
+const keywordGroups={
+ "Shock":["breaking","urgent","unexpected","surprise","emergency","crisis","shock","record","historic"],
+ "Conflict":["war","invasion","attack","missile","drone","strike","ceasefire","military"],
+ "Policy":["rate hike","rate cut","hawkish","dovish","tariff","sanction","ban","approval","regulation"],
+ "Macro":["inflation","cpi","pce","payrolls","unemployment","recession","gdp","yield","treasury"],
+ "Liquidity":["liquidation","funding","margin","default","bankruptcy","credit","liquidity"],
+ "Energy":["opec","oil","brent","wti","gas","lng","pipeline","refinery"],
+ "Crypto":["bitcoin","ethereum","crypto","stablecoin","etf","sec","exchange","hack","exploit"],
+ "Corporate":["earnings","guidance","revenue","profit","downgrade","upgrade","merger","acquisition"],
+ "Supply":["shipping","port","freight","supply chain","hormuz","red sea","canal"],
+ "Risk":["outage","blackout","cyberattack","ransomware","earthquake","flood","wildfire","hurricane"]
+};
+const pos=["rally","gain","rise","surge","beat","approval","rate cut","easing","optimism","rebound","growth","record high","ceasefire","upgrade","strong demand","dovish"];
+const neg=["fall","drop","selloff","slump","crash","rate hike","war","attack","sanction","tariff","recession","miss","fraud","hack","liquidation","default","bankruptcy","downgrade","hawkish","outage"];
+const severityWords={"emergency":3,"invasion":3,"missile":3,"attack":2.5,"war":3,"default":3,"bankruptcy":2.5,"sanction":2,"tariff":1.6,"ban":2,"hack":2.4,"exploit":2.4,"outage":1.8,"unexpected":1.6,"surprise":1.5,"urgent":1.5,"breaking":1.2,"ceasefire":2};
+const trustedDomains=["reuters.com","apnews.com","bloomberg.com","ft.com","wsj.com","cnbc.com","bbc.com","bbc.co.uk","economist.com","marketwatch.com","investing.com","coindesk.com","cointelegraph.com","sec.gov","federalreserve.gov","ecb.europa.eu","bankofengland.co.uk","imf.org","worldbank.org","opec.org"];
+function sent(t){t=(t||"").toLowerCase();let s=0;pos.forEach(w=>t.includes(w)&&s++);neg.forEach(w=>t.includes(w)&&s--);return clamp(s,-3,3)}
+function severity(t){t=(t||"").toLowerCase();let s=0;for(const [k,v] of Object.entries(severityWords))if(t.includes(k))s+=v;return clamp(s,0,5)}
+function trust(domain){domain=(domain||"").toLowerCase();if(trustedDomains.some(d=>domain===d||domain.endsWith("."+d)))return 1; if(/\.(gov|int)$/.test(domain))return 1; return .55}
+function keywordHits(t){t=(t||"").toLowerCase();const hits=[];for(const [g,arr] of Object.entries(keywordGroups))for(const k of arr)if(t.includes(k))hits.push({g,k});return hits}
+function freshness(seendate){if(!seendate)return .65;const s=String(seendate).replace("T","").replace("Z","");const m=s.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/);if(!m)return .65;const d=Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);const h=Math.max(0,(Date.now()-d)/36e5);return h<=1?1:h<=3?.9:h<=6?.8:h<=12?.68:h<=24?.55:.4}
+async function gdelt(q,hours,maxrecords=250){const u=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&maxrecords=${maxrecords}&format=json&timespan=${hours}h&sort=DateDesc`;try{const r=await fetch(u);if(!r.ok)throw new Error("GDELT "+r.status);const j=await r.json();return (j.articles||[]).map(a=>{const title=a.title||"";return{title,source:a.domain||"",date:a.seendate||"",url:a.url||"",lang:a.language||"",score:sent(title),severity:severity(title),trust:trust(a.domain||""),fresh:freshness(a.seendate||""),hits:keywordHits(title)}})}catch(e){return[]}}
+let newsCache={t:0,hours:"",mode:"",events:[]};
+async function worldEvents(force=false){
+ const hours=$("hours").value,mode=$("newsMode").value,now=Date.now();
+ if(!force&&newsCache.events.length&&newsCache.hours===hours&&newsCache.mode===mode&&now-newsCache.t<300000)return newsCache.events;
+ const all=[],sources=mode==="turbo"?turboQueries:cats;
+ if(mode==="turbo"){
+   const parts=await Promise.all(sources.map(async c=>({c,arr:await gdelt(c.q,hours,120)})));
+   parts.forEach(({c,arr})=>arr.forEach(a=>all.push({...a,cat:c.name,icon:c.icon})));
+ }else{
+   for(let i=0;i<sources.length;i+=6){
+     const batch=sources.slice(i,i+6);
+     const parts=await Promise.all(batch.map(async c=>({c,arr:await gdelt(c.q,hours,180)})));
+     parts.forEach(({c,arr})=>arr.forEach(a=>all.push({...a,cat:c.name,icon:c.icon})));
+   }
+ }
+ const seen=new Set(),out=[];
+ for(const x of all){
+   const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);
+   if(k&&!seen.has(k)){seen.add(k);out.push(x)}
+ }
+ out.sort((a,b)=>(b.severity*b.trust*b.fresh)-(a.severity*a.trust*a.fresh));
+ newsCache={t:now,hours,mode,events:out};
+ return out
+}
+const symbolNewsCache=new Map();
+async function symbolWorldEvents(sym){
+ const hours=$("hours").value,ck=sym+"|"+hours,now=Date.now(),hit=symbolNewsCache.get(ck);
+ if(hit&&now-hit.t<180000)return hit.v;
+ const aliases=symbolTerms(sym).slice(0,6);
+ const q="("+aliases.map(x=>x.includes(" ")?`"${x}"`:x).join(" OR ")+")";
+ const raw=await gdelt(q,hours,100),v=raw.map(x=>({...x,cat:"Symbol Specific",icon:"🎯"}));symbolNewsCache.set(ck,{t:now,v});return v
+}
+const assetAliases={
+ "USD":["usd","dollar","u.s. dollar","federal reserve","fed","fomc","treasury","us yields"],
+ "EUR":["eur","euro","ecb","eurozone","european central bank"],
+ "GBP":["gbp","sterling","pound","bank of england","boe","uk inflation"],
+ "JPY":["jpy","yen","bank of japan","boj","japan rates"],
+ "CHF":["chf","swiss franc","snb","swiss national bank"],
+ "AUD":["aud","australian dollar","rba","reserve bank of australia","australia rates"],
+ "CAD":["cad","canadian dollar","bank of canada","boc","canada rates"],
+ "NZD":["nzd","new zealand dollar","rbnz","reserve bank of new zealand"],
+ "BTC":["bitcoin","btc","crypto","cryptocurrency","bitcoin etf","sec","liquidation"],
+ "ETH":["ethereum","ether","eth","crypto","ethereum etf","sec","liquidation"],
+ "SOL":["solana","sol","crypto","cryptocurrency"],
+ "XRP":["xrp","ripple","crypto","sec"],
+ "XAU":["gold","bullion","xau","real yields","safe haven"],
+ "XAG":["silver","xag","industrial metals","precious metals"]
+};
+function symbolTerms(sym){
+ sym=sym.toUpperCase();
+ const common=["inflation","interest rates","central bank","recession","risk sentiment"];
+ if(sym.includes("/")){
+   const [a,b]=sym.split("/");
+   return [...new Set([...(assetAliases[a]||[a.toLowerCase()]),...(assetAliases[b]||[b.toLowerCase()]),...common])];
+ }
+ return [...new Set([...(assetAliases[sym]||[sym.toLowerCase()]),sym.toLowerCase(),"earnings","guidance","shares","stock","rates"])]
+}
+
+function normalizeStory(t){
+ return String(t||"").toLowerCase().replace(/https?:\/\/\S+/g," ").replace(/[^a-z0-9\s]/g," ")
+ .replace(/\b(the|a|an|and|or|of|to|in|on|for|with|as|at|by|from|is|are|was|were|be|has|have|had)\b/g," ")
+ .replace(/\s+/g," ").trim()
+}
+function tokenSet(t){return new Set(normalizeStory(t).split(" ").filter(x=>x.length>2))}
+function jaccardTitle(a,b){
+ const A=tokenSet(a),B=tokenSet(b);if(!A.size||!B.size)return 0;
+ let i=0;for(const x of A)if(B.has(x))i++;
+ return i/(A.size+B.size-i)
+}
+function sourceQuality(e){
+ const d=(e.domain||"").toLowerCase();
+ if(/reuters|apnews|bloomberg|ft\.com|wsj|cnbc|bbc|economist|federalreserve|ecb|bankofengland|imf|worldbank|opec|sec\.gov/.test(d))return 1;
+ if(/marketwatch|investing|coindesk|cointelegraph|yahoo|forbes/.test(d))return .78;
+ if(/fool\.com/.test(d))return .45;
+ return e.trust||.55
+}
+function symbolEntityScore(sym,title){
+ const t=String(title||"").toLowerCase(),s=sym.toUpperCase();
+ const aliases={
+  "XAU/USD":["gold","xau","bullion","fed","fomc","treasury","yield","dollar","inflation","cpi","pce","war","geopolitical","safe haven","central bank"],
+  "BTC/USD":["bitcoin","btc","crypto","etf","sec","exchange","liquidation","stablecoin","fed","liquidity"],
+  "ETH/USD":["ethereum","ether","eth","crypto","etf","sec","staking","defi"],
+  "EUR/USD":["euro","eur","ecb","eurozone","fed","dollar","fomc","inflation"],
+  "GBP/USD":["sterling","pound","gbp","boe","bank of england","fed","dollar"],
+  "USD/JPY":["yen","jpy","boj","bank of japan","fed","dollar","yield"],
+  "XAG/USD":["silver","xag","metals","gold","fed","yield","dollar"]
+ };
+ let score=0;for(const a of (aliases[s]||[s.toLowerCase()]))if(t.includes(a))score++;
+ return score
+}
+function clusterStories(items){
+ const clusters=[];
+ for(const x of items){
+   const hit=clusters.find(c=>jaccardTitle(c.title,x.title)>=.58);
+   if(hit){hit.items.push(x);if(sourceQuality(x)>sourceQuality(hit.best))hit.best=x}
+   else clusters.push({title:x.title,best:x,items:[x]});
+ }
+ return clusters.map(c=>({...c.best,clusterSize:c.items.length,clusterSources:new Set(c.items.map(z=>z.domain||"")).size}))
+}
+function newsUtility(sym,e){
+ const ent=symbolEntityScore(sym,e.title);
+ const corroboration=Math.min(.18,Math.max(0,(e.clusterSources||1)-1)*.06);
+ return (ent>0?.46:0)+Math.min(ent,3)/3*.18+sourceQuality(e)*.18+(e.fresh||.65)*.1+Math.min(1,(e.severity||0)/5)*.08+corroboration
+}
+function relevantNews(events,sym){
+ const direct=events.filter(e=>symbolEntityScore(sym,e.title)>0);
+ return clusterStories(direct).map(e=>({...e,utility:newsUtility(sym,e)})).filter(e=>e.utility>=.30).sort((a,b)=>b.utility-a.utility).slice(0,30)
+}
+function newsScore(events,sym){
+ const rel=relevantNews(events,sym);let num=0,den=0;
+ for(const x of rel){
+   const u=Math.max(.2,x.utility||.5),cor=Math.min(1.35,1+Math.max(0,(x.clusterSources||1)-1)*.1);
+   const w=u*sourceQuality(x)*(x.fresh||.65)*cor;
+   num+=(x.score||0)*w;den+=w
+ }
+ return {items:rel,score:clamp(den?num/den:0,-2,2)}
+}
+function impactMap(events){const text=events.map(x=>x.title.toLowerCase()).join(" ");let impacts=[];
+ const push=(a,d,r)=>impacts.push({a,d,r});
+ if(/war|attack|missile|invasion|geopolitical|sanction/.test(text)){push("XAU/USD","+","safe-haven / geopolitical risk");push("Oil","+","risk premium / supply concern");push("Risk assets","−","risk-off pressure")}
+ if(/rate hike|hawkish|treasury yield|yields rise|inflation/.test(text)){push("USD","+","rate / yield support");push("XAU/USD","−","real-yield / dollar pressure");push("BTC / Nasdaq","−","liquidity / duration pressure")}
+ if(/rate cut|dovish|easing|yields fall/.test(text)){push("XAU/USD","+","lower-yield tailwind");push("BTC / Nasdaq","+","liquidity tailwind");push("USD","−","rate differential pressure")}
+ if(/opec|pipeline|refinery|hormuz|red sea|oil|energy supply/.test(text)){push("Oil","±","supply / shipping sensitivity");push("Airlines","−","fuel-cost exposure")}
+ if(/tariff|trade war|export restriction|sanction/.test(text)){push("FX / Equities","±","trade-flow repricing");push("Industrial metals","±","growth / supply-chain effect")}
+ if(/bitcoin|ethereum|crypto|stablecoin|sec|etf|exchange|liquidation/.test(text)){push("BTC / ETH","±","crypto-specific catalyst")}
+ if(/earnings|guidance|revenue|profit|downgrade|upgrade/.test(text))push("Equities","±","company / sector repricing");
+ if(/earthquake|hurricane|flood|wildfire|cyclone/.test(text))push("Regional assets","±","physical supply / insurance / growth shock");
+ const seen=new Set();return impacts.filter(x=>{const k=x.a+"|"+x.r;if(seen.has(k))return false;seen.add(k);return true}).slice(0,12)
+}
+function verdict(s){if(s>=3.3)return"STRONG BUY";if(s>=1.55)return"BUY";if(s<=-3.3)return"STRONG SELL";if(s<=-1.55)return"SELL";return"WAIT"}
+function vclass(v){return v.includes("BUY")?"buy":v.includes("SELL")?"sell":"wait"}
+
+
+const TITAN_SIGNAL_LOCK_KEY="titan_active_signals_v2";
+let titanActiveSignals=JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||localStorage.getItem("titan_active_signals_v1")||"{}");
+
+function holdMinutesForTF(tf){
+ const map={"5min":45,"15min":90,"30min":180,"1h":360,"4h":1440,"1day":4320};
+ return map[tf]||180
+}
+function humanDuration(ms){
+ if(!isFinite(ms)||ms<0)return"—";
+ const min=Math.floor(ms/60000),h=Math.floor(min/60),m=min%60,d=Math.floor(h/24),hh=h%24;
+ if(d)return `${d}d ${hh}h`;
+ if(h)return `${h}h ${m}m`;
+ return `${Math.max(0,min)}m`
+}
+function actionableDirection(v){return /BUY/.test(v)?"BUY":/SELL/.test(v)?"SELL":null}
+function signalLockStatus(sym){return titanActiveSignals[sym]||null}
+function saveSignalLocks(){localStorage.setItem(TITAN_SIGNAL_LOCK_KEY,JSON.stringify(titanActiveSignals));localStorage.removeItem("titan_active_signals_v1")}
+function clearSignalLock(sym,reason="MANUAL"){
+ if(titanActiveSignals[sym]){
+  titanActiveSignals[sym].closedAt=Date.now();
+  titanActiveSignals[sym].closeReason=reason;
+  delete titanActiveSignals[sym];
+  saveSignalLocks()
+ }
+}
+function planForDirection(r,direction){
+ const p=r.main?.price,a=r.main?.atr;if(!isFinite(p)||!isFinite(a)||a<=0)return null;
+ const dir=direction==="BUY"?1:direction==="SELL"?-1:0;if(!dir)return null;
+ const zone=.12*a,lo=p-zone,hi=p+zone;
+ let sl=dir>0?Math.min(p-1.35*a,isFinite(r.main.support)?r.main.support-.18*a:p-1.35*a):Math.max(p+1.35*a,isFinite(r.main.resistance)?r.main.resistance+.18*a:p+1.35*a);
+ const risk=Math.abs(p-sl),tp1=p+dir*a,tp2=p+dir*2*a,tp3=p+dir*3.2*a,rr=risk?Math.abs(tp2-p)/risk:NaN;
+ return{dir,entry:p,lo,hi,sl,tp1,tp2,tp3,rr}
+}
+function planValid(p){return p&&[p.entry,p.lo,p.hi,p.sl,p.tp1,p.tp2,p.tp3].every(Number.isFinite)}
+function liveEntryState(active,r,plan){
+ if(!active||!plan||!isFinite(r.main?.price)||!isFinite(r.main?.atr))return"—";
+ const p=r.main.price,a=r.main.atr,orig=active.originalEntry??active.entry;
+ const run=active.direction==="BUY"?p-orig:orig-p;
+ if(run>.9*a)return"DON'T CHASE";
+ if(p>=plan.lo&&p<=plan.hi)return"READY";
+ const better=active.direction==="BUY"?p<plan.lo:p>plan.hi;
+ return better?"BETTER PRICE":"WAIT RETEST"
+}
+function refreshActivePlan(active,r){
+ const candidate=planForDirection(r,active.direction);
+ if(!planValid(candidate))return active;
+ const prev=active.plan;
+ if(prev&&isFinite(prev.sl)){
+  candidate.sl=active.direction==="BUY"?Math.max(prev.sl,candidate.sl):Math.min(prev.sl,candidate.sl);
+  const risk=Math.abs(candidate.entry-candidate.sl);
+  candidate.rr=risk?Math.abs(candidate.tp2-candidate.entry)/risk:NaN;
+ }
+ if(active.originalEntry==null)active.originalEntry=active.entry;
+ if(!active.originalPlan&&prev)active.originalPlan=JSON.parse(JSON.stringify(prev));
+ const threshold=Math.max((r.main?.atr||0)*.03,1e-8);
+ const changed=!prev||Math.abs(candidate.entry-prev.entry)>=threshold||Math.abs(candidate.sl-prev.sl)>=threshold;
+ active.plan=candidate;active.entry=candidate.entry;active.lastSeenPrice=r.main.price;active.lastScanAt=Date.now();
+ active.entryState=liveEntryState(active,r,candidate);
+ if(changed){
+  active.planVersion=(active.planVersion||1)+1;active.planUpdatedAt=Date.now();
+  active.planHistory=Array.isArray(active.planHistory)?active.planHistory:[];
+  active.planHistory.unshift({t:active.planUpdatedAt,entry:candidate.entry,lo:candidate.lo,hi:candidate.hi,sl:candidate.sl,tp1:candidate.tp1,tp2:candidate.tp2,tp3:candidate.tp3,state:active.entryState});
+  active.planHistory=active.planHistory.slice(0,60);
+  saveSignalLocks()
+ }
+ return active
+}
+function shouldHardInvalidate(active,r){
+ if(!active?.plan||!isFinite(r.main?.price))return null;
+ const p=r.main.price,dir=active.direction;
+ if(dir==="BUY"&&isFinite(active.plan.sl)&&p<=active.plan.sl)return"INVALIDATION HIT";
+ if(dir==="SELL"&&isFinite(active.plan.sl)&&p>=active.plan.sl)return"INVALIDATION HIT";
+ const rawDir=actionableDirection(r.rawV||r.v);
+ const opposite=rawDir&&rawDir!==dir;
+ const strongOpposite=opposite&&Math.abs(r.total)>=3.3&&r.align>=Math.max(4,Math.ceil(r.valid*.8));
+ if(strongOpposite)return"STRONG OPPOSITE CONFIRMATION";
+ return null
+}
+function precisionGate(r){
+ const dir=actionableDirection(r.v);if(!dir)return{pass:false,reason:"NO ACTIONABLE DIRECTION"};
+ const newsConflict=r.news?.items?.length>=3&&Math.abs(r.news.score)>=.85&&Math.sign(r.news.score)!==0&&Math.sign(r.news.score)!==Math.sign(r.market);
+ if(r.conf<60)return{pass:false,reason:"LOW MODEL CONFIDENCE"};
+ if(r.align===0&&r.conf<78)return{pass:false,reason:"NO TIMEFRAME CONFIRMATION"};
+ if(newsConflict&&Math.abs(r.market)<2.2)return{pass:false,reason:"NEWS/MARKET CONFLICT"};
+ return{pass:true,reason:"PRECISION GATE PASS"}
+}
+function applySignalPersistence(r){
+ const now=Date.now(),rawV=r.v,rawConf=r.conf,rawDir=actionableDirection(rawV);
+ r.rawV=rawV;r.rawConf=rawConf;
+ let active=signalLockStatus(r.sym);
+ if(active){const hard=shouldHardInvalidate(active,r);if(hard){clearSignalLock(r.sym,hard);active=null;r.lockExitReason=hard}}
+ if(active){
+  const age=now-active.startedAt,minimum=active.minHoldMs,expired=age>=minimum;
+  const sameDir=rawDir===active.direction;
+  if(expired&&!sameDir&&rawV==="WAIT"){clearSignalLock(r.sym,"MINIMUM HOLD COMPLETE + NO CONFIRMATION");active=null}
+  else if(expired&&rawDir&&rawDir!==active.direction){clearSignalLock(r.sym,"HOLD COMPLETE + OPPOSITE SIGNAL");active=null}
+ }
+ if(!active&&rawDir){
+  const pg=precisionGate(r);r.precisionGate=pg;
+  if(pg.pass){
+   const plan=planForDirection(r,rawDir)||executionPlan(r),minHoldMs=holdMinutesForTF(r.tf)*60000;
+   active={id:"LOCK-"+Date.now().toString(36).toUpperCase(),sym:r.sym,direction:rawDir,verdict:rawV,startedAt:now,minHoldMs,tf:r.tf,entry:r.main.price,originalEntry:r.main.price,modelScore:r.conf,plan,originalPlan:JSON.parse(JSON.stringify(plan)),planVersion:1,planUpdatedAt:now,planHistory:[],sourceBar:r.main.barTime||"",entryState:"READY",lastScanAt:now,lastSeenPrice:r.main.price};
+   titanActiveSignals[r.sym]=active;saveSignalLocks();r.lockCreated=true
+  } else {r.lockExitReason=pg.reason}
+ }
+ if(active){
+  active=refreshActivePlan(active,r);titanActiveSignals[r.sym]=active;saveSignalLocks();
+  r.activeSignal=active;
+  const activeVerdict=active.direction==="BUY"?(active.verdict.includes("STRONG")?"STRONG BUY":"BUY"):(active.verdict.includes("STRONG")?"STRONG SELL":"SELL");
+  r.v=activeVerdict;r.conf=Math.max(55,Math.round((active.modelScore*.65)+(rawConf*.35)));r.signalLocked=true
+ } else {r.activeSignal=null;r.signalLocked=false}
+ return r
+}
+function renderSignalLock(r){
+ const a=r.activeSignal,now=Date.now();
+ if(!a){
+  $("lockBadge").textContent=r.lockExitReason||"NO ACTIVE SIGNAL";$("lockSignal").textContent="—";$("lockHold").textContent="—";$("lockAge").textContent="—";$("lockRaw").textContent=r.rawV||r.v;
+  $("lockNarrative").textContent=r.lockExitReason?`No lock created / previous signal ended: ${r.lockExitReason}. TITAN is waiting for a cleaner confirmed setup.`:"No committed signal is active.";
+  return
+ }
+ const age=now-a.startedAt,remaining=Math.max(0,a.minHoldMs-age);
+ $("lockBadge").textContent=remaining>0?"SIGNAL LOCKED":"HOLD COMPLETE";$("lockSignal").textContent=a.direction;$("lockHold").textContent=remaining>0?humanDuration(remaining)+" left":"minimum met";$("lockAge").textContent=humanDuration(age);$("lockRaw").textContent=r.rawV;
+ const rawDir=actionableDirection(r.rawV),conflict=rawDir&&rawDir!==a.direction;
+ $("lockNarrative").textContent=remaining>0?`${a.direction} thesis remains committed. Live entry/targets are recalculated on new scans; original entry stays frozen for learning.${conflict?" Raw scan currently disagrees, but not strongly enough to invalidate the thesis.":""}`:`Minimum hold is complete. TITAN keeps updating the live plan while the thesis remains valid.`;
+}
+async function scanSymbol(sym,tf,events){
+ const tfs=["5min","15min","30min","1h","4h"],w={"5min":.7,"15min":.9,"30min":1.1,"1h":1.25,"4h":1.05},res={};let raw5=[];await Promise.all(tfs.map(async x=>{try{const rows=await td(sym,x);if(x==="5min")raw5=rows;res[x]=marketAnalyze(rows)}catch(e){res[x]={error:e.message}}}));
+ let n=0,d=0,valid=0;tfs.forEach(x=>{if(res[x]&&!res[x].error){n+=res[x].score*w[x];d+=w[x];valid++}});if(!valid){const errs=[...new Set(tfs.map(x=>res[x]?.error).filter(Boolean))];throw new Error(errs[0]||("No market data returned for "+sym))}
+ const market=n/d,N=newsScore(events,sym),C=causalBias(sym,N.items.length?N.items:events);N.rawScore=N.score;N.causalScore=C.score;N.causalReasons=C.reasons;N.score=clamp(N.rawScore*.35+C.score*.65,-2,2);const total=market+N.score*.75,main=res[tf]&&!res[tf].error?res[tf]:Object.values(res).find(x=>x&&!x.error),align=tfs.filter(x=>res[x]&&!res[x].error&&Math.sign(res[x].score)===Math.sign(total)&&Math.abs(res[x].score)>=1).length,v=verdict(total);
+ let conf=Math.round(clamp(50+Math.abs(total)*8+align*3,45,94));if(v==="WAIT")conf=Math.min(conf,68);
+ return{sym,tf,res,market,news:N,total,main,align,valid,v,conf,raw5}
+}
+async function quickRankSymbol(sym,events){
+ const main=marketAnalyze(await td(sym,"30min"));
+ const N=newsScore(events,sym),C=causalBias(sym,N.items.length?N.items:events);N.rawScore=N.score;N.causalScore=C.score;N.causalReasons=C.reasons;N.score=clamp(N.rawScore*.35+C.score*.65,-2,2);const total=main.score+N.score*.75,v=verdict(total);
+ let conf=Math.round(clamp(50+Math.abs(total)*9,45,90));if(v==="WAIT")conf=Math.min(conf,66);
+ return{sym,tf:"30min",res:{"30min":main},market:main.score,news:N,total,main,align:1,valid:1,v,conf}
+}
+function eventVectorObject(events){
+ const pairs=eventClassify(events),o={};for(const [k,v] of pairs)o[k]=v;return o
+}
+function eventVectorDistance(a,b){
+ const keys=["GEOPOLITICS","RATES","INFLATION","ENERGY","CRYPTO","CORPORATE","CYBER","SUPPLY"];
+ let d=0,w=0;for(const k of keys){const x=a?.[k]||0,y=b?.[k]||0,scale=Math.max(1,x,y);d+=Math.min(1.5,Math.abs(x-y)/scale);w++}return w?d/w:99
+}
+function historicalNewsAnalogs(r,events){
+ const dir=dirSign(r.v),current=eventVectorObject(r.news?.items?.length?r.news.items:events);
+ if(!dir)return{n:0,hit:null,move:null,vote:"WAIT",cases:[]};
+ const rows=titanJournal.filter(x=>x.sym===r.sym&&dirSign(x.v)===dir&&x.eventVector&&x.outcome?.snapshots?.["2h"]);
+ const ranked=rows.map(x=>({x,d:eventVectorDistance(current,x.eventVector)})).sort((a,b)=>a.d-b.d).slice(0,20).filter(z=>z.d<=.72);
+ if(!ranked.length)return{n:0,hit:null,move:null,vote:"NO DATA",cases:[]};
+ let wh=0,wm=0,ws=0;for(const z of ranked){const o=z.x.outcome.snapshots["2h"],wt=1/Math.max(.15,z.d);wh+=(o.correct?1:0)*wt;wm+=dir*(o.ret||0)*wt;ws+=wt}
+ const hit=wh/ws,move=wm/ws,vote=hit>=.62&&move>0?"SUPPORT":hit<=.42||move<0?"REJECT":"NEUTRAL";
+ return{n:ranked.length,hit,move,vote,cases:ranked.slice(0,5)}
+}
+function renderHistoricalNews(r,events){
+ const h=historicalNewsAnalogs(r,events);$("histNewsN").textContent=String(h.n);$("histNewsHit").textContent=h.hit==null?"—":Math.round(h.hit*100)+"%";$("histNewsMove").textContent=h.move==null?"—":(h.move*100).toFixed(2)+"%";$("histNewsVote").textContent=h.vote;$("histNewsBadge").textContent=h.n>=5?"HISTORICAL EVIDENCE ACTIVE":h.n?"EARLY EVIDENCE":"BUILDING MEMORY";
+ $("histNewsList").innerHTML=h.cases.length?h.cases.map(z=>{const x=z.x,o=x.outcome.snapshots["2h"],heads=(x.newsEvidence||[]).slice(0,2).map(n=>esc(n.title)).join(" • ")||"Archived event pattern";return `<div class="item"><b>${new Date(x.t).toLocaleString()} • ${esc(x.v)} • ${o.correct?"SUPPORTED":"FAILED"}</b><p>Similarity ${Math.round((1-Math.min(1,z.d))*100)}% • 2h ${(dirSign(x.v)*(o.ret||0)*100).toFixed(2)}% • ${heads}</p></div>`}).join(""):'<div class="item"><p>No resolved comparable historical news cases yet. New decisions now archive their exact headlines/event DNA so this evidence grows without look-ahead leakage.</p></div>';
+ r.historicalNews=h
+}
+
+function renderNewsRadar(r,events){
+ const rel=(r.news?.items||[]).slice(0,6),high=rel.filter(x=>(x.severity||0)>=2).length;
+ const bias=(r.news?.score||0)>.2?"BULLISH":(r.news?.score||0)<-.2?"BEARISH":"NEUTRAL";
+ $("newsLiveBadge").textContent=`NEWS ACTIVE • ${$("newsMode").value.toUpperCase()}`;
+ $("newsLiveCount").textContent=String(r.news?.items?.length||0);
+ $("newsLiveBias").textContent=bias;
+ $("newsLiveHigh").textContent=String(high);
+ $("newsLiveTime").textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+ $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):`<div class="item"><p>No directly relevant headline found for this symbol in the selected lookback. TITAN still checked the world-event feed.</p></div>`;
+ renderHistoricalNews(r,events);
+}
+function render(r,events){
+ applySignalPersistence(r);
+ renderSignalLock(r);
+ const {main}=r,plan=(r.activeSignal?.plan||executionPlan(r)),dir=dirSign(r.v),p=plan.entry,a=main.atr;
+ let lo=plan.lo,hi=plan.hi,sl=plan.sl,t1=plan.tp1,t2=plan.tp2,t3=plan.tp3,rr=plan.rr
+ $("signal").textContent=r.v;$("signal").className="sig "+vclass(r.v);$("conf").textContent=r.conf+"%";$("meter").style.width=r.conf+"%";$("status").textContent=`${r.sym} • ${r.align}/${r.valid} TF aligned • ${r.news.items.length} relevant headlines${r.signalLocked?" • SIGNAL LOCK ACTIVE":""}`;
+renderBrain(r,events);renderNewsRadar(r,events);
+ const aSig=r.activeSignal;
+ $("origEntry").textContent=aSig&&isFinite(aSig.originalEntry)?fmt(aSig.originalEntry):(dir&&isFinite(p)?fmt(p):"—");
+ $("entry").textContent=dir?`${fmt(lo)} – ${fmt(hi)}`:"WAIT";
+ $("entryState").textContent=aSig?.entryState||(dir?"READY":"WAIT");
+ $("planUpdated").textContent=aSig?.planUpdatedAt?new Date(aSig.planUpdatedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—";
+ $("sl").textContent=fmt(sl);$("tp1").textContent=fmt(t1);$("tp2").textContent=fmt(t2);$("tp3").textContent=fmt(t3);
+ $("grade").textContent=r.conf>=84?"A-GRADE":r.conf>=74?"B-GRADE":r.v==="WAIT"?"NO TRADE":"C-GRADE";
+ const macroEvents=events.filter(e=>{
+ const c=(e.cat||"").toLowerCase(),t=(e.title||"").toLowerCase();
+ return /macro|policy|central bank|inflation|jobs|bonds|yield|geopolitic|sanction|trade/.test(c)||
+        /federal reserve|fomc|ecb|boe|boj|inflation|cpi|pce|payroll|unemployment|treasury|yield|war|attack|missile|sanction|tariff/.test(t)
+});
+const highImpact=macroEvents.filter(e=>(e.severity||0)>=2).length,macro=macroEvents.length;
+$("riskBox").className=(highImpact>=3||macro>=18)?"warn":"good";
+$("riskBox").textContent=(highImpact>=3||macro>=18)?`⚠️ Elevated event risk: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`:`✓ Event risk currently moderate: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`;
+ $("scores").innerHTML=`<div class="scoreline"><span>Market structure</span><b>${r.market.toFixed(2)}</b></div><div class="scoreline"><span>World news</span><b>${r.news.items.length?r.news.score.toFixed(2):"NO DIRECT NEWS"}</b></div><div class="scoreline"><span>Macro risk</span><b>${highImpact>=3||macro>=18?"HIGH":macro>=7?"MEDIUM":"LOW"}</b></div><div class="scoreline"><span>Timeframe alignment</span><b>${r.align}/${r.valid}</b></div>`;
+ $("why").innerHTML=(r.news.items.slice(0,4).map(x=>`<div class="item"><h4>${esc(x.title)}</h4><p>${esc(x.source)} • ${esc(x.cat)} • sentiment ${x.score.toFixed(1)}</p></div>`).join("")||'<div class="item"><p>No strongly relevant world-news items found for this symbol.</p></div>')+(main.why.slice(0,4).map(x=>`<div class="item"><p>${x.v>0?"Bullish":"Bearish"} market evidence: ${esc(x.t)}</p></div>`).join(""));
+ const im=impactMap(events);$("impactMap").innerHTML=im.length?im.map(x=>`<div class="event"><div><b>${esc(x.a)}</b></div><div class="small">${esc(x.r)}</div><div class="impact ${x.d==="+"?"pos":x.d==="−"?"neg":"neu"}">${x.d}</div></div>`).join(""):'<div class="item"><p>No dominant causal theme detected.</p></div>'
+}
+let cachedEvents=[];
+async function ensureEvents(force=false){
+ const hours=$("hours").value,mode=$("newsMode").value;
+ const cacheValid=cachedEvents.length&&!force&&newsCache.hours===hours&&newsCache.mode===mode&&Date.now()-newsCache.t<300000;
+ if(cacheValid)return cachedEvents;
+ cachedEvents=await worldEvents(force);renderEvents(cachedEvents);return cachedEvents
+}
+
+const titanState=JSON.parse(localStorage.getItem("titan_state_v2")||"{}");
+let titanJournal=JSON.parse(localStorage.getItem("titan_journal_v2")||"[]");
+function dirSign(v){return /BUY/.test(v)?1:/SELL/.test(v)?-1:0}
+function eventClassify(events){
+ const groups={GEOPOLITICS:0,RATES:0,INFLATION:0,ENERGY:0,CRYPTO:0,CORPORATE:0,CYBER:0,SUPPLY:0};
+ for(const e of events){
+  const t=(e.title||"").toLowerCase(),w=(e.trust||.55)*(e.fresh||.65)*(1+(e.severity||0)*.25);
+  if(/war|attack|missile|invasion|sanction|ceasefire/.test(t))groups.GEOPOLITICS+=w;
+  if(/fed|fomc|ecb|boe|boj|rate hike|rate cut|yield|treasury/.test(t))groups.RATES+=w;
+  if(/inflation|cpi|pce|payroll|unemployment|wages/.test(t))groups.INFLATION+=w;
+  if(/opec|oil|brent|wti|gas|lng|pipeline|refinery|hormuz/.test(t))groups.ENERGY+=w;
+  if(/bitcoin|ethereum|crypto|stablecoin|etf|liquidation/.test(t))groups.CRYPTO+=w;
+  if(/earnings|guidance|revenue|profit|merger|acquisition/.test(t))groups.CORPORATE+=w;
+  if(/hack|exploit|cyberattack|ransomware|outage/.test(t))groups.CYBER+=w;
+  if(/shipping|port|freight|red sea|supply chain|canal/.test(t))groups.SUPPLY+=w;
+ }
+ return Object.entries(groups).sort((a,b)=>b[1]-a[1])
+}
+function causalBias(sym,events){
+ const s=sym.toUpperCase(),txt=events.map(e=>e.title.toLowerCase()).join(" "),out=[];
+ const add=(score,why)=>out.push({score,why});
+ if(s.includes("XAU")){
+  if(/war|attack|missile|invasion|sanction|geopolitical/.test(txt))add(1.2,"geopolitical safe-haven channel");
+  if(/rate cut|dovish|yields fall/.test(txt))add(1.0,"lower-yield channel");
+  if(/rate hike|hawkish|yields rise|strong dollar/.test(txt))add(-1.0,"yield/USD pressure");
+ }
+ if(/BTC|ETH|SOL|XRP/.test(s)){
+  if(/rate cut|dovish|easing|liquidity/.test(txt))add(.8,"liquidity tailwind");
+  if(/rate hike|hawkish|yields rise/.test(txt))add(-.8,"liquidity headwind");
+  if(/hack|exploit|exchange.*outage|crypto.*ban/.test(txt))add(-1.1,"crypto-specific risk");
+  if(/etf.*approval|approval.*etf/.test(txt))add(.8,"ETF/regulatory catalyst");
+ }
+ if(s.includes("/")){
+  const [a,b]=s.split("/");
+  const usdA=a==="USD",usdB=b==="USD";
+  if(/rate hike|hawkish|yields rise/.test(txt)){if(usdA)add(.7,"USD rate support");if(usdB)add(-.7,"USD rate support")}
+  if(/rate cut|dovish|yields fall/.test(txt)){if(usdA)add(-.6,"USD easing pressure");if(usdB)add(.6,"USD easing pressure")}
+ }
+ return {score:clamp(out.reduce((a,x)=>a+x.score,0),-2,2),reasons:out}
+}
+
+function median(a){if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y),m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function stdev(a){if(a.length<2)return 0;const m=avg(a);return Math.sqrt(avg(a.map(x=>(x-m)**2)))}
+function regimeDetect(r){
+ const vals=(r.res?Object.values(r.res):[]).filter(x=>x&&!x.error);
+ const scores=vals.map(x=>x.score||0),atrs=vals.map(x=>x.atrPct||0);
+ const spread=scores.length?Math.max(...scores)-Math.min(...scores):0;
+ const mean=Math.abs(avg(scores)),vol=median(atrs);
+ let regime="RANGE";
+ if(mean>=2.2&&spread<=3)regime="TREND";
+ if(mean>=1.2&&spread>4)regime="TRANSITION";
+ if(vol>=1.2)regime=regime==="TREND"?"VOLATILE TREND":"HIGH VOL";
+ if(vals.some(x=>Math.abs(x.breakout||0)>=1))regime="BREAKOUT";
+ return {regime,dispersion:spread,vol}
+}
+function evidenceVector(r,events){
+ const rel=r.news.items||[];
+ const causal=causalBias(r.sym,rel.length?rel:events);
+ const evRisk=Math.min(1,events.filter(e=>(e.severity||0)>=2.5).length/8);
+ const freshRel=rel.length?avg(rel.map(x=>x.fresh||.65)):0;
+ const trustRel=rel.length?avg(rel.map(x=>x.trust||.55)):0;
+ const tfAgree=r.valid?Math.abs(r.align/r.valid):0;
+ return {
+   tech:clamp(r.market/4,-1,1),
+   news:clamp(r.news.score/2,-1,1),
+   causal:clamp(causal.score/2,-1,1),
+   tf:clamp((tfAgree-.5)*2,-1,1),
+   freshness:freshRel,
+   trust:trustRel,
+   eventRisk:evRisk
+ }
+}
+function entropyLike(vals){
+ const x=vals.map(v=>Math.abs(v)).filter(v=>v>.001);
+ if(!x.length)return 1;
+ const sum=x.reduce((a,b)=>a+b,0),p=x.map(v=>v/sum);
+ return clamp(-p.reduce((a,b)=>a+(b*Math.log(b)),0)/Math.log(Math.max(2,p.length)),0,1)
+}
+function conflictMatrix(v){
+ const dirs=[v.tech,v.news,v.causal,v.tf].filter(x=>Math.abs(x)>.1).map(Math.sign);
+ let conflicts=0,pairs=0;
+ for(let i=0;i<dirs.length;i++)for(let j=i+1;j<dirs.length;j++){pairs++;if(dirs[i]!==dirs[j])conflicts++}
+ return {ratio:pairs?conflicts/pairs:0,count:conflicts,pairs}
+}
+function horizonScores(r,events){
+ const v=evidenceVector(r,events),rg=regimeDetect(r);
+ const s=clamp(.58*v.tech+.18*v.tf+.12*v.news+.12*v.causal,-1,1);
+ const d=clamp(.42*v.tech+.18*v.tf+.18*v.news+.22*v.causal,-1,1);
+ const w=clamp(.26*v.tech+.14*v.tf+.20*v.news+.40*v.causal,-1,1);
+ const lbl=x=>x>.18?"BUY":x<-.18?"SELL":"WAIT";
+ return {scalp:{score:s,label:lbl(s)},day:{score:d,label:lbl(d)},swing:{score:w,label:lbl(w)},regime:rg}
+}
+function adaptiveCalibration(){
+ const closed=titanJournal.filter(x=>x.outcome&&x.outcome.closed);
+ if(closed.length<8)return {n:closed.length,acc:null,cal:"LEARNING"};
+ const hit=closed.filter(x=>x.outcome.correct).length/closed.length;
+ const byBand={};
+ for(const x of closed){const b=Math.min(90,Math.floor((x.quality||50)/10)*10);(byBand[b]??=[]).push(x.outcome.correct?1:0)}
+ return {n:closed.length,acc:hit,cal:Object.entries(byBand).map(([b,a])=>`${b}s:${Math.round(avg(a)*100)}%`).join(" ")}
+}
+function gradePastSignals(sym,currentPrice){
+ const now=Date.now(),horizons=[{k:"30m",ms:30*60*1000},{k:"2h",ms:2*60*60*1000},{k:"1d",ms:24*60*60*1000}];
+ let changed=false;
+ for(const x of titanJournal){
+   if(x.sym!==sym||!x.entry||!dirSign(x.v))continue;
+   x.outcome=x.outcome||{snapshots:{},closed:false};
+   for(const h of horizons){
+     if(!x.outcome.snapshots[h.k]&&now-x.t>=h.ms){
+       const ret=(currentPrice-x.entry)/x.entry,correct=dirSign(x.v)*ret>0;
+       x.outcome.snapshots[h.k]={price:currentPrice,ret,correct,t:now};changed=true;
+     }
+   }
+   if(x.outcome.snapshots["2h"]&&!x.outcome.closed){
+     x.outcome.closed=true;x.outcome.correct=x.outcome.snapshots["2h"].correct;changed=true;
+   }
+ }
+ if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+}
+
+
+function executionPlan(r){
+ const m=r.main,p=m.price,a=m.atr,dir=dirSign(r.v);
+ if(!dir||!isFinite(p)||!isFinite(a)||a<=0)return{dir:0,entry:p,lo:NaN,hi:NaN,sl:NaN,tp1:NaN,tp2:NaN,tp3:NaN,rr:NaN};
+ const lo=p-a*.12,hi=p+a*.12;
+ const sl=dir>0?Math.min(p-1.35*a,m.support-.1*a):Math.max(p+1.35*a,m.resistance+.1*a);
+ const tp1=p+dir*a,tp2=p+dir*2*a,tp3=p+dir*3.2*a;
+ const rr=Math.abs(tp2-p)/Math.max(Math.abs(p-sl),1e-9);
+ return{dir,entry:p,lo,hi,sl,tp1,tp2,tp3,rr}
+}
+function parseBarTime(s){
+ if(!s)return NaN;
+ const t=Date.parse(String(s).replace(" ","T")+"Z");
+ return Number.isFinite(t)?t:Date.parse(s)
+}
+function firstHitPath(rows,signal){
+ if(!signal?.plan||!dirSign(signal.v)||!signal.barTime)return null;
+ const dir=dirSign(signal.v),p=signal.entry,sl=signal.plan.sl,tp1=signal.plan.tp1,tp2=signal.plan.tp2,tp3=signal.plan.tp3;
+ if(![p,sl,tp1,tp2,tp3].every(Number.isFinite))return null;
+ const st=parseBarTime(signal.barTime);
+ const after=rows.filter(z=>parseBarTime(z.datetime)>st).sort((a,b)=>parseBarTime(a.datetime)-parseBarTime(b.datetime));
+ if(!after.length)return null;
+ let hit=null,hitTime=null,mfe=0,mae=0;
+ for(const z of after){
+   const h=+z.high,l=+z.low;
+   const fav=dir>0?(h-p)/p:(p-l)/p,adv=dir>0?(l-p)/p:(p-h)/p;
+   mfe=Math.max(mfe,fav);mae=Math.min(mae,adv);
+   const slHit=dir>0?l<=sl:h>=sl;
+   const t1Hit=dir>0?h>=tp1:l<=tp1;
+   const t2Hit=dir>0?h>=tp2:l<=tp2;
+   const t3Hit=dir>0?h>=tp3:l<=tp3;
+   // Conservative same-bar assumption: if SL and TP are both inside one 5m bar, count SL first.
+   if(slHit){hit="SL";hitTime=z.datetime;break}
+   if(t3Hit){hit="TP3";hitTime=z.datetime;break}
+   if(t2Hit){hit="TP2";hitTime=z.datetime;break}
+   if(t1Hit){hit="TP1";hitTime=z.datetime;break}
+ }
+ return{hit,hitTime,mfe,mae,bars:after.length}
+}
+function gradeFirstHit(r){
+ if(!r.raw5?.length)return;
+ let changed=false;
+ for(const x of titanJournal){
+   if(x.sym!==r.sym||x.firstHit?.resolved||!x.plan)continue;
+   const fh=firstHitPath(r.raw5,x);
+   if(!fh)continue;
+   x.outcome=x.outcome||{snapshots:{},closed:false};
+   x.outcome.mfe=fh.mfe;x.outcome.mae=fh.mae;
+   if(fh.hit){
+     x.firstHit={resolved:true,...fh};
+     x.outcome.closed=true;
+     x.outcome.correct=fh.hit!=="SL";
+     changed=true;
+   }
+ }
+ if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+}
+function componentLearning(){
+ const rows=titanJournal.filter(x=>x.dna&&x.firstHit?.resolved&&dirSign(x.v));
+ const base={tech:.42,news:.18,causal:.22,tf:.18};
+ if(rows.length<12)return{n:rows.length,w:base,adaptive:false};
+ const keys=["tech","news","causal","tf"],raw={};
+ for(const k of keys){
+   let good=0,total=0;
+   for(const x of rows){
+     const val=x.dna[k]||0;if(Math.abs(val)<.08)continue;
+     const wanted=dirSign(x.v),componentDir=Math.sign(val),won=x.firstHit.hit!=="SL";
+     // Reward components that agreed with winning trades OR opposed losing trades.
+     const useful=(componentDir===wanted&&won)||(componentDir!==wanted&&!won);
+     good+=useful?1:0;total++;
+   }
+   const hr=total?good/total:.5;
+   raw[k]=Math.max(.08,0.15+(hr-.5)*1.4);
+ }
+ const sum=Object.values(raw).reduce((a,b)=>a+b,0);
+ const learned={};for(const k of keys)learned[k]=raw[k]/sum;
+ // Shrink learned weights toward conservative base to resist small-sample overfit.
+ const shrink=Math.min(.7,(rows.length-12)/60);
+ const w={};for(const k of keys)w[k]=base[k]*(1-shrink)+learned[k]*shrink;
+ const norm=Object.values(w).reduce((a,b)=>a+b,0);for(const k of keys)w[k]/=norm;
+ return{n:rows.length,w,adaptive:true}
+}
+function adaptiveFusion(r,events){
+ const e=evidenceVector(r,events),L=componentLearning(),w=L.w;
+ const fused=clamp(e.tech*w.tech+e.news*w.news+e.causal*w.causal+e.tf*w.tf,-1,1);
+ return{fused,e,L}
+}
+function renderEnsemble(r,events){
+ const a=adaptiveFusion(r,events),w=a.L.w;
+ $("wTech").textContent=Math.round(w.tech*100)+"%";$("wNews").textContent=Math.round(w.news*100)+"%";
+ $("wCausal").textContent=Math.round(w.causal*100)+"%";$("wTF").textContent=Math.round(w.tf*100)+"%";
+ $("ensBadge").textContent=a.L.adaptive?`ADAPTIVE • ${a.L.n} OUTCOMES`:`BASE WEIGHTS • ${a.L.n}/12`;
+ $("ensNarrative").textContent=`Adaptive fused evidence ${(a.fused*100).toFixed(0)}. Learning is shrinkage-limited so a small sample cannot wildly rewrite the model.`;
+ return a
+}
+function scenarioTree(r,events,adaptive){
+ const e=adaptive.e,shock=Math.min(.25,e.eventRisk*.18),u=renderlessUncertainty(e);
+ const center=clamp(.5+adaptive.fused*.28,.08,.92);
+ let bull=clamp(center-shock*.25,.03,.94),bear=clamp(1-center+shock*.25,.03,.94);
+ let base=clamp(.28+u*.38+shock,.08,.70);
+ const sum=bull+bear+base;bull/=sum;bear/=sum;base/=sum;
+ return{bull,bear,base}
+}
+function renderlessUncertainty(e){
+ const cf=conflictMatrix(e);
+ return clamp(.55*cf.ratio+.2*(1-e.trust)+.15*(1-e.freshness)+.1*e.eventRisk,0,1)
+}
+function renderScenario(r,events,adaptive){
+ const s=scenarioTree(r,events,adaptive);
+ $("scBull").textContent=Math.round(s.bull*100)+"%";$("scBase").textContent=Math.round(s.base*100)+"%";$("scBear").textContent=Math.round(s.bear*100)+"%";
+ const dom=[["BULL",s.bull],["BASE",s.base],["BEAR",s.bear]].sort((a,b)=>b[1]-a[1])[0];
+ $("scenarioBadge").textContent=dom[0];
+ $("scenarioNarrative").textContent=`Scenario distribution is a relative model view, not a calibrated probability forecast. Dominant scenario: ${dom[0]} (${Math.round(dom[1]*100)}%).`;
+ return s
+}
+function edgeStats(sym=null){
+ const rows=titanJournal.filter(x=>(!sym||x.sym===sym)&&x.firstHit?.resolved&&x.plan&&dirSign(x.v));
+ let wins=0,loss=0,rSum=0;
+ for(const x of rows){
+   const risk=Math.abs(x.entry-x.plan.sl);if(!risk)continue;
+   if(x.firstHit.hit==="SL"){loss++;rSum-=1}
+   else{
+     wins++;
+     const tgt=x.firstHit.hit==="TP3"?x.plan.tp3:x.firstHit.hit==="TP2"?x.plan.tp2:x.plan.tp1;
+     rSum+=Math.abs(tgt-x.entry)/risk;
+   }
+ }
+ return{n:wins+loss,wins,loss,wr:wins+loss?wins/(wins+loss):null,exp:wins+loss?rSum/(wins+loss):null}
+}
+function driftCheck(sym){
+ const rows=titanJournal.filter(x=>x.sym===sym&&x.firstHit?.resolved).slice(0,40);
+ if(rows.length<12)return{state:"LEARNING",recent:null,prior:null};
+ const hit=a=>a.filter(x=>x.firstHit.hit!=="SL").length/a.length;
+ const recent=hit(rows.slice(0,Math.min(8,rows.length)));
+ const prior=rows.length>=16?hit(rows.slice(8,16)):null;
+ if(prior==null)return{state:"LEARNING",recent,prior};
+ const delta=recent-prior;
+ return{state:delta<=-.25?"NEGATIVE DRIFT":delta>=.2?"POSITIVE DRIFT":"STABLE",recent,prior}
+}
+function renderEdgeControl(r){
+ const s=edgeStats(r.sym),d=driftCheck(r.sym);
+ $("fhWin").textContent=s.n?s.wins:"—";$("fhLoss").textContent=s.n?s.loss:"—";$("expR").textContent=s.n?s.exp.toFixed(2)+"R":"—";
+ $("driftState").textContent=d.state;$("driftBadge").textContent=s.n>=20?(s.exp>0&&d.state!=="NEGATIVE DRIFT"?"EDGE HEALTHY":"EDGE WARNING"):`LEARNING • ${s.n}/20`;
+ $("driftNarrative").textContent=s.n<20?`Only ${s.n} resolved first-hit outcomes for ${r.sym}. TITAN refuses to call this edge proven yet.`:`Resolved expectancy ${s.exp.toFixed(2)}R/trade with ${Math.round(s.wr*100)}% TP-first rate. ${d.state==="NEGATIVE DRIFT"?"Recent performance weakened materially; gate should be conservative.":"No material negative drift detected."}`;
+ return{s,d}
+}
+function sessionName(){
+ const h=new Date().getUTCHours();
+ if(h<7)return"ASIA";
+ if(h<12)return"LONDON";
+ if(h<17)return"NEW YORK";
+ return"AFTER HOURS";
+}
+function makeDNA(r,events,b){
+ const rg=regimeDetect(r),e=evidenceVector(r,events),m=r.main;
+ return{
+  regime:rg.regime,session:sessionName(),rsi:+(m.rsi||50).toFixed(1),
+  atrPct:+(m.atrPct||0).toFixed(4),rv:+(m.rv||0).toFixed(4),
+  breakout:m.breakout||0,slope9:+(m.slope9||0).toFixed(4),slope21:+(m.slope21||0).toFixed(4),
+  tech:+e.tech.toFixed(3),news:+e.news.toFixed(3),causal:+e.causal.toFixed(3),tf:+e.tf.toFixed(3),
+  quality:b?.quality||0
+ }
+}
+function dnaDistance(a,b){
+ if(!a||!b)return 99;
+ let d=0,w=0;
+ const add=(x,y,scale,wt=1)=>{d+=Math.min(2,Math.abs((x||0)-(y||0))/Math.max(scale,1e-9))*wt;w+=wt};
+ add(a.rsi,b.rsi,25,1);add(a.atrPct,b.atrPct,Math.max(.15,(a.atrPct+b.atrPct)/2),.8);
+ add(a.rv,b.rv,Math.max(.1,(a.rv+b.rv)/2),.7);add(a.slope9,b.slope9,.25,.7);
+ add(a.tech,b.tech,.6,1.1);add(a.news,b.news,.6,.8);add(a.causal,b.causal,.6,.9);add(a.tf,b.tf,.8,.9);
+ d+=(a.breakout===b.breakout?0:.35);w+=.5;
+ d+=(a.regime===b.regime?0:.6);w+=.8;
+ d+=(a.session===b.session?0:.2);w+=.3;
+ return w?d/w:99
+}
+function analogMemory(currentDNA,dir){
+ const closed=titanJournal.filter(x=>x.dna&&x.outcome?.snapshots?.["2h"]&&dirSign(x.v)===dir);
+ const ranked=closed.map(x=>({x,d:dnaDistance(currentDNA,x.dna)})).sort((a,b)=>a.d-b.d).slice(0,12);
+ const useful=ranked.filter(z=>z.d<=.85);
+ if(!useful.length)return{n:0,hit:null,avgMove:null,vote:"NO DATA",distance:null};
+ let hit=0,move=0,ws=0;
+ for(const z of useful){
+  const o=z.x.outcome.snapshots["2h"],wt=1/Math.max(.12,z.d);
+  hit+=(o.correct?1:0)*wt;move+=(dirSign(z.x.v)*(o.ret||0))*wt;ws+=wt;
+ }
+ const hr=hit/ws,av=move/ws;
+ return{n:useful.length,hit:hr,avgMove:av,vote:hr>=.62&&av>0?"SUPPORT":hr<=.42||av<0?"REJECT":"NEUTRAL",distance:avg(useful.map(z=>z.d))}
+}
+function gradeFromBars(r){
+ if(!r.raw5?.length)return;
+ const rows=r.raw5,now=Date.now();let changed=false;
+ const byTime=rows.filter(x=>x.datetime).sort((a,b)=>String(a.datetime).localeCompare(String(b.datetime)));
+ for(const x of titanJournal){
+  if(x.sym!==r.sym||!x.entry||!dirSign(x.v)||!x.barTime)continue;
+  x.outcome=x.outcome||{snapshots:{},closed:false};
+  const after=byTime.filter(row=>String(row.datetime)>=String(x.barTime));
+  if(after.length<2)continue;
+  const dir=dirSign(x.v),highs=after.map(z=>+z.high),lows=after.map(z=>+z.low),closes=after.map(z=>+z.close);
+  const best=dir>0?Math.max(...highs):Math.min(...lows),worst=dir>0?Math.min(...lows):Math.max(...highs);
+  x.outcome.mfe=dir*(best-x.entry)/x.entry;x.outcome.mae=dir*(worst-x.entry)/x.entry;
+  const snap=(bars,key)=>{if(after.length>bars&&!x.outcome.snapshots[key]){const p=+after[bars].close,ret=(p-x.entry)/x.entry;x.outcome.snapshots[key]={price:p,ret,correct:dir*ret>0,barTime:after[bars].datetime};changed=true}};
+  snap(6,"30m");snap(24,"2h");snap(72,"6h");
+  if(x.outcome.snapshots["2h"]&&!x.outcome.closed){x.outcome.closed=true;x.outcome.correct=x.outcome.snapshots["2h"].correct;changed=true}
+ }
+ if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+}
+function renderMemoryAndGate(r,events,b,meta){
+ const dna=makeDNA(r,events,b),mem=analogMemory(dna,dirSign(r.v));
+ $("memN").textContent=mem.n;$("memHit").textContent=mem.hit==null?"—":Math.round(mem.hit*100)+"%";
+ $("memMove").textContent=mem.avgMove==null?"—":(mem.avgMove*100).toFixed(2)+"%";$("memVote").textContent=mem.vote;
+ $("memoryBadge").textContent=mem.n>=5?"ANALOG MEMORY ACTIVE":mem.n?"EARLY MEMORY":"NO MEMORY YET";
+ $("memoryNarrative").textContent=mem.n?`${mem.n} comparable completed setups found. Average DNA distance ${mem.distance.toFixed(2)}. This is local empirical memory, not a guaranteed forecast.`:"Not enough comparable completed setups yet.";
+ const technicalPass=Math.abs(r.market)>=1.35,alignPass=r.align>=Math.max(2,Math.ceil(r.valid*.5)),uncPass=meta.uncertainty<=.58,conflictPass=meta.cf.ratio<=.45;
+ const memoryPass=mem.n<5?null:(mem.vote==="SUPPORT");
+ const eventDanger=events.filter(e=>(e.severity||0)>=3).length>=5;
+ let gate=(technicalPass&&alignPass&&uncPass&&conflictPass&&!eventDanger)?"PASS":"WAIT";
+ if(memoryPass===false)gate="REJECT";
+ $("edgeState").textContent=technicalPass&&alignPass?"STRUCTURE OK":"WEAK";
+ $("edgeRisk").textContent=eventDanger?"EVENT SHOCK":meta.uncertainty>.58?"UNCERTAIN":"NORMAL";
+ $("edgeGate").textContent=gate;$("edgeEvidence").textContent=mem.n>=5?`${mem.n} analogs`:"building";
+ $("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"MEMORY REJECT":"NO TRADE";
+ $("edgeNarrative").textContent=gate==="PASS"?(mem.n>=5?`Current structure passed the risk gate and local analog memory ${mem.vote.toLowerCase()}s the direction.`:"Current structure passed the risk gate, but TITAN still needs more completed analogs before calling the edge proven."):gate==="REJECT"?"Historical local analogs currently reject this setup.":"One or more safety gates failed; forcing a trade is not justified.";
+ const ad=adaptiveFusion(r,events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ if(Math.abs(ad.fused)<.16&&gate==="PASS")gate="WAIT";
+ if(es.n>=20&&es.exp<=0)gate="REJECT";
+ if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";
+ $("edgeGate").textContent=gate;
+ $("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"EDGE REJECT":"NO TRADE";
+ return{dna,mem,gate}
+}
+function renderMeta(r,events){
+ const v=evidenceVector(r,events),cf=conflictMatrix(v),hz=horizonScores(r,events),cal=adaptiveCalibration();
+ const uncertainty=clamp(.45*cf.ratio+.25*entropyLike([v.tech,v.news,v.causal,v.tf])+.20*(1-v.trust)+.10*(1-v.freshness),0,1);
+ $("metaUnc").textContent=Math.round(uncertainty*100)+"%";
+ $("metaRegime").textContent=hz.regime.regime;
+ $("metaConflict").textContent=`${cf.count}/${cf.pairs||0}`;
+ $("metaCal").textContent=cal.acc===null?`LEARNING (${cal.n})`:`${Math.round(cal.acc*100)}% / ${cal.n}`;
+ $("hzScalp").textContent=hz.scalp.label;
+ $("hzDay").textContent=hz.day.label;
+ $("hzSwing").textContent=hz.swing.label;
+ const labels=[hz.scalp.label,hz.day.label,hz.swing.label],cons=labels.every(x=>x===labels[0])?labels[0]:"MIXED";
+ $("hzConsensus").textContent=cons;
+ $("metaBadge").textContent=uncertainty>.6?"HIGH UNCERTAINTY":cf.ratio>.45?"CONFLICT":"EVIDENCE FUSED";
+ const caution=uncertainty>.6||cf.ratio>.45;
+ $("metaNarrative").textContent=`Evidence fusion: technical ${(v.tech*100).toFixed(0)}, news ${(v.news*100).toFixed(0)}, causal ${(v.causal*100).toFixed(0)}, TF ${(v.tf*100).toFixed(0)}. ${caution?"TITAN sees too much uncertainty/conflict — WAIT is safer than forcing a trade.":"Evidence is reasonably coherent across layers."}`;
+ return {uncertainty,cf,hz,cal}
+}
+function buildBrain(r,events){
+ const rel=r.news.items||[],causal=causalBias(r.sym,rel.length?rel:events);
+ const technical=clamp(r.market/4,-1,1),news=clamp(r.news.score/2,-1,1),cause=clamp(causal.score/2,-1,1);
+ const sign=dirSign(r.v),agree=[technical,news,cause].filter(x=>Math.sign(x)===sign&&Math.abs(x)>.08).length;
+ const conflicts=[technical,news,cause].filter(x=>sign&&Math.sign(x)===-sign&&Math.abs(x)>.18).length;
+ const severe=events.filter(e=>(e.severity||0)>=2.5).length;
+ let quality=50+Math.abs(technical)*18+Math.abs(news)*10+Math.abs(cause)*10+agree*5-conflicts*9-Math.min(severe,5)*1.5;
+ if(r.v==="WAIT")quality=Math.min(quality,64);
+ quality=Math.round(clamp(quality,35,93));
+ return {technical,news,cause,agree,conflicts,severe,quality,causal}
+}
+function renderBrain(r,events){
+ const b=buildBrain(r,events),sg=dirSign(r.v);
+ gradeFromBars(r); gradeFirstHit(r); const meta=renderMeta(r,events);
+ const adaptive=renderEnsemble(r,events); renderScenario(r,events,adaptive); const edgeCtl=renderEdgeControl(r);
+ $("brainTech").textContent=(b.technical*100).toFixed(0);
+ $("brainNews").textContent=r.news.items.length?`${r.news.items.length} direct`:"0 direct";
+ $("brainRisk").textContent=b.severe>=3?"HIGH":b.severe?"MEDIUM":"LOW";
+ $("brainAgree").textContent=`${b.agree}/3`;
+ $("brainState").textContent=b.conflicts?`CONFLICT ${b.conflicts}`:"ALIGNED";
+ const forcedWait=meta.uncertainty>.65||meta.cf.ratio>.5;
+ $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?"META-BRAIN GATE: evidence is too conflicted/uncertain to trust an aggressive entry.":"Cross-layer evidence passed the meta-brain gate."}`;
+ const dna=eventClassify(events).filter(x=>x[1]>0).slice(0,5);
+ $("eventDNA").innerHTML=dna.length?dna.map(([k,v])=>`<div class="scoreline"><span>${k}</span><b>${v.toFixed(1)}</b></div>`).join("")+(`<div class="small" style="margin-top:8px">${b.causal.reasons.length?b.causal.reasons.map(x=>`${x.score>0?"+":""}${x.score.toFixed(1)} ${esc(x.why)}`).join(" • "):"No strong causal rule matched this symbol."}</div>`):"<p>No material event cluster detected.</p>";
+ const prev=titanState[r.sym],now={v:r.v,conf:r.conf,market:r.market,news:r.news.score,price:r.main.price||0,t:Date.now()};
+ if(prev){
+  const changes=[];
+  if(prev.v!==now.v)changes.push(`Verdict ${prev.v} → ${now.v}`);
+  if(Math.abs(prev.conf-now.conf)>=5)changes.push(`Model score ${prev.conf}% → ${now.conf}%`);
+  if(Math.abs(prev.news-now.news)>=.35)changes.push(`News bias ${prev.news.toFixed(2)} → ${now.news.toFixed(2)}`);
+  if(Math.sign(prev.market)!==Math.sign(now.market))changes.push("Market structure changed direction");
+  $("changedBox").innerHTML=changes.length?changes.map(x=>`<p>⚡ ${esc(x)}</p>`).join(""):"<p>No material state change since the previous scan.</p>";
+ }
+ titanState[r.sym]=now;localStorage.setItem("titan_state_v2",JSON.stringify(titanState));
+ const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; recordJournal(r,b);renderJournal();
+}
+function recordJournal(r,b){
+ const last=titanJournal[0];
+ if(r.signalLocked && r.rawV==="WAIT" && last&&last.sym===r.sym&&actionableDirection(last.v)===r.activeSignal?.direction)return;
+ if(last&&r.activeSignal&&last.signalLock?.id===r.activeSignal.id)return;
+ if(last&&last.sym===r.sym&&last.v===r.v&&Date.now()-last.t<60000)return;
+ const plan=r.activeSignal?.plan||executionPlan(r),newsEvidence=(r.news?.items||[]).slice(0,10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0})),eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);titanJournal.unshift({id:"TITAN-"+Date.now().toString(36).toUpperCase(),modelVersion:"TITAN-GOD-7.0",t:Date.now(),sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal=titanJournal.slice(0,100);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+}
+function renderJournal(){
+ must("jCount").textContent=titanJournal.length;must("jBuy").textContent=titanJournal.filter(x=>/BUY/.test(x.v)).length;must("jSell").textContent=titanJournal.filter(x=>/SELL/.test(x.v)).length;must("jWait").textContent=titanJournal.filter(x=>x.v==="WAIT").length;
+ must("journalList").innerHTML=titanJournal.slice(0,7).map(x=>{const fh=x.firstHit?.resolved?x.firstHit.hit:"pending",mfe=x.outcome?.mfe!=null?`MFE ${(x.outcome.mfe*100).toFixed(2)}%`:"",mae=x.outcome?.mae!=null?`MAE ${(x.outcome.mae*100).toFixed(2)}%`:"";return `<div class="item"><b>${esc(x.sym)} • ${esc(x.v)} • ${esc(x.gate||"")}</b><div class="small">${new Date(x.t).toLocaleString()} • first-hit ${fh} • quality ${x.quality}/100${mfe?" • "+mfe:""}${mae?" • "+mae:""} • ${x.id}</div></div>`}).join("")||'<div class="item"><p>No signals stored yet.</p></div>'
+}
+function renderCoverage(events){
+ const sources=new Set(events.map(e=>e.source).filter(Boolean)),themes=new Set(events.map(e=>e.cat).filter(Boolean)),counts={};
+ events.forEach(e=>(e.hits||[]).forEach(h=>counts[h.k]=(counts[h.k]||0)+1));
+ const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,14);
+ $("covHeadlines").textContent=events.length;$("covSources").textContent=sources.size;$("covThemes").textContent=themes.size;
+ $("covKeywords").textContent=Object.keys(counts).length;$("coverageBadge").textContent=`${$("newsMode").value.toUpperCase()} • ${sources.size} SOURCES`;
+ $("keywordRadar").innerHTML=top.length?"Top live keywords: "+top.map(([k,n])=>`<span class="badge" style="margin:2px">${esc(k)} ×${n}</span>`).join(" "):"No priority keywords detected.";
+}
+function renderEvents(events){$("eventCount").textContent=events.length+" EVENTS";renderCoverage(events);$("eventList").innerHTML=events.slice(0,100).map(e=>`<div class="event"><div><b>${e.icon} ${esc(e.cat)}</b><div class="small">sev ${(e.severity||0).toFixed(1)} • trust ${Math.round((e.trust||.55)*100)}%</div></div><div><b style="font-size:12px">${esc(e.title)}</b><div class="small">${esc(e.source)} • ${e.lang?esc(e.lang):"global"} • ${(e.hits||[]).slice(0,4).map(h=>esc(h.k)).join(", ")}</div></div><div class="impact ${e.score>0?"pos":e.score<0?"neg":"neu"}">${e.score>0?"+":""}${e.score}</div></div>`).join("")||'<div class="item"><p>No events returned.</p></div>'}
+$("refreshEvents").onclick=async()=>{$("eventList").innerHTML='<div class="item"><p>Refreshing world news...</p></div>';cachedEvents=await worldEvents(true);renderEvents(cachedEvents)}
+$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="TURBO SCANNING...";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev)}catch(e){$("signal").textContent="ERROR";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message}finally{b.disabled=false;b.textContent="⚡ RUN WORLD → TRADE SCAN"}}
+
+
+function deepGateForBest(r,events){
+ const e=evidenceVector(r,events),cf=conflictMatrix(e),u=renderlessUncertainty(e),b=buildBrain(r,events),rg=regimeDetect(r);
+ const mem=analogMemory(makeDNA(r,events,b),dirSign(r.v)),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ const severe=events.filter(x=>(x.severity||0)>=3).length;
+ let gate=(Math.abs(r.market)>=1.35 && r.align>=Math.max(2,Math.ceil(r.valid*.5)) && u<=.58 && cf.ratio<=.45 && severe<5)?"PASS":"WAIT";
+ if(mem.n>=5 && mem.vote==="REJECT")gate="REJECT";
+ if(es.n>=20 && es.exp<=0)gate="REJECT";
+ if(dr.state==="NEGATIVE DRIFT" && gate==="PASS")gate="WAIT";
+ const quality=Math.round(clamp(b.quality-u*22+(gate==="PASS"?8:gate==="REJECT"?-14:-4),30,94));
+ return {gate,quality,uncertainty:u,regime:rg.regime,memN:mem.n,expN:es.n,exp:es.exp}
+}
+$("scanAll").onclick=async()=>{
+ const b=$("scanAll");b.disabled=true;b.textContent="RANKING MARKETS...";
+ $("oppList").innerHTML='<div class="item"><p>Stage 1: low-credit ranking across 5 markets…</p></div>';
+ try{
+  const ev=await ensureEvents(),basket=["BTC/USD","ETH/USD","XAU/USD","EUR/USD","USD/JPY"],stage1=[];
+  for(const s of basket){
+   try{stage1.push(await quickRankSymbol(s,ev));await new Promise(r=>setTimeout(r,350))}catch(e){}
+  }
+  stage1.sort((a,b)=>b.conf-a.conf||Math.abs(b.total)-Math.abs(a.total));
+  const leader=stage1.find(x=>x.v!=="WAIT");
+  if(leader){
+   $("oppList").innerHTML='<div class="item"><p>Stage 2: deep-confirming #1 through the World Brain…</p></div>';
+   try{
+    const r15=marketAnalyze(await td(leader.sym,"15min"));await new Promise(r=>setTimeout(r,350));
+    const r1h=marketAnalyze(await td(leader.sym,"1h"));
+    const agree=[leader.main,r15,r1h].filter(x=>Math.sign(x.score)===Math.sign(leader.total)&&Math.abs(x.score)>=1).length;
+    leader.align=agree;leader.valid=3;leader.market=(leader.main.score+r15.score+r1h.score)/3;
+    leader.total=leader.market+leader.news.score*.75;leader.v=verdict(leader.total);
+    leader.conf=Math.round(clamp(50+Math.abs(leader.total)*8+agree*3,45,94));if(leader.v==="WAIT")leader.conf=Math.min(leader.conf,68);
+    const deepR={sym:leader.sym,tf:"30min",res:{"30min":leader.main,"15min":r15,"1h":r1h},market:leader.market,news:leader.news,total:leader.total,main:leader.main,align:leader.align,valid:leader.valid,v:leader.v,conf:leader.conf};
+    Object.assign(leader,deepGateForBest(deepR,ev));
+   }catch(e){leader.gate="WAIT";leader.quality=leader.conf;leader.deepError=e.message}
+  }
+  const min=+$("minConf").value;
+  const shown=stage1.filter(x=>x.conf>=min&&x.v!=="WAIT").slice(0,6);
+  $("oppList").innerHTML=shown.length?shown.map((x,i)=>{
+   const isLeader=leader&&x.sym===leader.sym;
+   const gate=isLeader?(x.gate||"WAIT"):"RANK ONLY";
+   const label=gate==="PASS"?"TRADE CANDIDATE":gate==="REJECT"?"REJECT":gate==="RANK ONLY"?"RANK ONLY":"NO TRADE";
+   const detail=isLeader?`${x.align}/${x.valid} TF • uncertainty ${Math.round((x.uncertainty||0)*100)}% • ${x.news.items.length} direct news`:`M30 ranked • ${x.news.items.length} direct news • market ${x.market.toFixed(2)}`;
+   const q=isLeader?(x.quality||x.conf):x.conf;
+   return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(x.v)}">${x.v}</span></b><small>${detail}</small><small><b>${label}</b>${isLeader&&x.memN?` • ${x.memN} analogs`:""}</small></div><div class="right"><b>${q}%</b><small>${isLeader?"quality":"rank score"}</small></div></div>`
+  }).join(""):'<div class="item"><p>No setup passed the current score threshold. That is a valid TITAN result.</p></div>'
+ }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`}
+ finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES"}
+}
+
+
+// TITAN 6.2.1 MEMORY PATCH — redundant automatic brain persistence.
+// Deliberately excludes titan_td (API key) and all connection credentials.
+const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
+const TITAN_AUTO_MEMORY_STORE="brain";
+const TITAN_AUTO_MEMORY_KEY="latest";
+function titanMemorySnapshot(){
+ return {schema:2,savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
+}
+function titanMemoryOpen(){return new Promise((resolve,reject)=>{try{const q=indexedDB.open(TITAN_AUTO_MEMORY_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(TITAN_AUTO_MEMORY_STORE))db.createObjectStore(TITAN_AUTO_MEMORY_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)}catch(e){reject(e)}})}
+function renderAutoMemoryStatus(savedAt=null){
+ const badge=document.getElementById("autoMemBadge"),st=document.getElementById("autoMemStatus"),last=document.getElementById("autoMemLast"),rec=document.getElementById("autoMemRecords"),ln=document.getElementById("autoLearnN"),nar=document.getElementById("autoMemNarrative");
+ const L=componentLearning();
+ if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln)ln.textContent=String(L.n||0);
+ if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
+ if(nar)nar.textContent=`Brain snapshots save automatically in this browser. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; API key is not copied into brain backups.`;
+}
+async function titanAutoMemorySave(){
+ try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt)}catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("TITAN auto-memory save skipped",e)}
+}
+async function titanAutoMemoryRecover(){
+ try{const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readonly");const req=tx.objectStore(TITAN_AUTO_MEMORY_STORE).get(TITAN_AUTO_MEMORY_KEY);const snap=await new Promise((res,rej)=>{req.onsuccess=()=>res(req.result);req.onerror=()=>rej(req.error)});db.close();
+  if(!snap||!Array.isArray(snap.journal)||!snap.state||!snap.activeSignals)return false;
+  const localJ=JSON.parse(localStorage.getItem("titan_journal_v2")||"[]");
+  const localS=JSON.parse(localStorage.getItem("titan_state_v2")||"{}");
+  const localA=JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}");
+  const localHas=localJ.length||Object.keys(localS).length||Object.keys(localA).length;
+  const snapHas=snap.journal.length||Object.keys(snap.state).length||Object.keys(snap.activeSignals).length;
+  if(!localHas&&snapHas){
+   localStorage.setItem("titan_journal_v2",JSON.stringify(snap.journal));
+   localStorage.setItem("titan_state_v2",JSON.stringify(snap.state));
+   localStorage.setItem(TITAN_SIGNAL_LOCK_KEY,JSON.stringify(snap.activeSignals));
+   titanJournal=snap.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,snap.state);titanActiveSignals=snap.activeSignals;renderJournal();
+   const m=document.getElementById("backupMsg");if(m)m.textContent=`Auto-memory restored from app: ${snap.journal.length} signals loaded.`;renderAutoMemoryStatus(snap.savedAt);
+   return true;
+  }
+ }catch(e){console.warn("TITAN auto-memory recovery skipped",e)}
+ return false;
+}
+window.addEventListener("load",async()=>{await titanAutoMemoryRecover();await titanAutoMemorySave()});
+window.addEventListener("pagehide",()=>{titanAutoMemorySave()});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")titanAutoMemorySave()});
+setInterval(titanAutoMemorySave,5000);
+
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+
+must("clearJournal").onclick=()=>{titanJournal=[];localStorage.removeItem("titan_journal_v2");renderJournal()};
+renderJournal();
+
+(function titanIntegrityCheck(){
+ const required=["signal","status","conf","meter","riskBox","covHeadlines","covSources","covThemes","covKeywords",
+ "ensBadge","wTech","wNews","wCausal","wTF","scenarioBadge","scBull","scBase","scBear",
+ "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote",
+ "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
+ "hzScalp","hzDay","hzSwing","hzConsensus","brainState","brainTech","brainNews","brainRisk","brainAgree",
+ "changedBox","eventDNA","histNewsBadge","histNewsN","histNewsHit","histNewsMove","histNewsVote","histNewsList","newsLiveBadge","newsLiveCount","newsLiveBias","newsLiveHigh","newsLiveTime","newsLiveList","origEntry","entry","entryState","planUpdated","sl","tp1","tp2","tp3","grade","scores","why","impactMap",
+ "jCount","jBuy","jSell","jWait","journalList","clearJournal","autoMemBadge","autoMemStatus","autoMemLast","autoMemRecords","autoLearnN","autoMemNarrative","exportTitan","importTitan","importTitanText","backupMsg"];
+ const missing=required.filter(id=>!document.getElementById(id));
+ const box=document.getElementById("integrityBox");
+ if(box){
+   if(missing.length){box.className="warn";box.textContent="UI integrity FAIL: "+missing.join(", ");}
+   else{box.className="good";box.textContent="UI integrity PASS ✓ All critical screen elements loaded.";}
+ }
+ if(missing.length) console.error("TITAN UI integrity missing IDs:",missing);
+})();
+
+must("exportTitan").onclick=()=>{
+ const payload={version:"TITAN63",exportedAt:new Date().toISOString(),journal:JSON.parse(localStorage.getItem("titan_journal_v2")||"[]"),state:JSON.parse(localStorage.getItem("titan_state_v2")||"{}"),activeSignals:JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}"),learning:componentLearning(),apiKeyIncluded:false};
+ const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
+ must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
+};
+must("importTitan").onclick=()=>{
+ try{
+  const p=JSON.parse(must("importTitanText").value.trim());
+  if(!p||!Array.isArray(p.journal)||typeof p.state!=="object")throw new Error("Invalid TITAN backup");
+  localStorage.setItem("titan_journal_v2",JSON.stringify(p.journal));localStorage.setItem("titan_state_v2",JSON.stringify(p.state));localStorage.setItem(TITAN_SIGNAL_LOCK_KEY,JSON.stringify(p.activeSignals||{}));localStorage.removeItem("titan_active_signals_v1");
+  titanJournal=p.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,p.state);titanActiveSignals=p.activeSignals||{};renderJournal();
+  titanAutoMemorySave();must("backupMsg").textContent=`Restore complete: ${p.journal.length} signals loaded and auto-saved.`;
+ }catch(e){must("backupMsg").textContent="Restore failed: "+e.message}
+};
+</script>
+</body></html>
