@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>TITAN GOD 7.0 — FORENSIC EVIDENCE ENGINE</title>
+<title>TITAN GOD 8.0 — CONSENSUS ENGINE</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -112,7 +112,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 7.0 • FORENSIC EVIDENCE</div></div>
+ <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 8.0 • CONSENSUS ENGINE</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -462,7 +462,22 @@ function severity(t){t=(t||"").toLowerCase();let s=0;for(const [k,v] of Object.e
 function trust(domain){domain=(domain||"").toLowerCase();if(trustedDomains.some(d=>domain===d||domain.endsWith("."+d)))return 1; if(/\.(gov|int)$/.test(domain))return 1; return .55}
 function keywordHits(t){t=(t||"").toLowerCase();const hits=[];for(const [g,arr] of Object.entries(keywordGroups))for(const k of arr)if(t.includes(k))hits.push({g,k});return hits}
 function freshness(seendate){if(!seendate)return .65;const s=String(seendate).replace("T","").replace("Z","");const m=s.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/);if(!m)return .65;const d=Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);const h=Math.max(0,(Date.now()-d)/36e5);return h<=1?1:h<=3?.9:h<=6?.8:h<=12?.68:h<=24?.55:.4}
-async function gdelt(q,hours,maxrecords=250){const u=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&maxrecords=${maxrecords}&format=json&timespan=${hours}h&sort=DateDesc`;try{const r=await fetch(u);if(!r.ok)throw new Error("GDELT "+r.status);const j=await r.json();return (j.articles||[]).map(a=>{const title=a.title||"";return{title,source:a.domain||"",date:a.seendate||"",url:a.url||"",lang:a.language||"",score:sent(title),severity:severity(title),trust:trust(a.domain||""),fresh:freshness(a.seendate||""),hits:keywordHits(title)}})}catch(e){return[]}}
+let newsFetchHealth={attempts:0,successes:0,failures:0,lastError:"",lastSuccess:0,lastAttempt:0};
+async function gdelt(q,hours,maxrecords=250){
+ const u=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&maxrecords=${maxrecords}&format=json&timespan=${hours}h&sort=DateDesc`;
+ newsFetchHealth.attempts++;newsFetchHealth.lastAttempt=Date.now();
+ try{
+  const r=await fetch(u);if(!r.ok)throw new Error("GDELT "+r.status);const j=await r.json();
+  newsFetchHealth.successes++;newsFetchHealth.lastSuccess=Date.now();
+  return (j.articles||[]).map(a=>{const title=a.title||"";return{title,source:a.domain||"",date:a.seendate||"",url:a.url||"",lang:a.language||"",score:sent(title),severity:severity(title),trust:trust(a.domain||""),fresh:freshness(a.seendate||""),hits:keywordHits(title)}})
+ }catch(e){newsFetchHealth.failures++;newsFetchHealth.lastError=e?.message||String(e);return[]}
+}
+function newsHealth(events){
+ const attempted=newsFetchHealth.attempts>0,reachable=newsFetchHealth.successes>0;
+ const degraded=attempted&&!reachable;
+ const emptyButReachable=reachable&&(!events||events.length===0);
+ return {attempted,reachable,degraded,emptyButReachable,attempts:newsFetchHealth.attempts,successes:newsFetchHealth.successes,failures:newsFetchHealth.failures,lastError:newsFetchHealth.lastError};
+}
 let newsCache={t:0,hours:"",mode:"",events:[]};
 async function worldEvents(force=false){
  const hours=$("hours").value,mode=$("newsMode").value,now=Date.now();
@@ -596,6 +611,45 @@ function verdict(s){if(s>=3.3)return"STRONG BUY";if(s>=1.55)return"BUY";if(s<=-3
 function vclass(v){return v.includes("BUY")?"buy":v.includes("SELL")?"sell":"wait"}
 
 
+function consensusUncertainty(v){
+ const cf=conflictMatrix(v);
+ return clamp(.45*cf.ratio+.25*entropyLike([v.tech,v.news,v.causal,v.tf])+.20*(1-v.trust)+.10*(1-v.freshness),0,1)
+}
+function decisionConsensus(r,events){
+ const v=evidenceVector(r,events),cf=conflictMatrix(v),uncertainty=consensusUncertainty(v),nh=newsHealth(events);
+ const rawVerdict=r.rawTechnicalV||r.v,rawDir=actionableDirection(rawVerdict);
+ const technicalPass=Math.abs(r.market)>=1.35;
+ const alignPass=r.align>=Math.max(2,Math.ceil(r.valid*.5));
+ const conflictPass=cf.ratio<=.45;
+ const uncertaintyPass=uncertainty<=.58;
+ const severe=events.filter(e=>(e.severity||0)>=3).length,eventDanger=severe>=5;
+ const hist=historicalNewsAnalogs({...r,v:rawVerdict},events);
+ const es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ let gate=(rawDir&&technicalPass&&alignPass&&conflictPass&&uncertaintyPass&&!eventDanger)?"PASS":"WAIT";
+ if(hist.n>=5&&hist.vote==="REJECT")gate="REJECT";
+ if(es.n>=20&&es.exp<=0)gate="REJECT";
+ if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";
+ if(nh.degraded&&gate==="PASS")gate="WAIT";
+ const sg=rawDir==="BUY"?1:rawDir==="SELL"?-1:0;
+ const signed=[v.tech,v.news,v.causal,v.tf];
+ const support=signed.filter(x=>sg&&Math.sign(x)===sg&&Math.abs(x)>.10).length;
+ const oppose=signed.filter(x=>sg&&Math.sign(x)===-sg&&Math.abs(x)>.10).length;
+ let directionalConfidence=clamp((r.rawConf??r.conf)-uncertainty*28-cf.ratio*18+support*2-oppose*4,35,92);
+ if(nh.degraded)directionalConfidence=Math.min(directionalConfidence,58);
+ if(gate!=="PASS")directionalConfidence=Math.min(directionalConfidence,64);
+ if(hist.n>=5&&hist.vote==="SUPPORT")directionalConfidence=Math.min(94,directionalConfidence+4);
+ if(hist.n>=5&&hist.vote==="REJECT")directionalConfidence=Math.min(directionalConfidence,52);
+ const strongAllowed=gate==="PASS"&&support>=3&&uncertainty<=.38&&cf.ratio<=.25&&(!nh.degraded)&&(hist.n<5||hist.vote!=="REJECT");
+ let finalVerdict="WAIT";
+ if(gate==="PASS"&&rawDir){
+  const wantsStrong=/STRONG/.test(rawVerdict)&&strongAllowed;
+  finalVerdict=rawDir==="BUY"?(wantsStrong?"STRONG BUY":"BUY"):(wantsStrong?"STRONG SELL":"SELL");
+ }
+ const biasLabel=rawDir?`${rawDir} BIAS — WAIT`:"WAIT";
+ const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":!technicalPass?"STRUCTURE TOO WEAK":!alignPass?"TIMEFRAMES NOT ALIGNED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":eventDanger?"EVENT SHOCK RISK":"WAIT FOR CONFIRMATION";
+ return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed};
+}
+
 const TITAN_SIGNAL_LOCK_KEY="titan_active_signals_v2";
 let titanActiveSignals=JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||localStorage.getItem("titan_active_signals_v1")||"{}");
 
@@ -664,6 +718,7 @@ function refreshActivePlan(active,r){
  return active
 }
 function shouldHardInvalidate(active,r){
+ if(r.consensus&&r.consensus.gate!=="PASS")return "CONSENSUS GATE FAILED: "+r.consensus.reason;
  if(!active?.plan||!isFinite(r.main?.price))return null;
  const p=r.main.price,dir=active.direction;
  if(dir==="BUY"&&isFinite(active.plan.sl)&&p<=active.plan.sl)return"INVALIDATION HIT";
@@ -684,7 +739,8 @@ function precisionGate(r){
 }
 function applySignalPersistence(r){
  const now=Date.now(),rawV=r.v,rawConf=r.conf,rawDir=actionableDirection(rawV);
- r.rawV=rawV;r.rawConf=rawConf;
+ r.rawV=r.rawTechnicalV||rawV;r.rawConf=r.rawTechnicalConf??rawConf;
+ const consensusDir=actionableDirection(r.consensus?.finalVerdict||rawV);
  let active=signalLockStatus(r.sym);
  if(active){const hard=shouldHardInvalidate(active,r);if(hard){clearSignalLock(r.sym,hard);active=null;r.lockExitReason=hard}}
  if(active){
@@ -693,11 +749,11 @@ function applySignalPersistence(r){
   if(expired&&!sameDir&&rawV==="WAIT"){clearSignalLock(r.sym,"MINIMUM HOLD COMPLETE + NO CONFIRMATION");active=null}
   else if(expired&&rawDir&&rawDir!==active.direction){clearSignalLock(r.sym,"HOLD COMPLETE + OPPOSITE SIGNAL");active=null}
  }
- if(!active&&rawDir){
+ if(!active&&consensusDir){
   const pg=precisionGate(r);r.precisionGate=pg;
-  if(pg.pass){
-   const plan=planForDirection(r,rawDir)||executionPlan(r),minHoldMs=holdMinutesForTF(r.tf)*60000;
-   active={id:"LOCK-"+Date.now().toString(36).toUpperCase(),sym:r.sym,direction:rawDir,verdict:rawV,startedAt:now,minHoldMs,tf:r.tf,entry:r.main.price,originalEntry:r.main.price,modelScore:r.conf,plan,originalPlan:JSON.parse(JSON.stringify(plan)),planVersion:1,planUpdatedAt:now,planHistory:[],sourceBar:r.main.barTime||"",entryState:"READY",lastScanAt:now,lastSeenPrice:r.main.price};
+  if(pg.pass&&r.consensus?.gate==="PASS"){
+   const plan=planForDirection(r,consensusDir)||executionPlan(r),minHoldMs=holdMinutesForTF(r.tf)*60000;
+   active={id:"LOCK-"+Date.now().toString(36).toUpperCase(),sym:r.sym,direction:consensusDir,verdict:r.consensus.finalVerdict,startedAt:now,minHoldMs,tf:r.tf,entry:r.main.price,originalEntry:r.main.price,modelScore:r.conf,plan,originalPlan:JSON.parse(JSON.stringify(plan)),planVersion:1,planUpdatedAt:now,planHistory:[],sourceBar:r.main.barTime||"",entryState:"READY",lastScanAt:now,lastSeenPrice:r.main.price};
    titanActiveSignals[r.sym]=active;saveSignalLocks();r.lockCreated=true
   } else {r.lockExitReason=pg.reason}
  }
@@ -706,7 +762,7 @@ function applySignalPersistence(r){
   r.activeSignal=active;
   const activeVerdict=active.direction==="BUY"?(active.verdict.includes("STRONG")?"STRONG BUY":"BUY"):(active.verdict.includes("STRONG")?"STRONG SELL":"SELL");
   r.v=activeVerdict;r.conf=Math.max(55,Math.round((active.modelScore*.65)+(rawConf*.35)));r.signalLocked=true
- } else {r.activeSignal=null;r.signalLocked=false}
+ } else {r.activeSignal=null;r.signalLocked=false;r.v=r.consensus?.finalVerdict||r.v;r.conf=r.consensus?.confidence??r.conf}
  return r
 }
 function renderSignalLock(r){
@@ -760,20 +816,26 @@ function renderHistoricalNews(r,events){
 function renderNewsRadar(r,events){
  const rel=(r.news?.items||[]).slice(0,6),high=rel.filter(x=>(x.severity||0)>=2).length;
  const bias=(r.news?.score||0)>.2?"BULLISH":(r.news?.score||0)<-.2?"BEARISH":"NEUTRAL";
- $("newsLiveBadge").textContent=`NEWS ACTIVE • ${$("newsMode").value.toUpperCase()}`;
+ const nh=newsHealth(events);$("newsLiveBadge").textContent=nh.degraded?"NEWS FEED DEGRADED":`NEWS ACTIVE • ${$("newsMode").value.toUpperCase()}`;
  $("newsLiveCount").textContent=String(r.news?.items?.length||0);
  $("newsLiveBias").textContent=bias;
  $("newsLiveHigh").textContent=String(high);
  $("newsLiveTime").textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):`<div class="item"><p>No directly relevant headline found for this symbol in the selected lookback. TITAN still checked the world-event feed.</p></div>`;
+ $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — TITAN could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>News feed reachable, but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`;
  renderHistoricalNews(r,events);
 }
 function render(r,events){
+ r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;
+ r.consensus=decisionConsensus(r,events);
+ r.v=r.consensus.finalVerdict;r.conf=r.consensus.confidence;
  applySignalPersistence(r);
  renderSignalLock(r);
  const {main}=r,plan=(r.activeSignal?.plan||executionPlan(r)),dir=dirSign(r.v),p=plan.entry,a=main.atr;
  let lo=plan.lo,hi=plan.hi,sl=plan.sl,t1=plan.tp1,t2=plan.tp2,t3=plan.tp3,rr=plan.rr
- $("signal").textContent=r.v;$("signal").className="sig "+vclass(r.v);$("conf").textContent=r.conf+"%";$("meter").style.width=r.conf+"%";$("status").textContent=`${r.sym} • ${r.align}/${r.valid} TF aligned • ${r.news.items.length} relevant headlines${r.signalLocked?" • SIGNAL LOCK ACTIVE":""}`;
+ const headline=r.v;
+ $("signal").textContent=headline;$("signal").className="sig "+vclass(headline);$("conf").textContent=r.conf+"%";$("meter").style.width=r.conf+"%";
+ const nh=r.consensus?.nh||newsHealth(events),newsState=nh.degraded?"NEWS FEED DEGRADED":`${r.news.items.length} relevant headlines`,biasState=(r.v==="WAIT"&&r.consensus?.biasLabel!=="WAIT")?` • ${r.consensus.biasLabel}`:"";
+ $("status").textContent=`${r.sym} • ${r.align}/${r.valid} TF aligned • ${newsState}${biasState}${r.signalLocked?" • SIGNAL LOCK ACTIVE":""} • ${r.consensus?.reason||""}`;
 renderBrain(r,events);renderNewsRadar(r,events);
  const aSig=r.activeSignal;
  $("origEntry").textContent=aSig&&isFinite(aSig.originalEntry)?fmt(aSig.originalEntry):(dir&&isFinite(p)?fmt(p):"—");
@@ -781,15 +843,16 @@ renderBrain(r,events);renderNewsRadar(r,events);
  $("entryState").textContent=aSig?.entryState||(dir?"READY":"WAIT");
  $("planUpdated").textContent=aSig?.planUpdatedAt?new Date(aSig.planUpdatedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—";
  $("sl").textContent=fmt(sl);$("tp1").textContent=fmt(t1);$("tp2").textContent=fmt(t2);$("tp3").textContent=fmt(t3);
- $("grade").textContent=r.conf>=84?"A-GRADE":r.conf>=74?"B-GRADE":r.v==="WAIT"?"NO TRADE":"C-GRADE";
+ $("grade").textContent=r.consensus?.gate!=="PASS"?"NO TRADE":r.conf>=84?"A-GRADE":r.conf>=74?"B-GRADE":"C-GRADE";
  const macroEvents=events.filter(e=>{
  const c=(e.cat||"").toLowerCase(),t=(e.title||"").toLowerCase();
  return /macro|policy|central bank|inflation|jobs|bonds|yield|geopolitic|sanction|trade/.test(c)||
         /federal reserve|fomc|ecb|boe|boj|inflation|cpi|pce|payroll|unemployment|treasury|yield|war|attack|missile|sanction|tariff/.test(t)
 });
 const highImpact=macroEvents.filter(e=>(e.severity||0)>=2).length,macro=macroEvents.length;
-$("riskBox").className=(highImpact>=3||macro>=18)?"warn":"good";
-$("riskBox").textContent=(highImpact>=3||macro>=18)?`⚠️ Elevated event risk: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`:`✓ Event risk currently moderate: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`;
+const nh2=r.consensus?.nh||newsHealth(events);
+$("riskBox").className=(nh2.degraded||highImpact>=3||macro>=18)?"warn":"good";
+$("riskBox").textContent=nh2.degraded?`⚠️ NEWS DATA DEGRADED: world-news feed could not be verified (${nh2.failures}/${nh2.attempts} failed requests). TITAN will not treat this as “no news”.`:(highImpact>=3||macro>=18)?`⚠️ Elevated event risk: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`:`✓ News feed reachable. Event risk currently moderate: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`;
  $("scores").innerHTML=`<div class="scoreline"><span>Market structure</span><b>${r.market.toFixed(2)}</b></div><div class="scoreline"><span>World news</span><b>${r.news.items.length?r.news.score.toFixed(2):"NO DIRECT NEWS"}</b></div><div class="scoreline"><span>Macro risk</span><b>${highImpact>=3||macro>=18?"HIGH":macro>=7?"MEDIUM":"LOW"}</b></div><div class="scoreline"><span>Timeframe alignment</span><b>${r.align}/${r.valid}</b></div>`;
  $("why").innerHTML=(r.news.items.slice(0,4).map(x=>`<div class="item"><h4>${esc(x.title)}</h4><p>${esc(x.source)} • ${esc(x.cat)} • sentiment ${x.score.toFixed(1)}</p></div>`).join("")||'<div class="item"><p>No strongly relevant world-news items found for this symbol.</p></div>')+(main.why.slice(0,4).map(x=>`<div class="item"><p>${x.v>0?"Bullish":"Bearish"} market evidence: ${esc(x.t)}</p></div>`).join(""));
  const im=impactMap(events);$("impactMap").innerHTML=im.length?im.map(x=>`<div class="event"><div><b>${esc(x.a)}</b></div><div class="small">${esc(x.r)}</div><div class="impact ${x.d==="+"?"pos":x.d==="−"?"neg":"neu"}">${x.d}</div></div>`).join(""):'<div class="item"><p>No dominant causal theme detected.</p></div>'
@@ -1137,6 +1200,7 @@ function renderMemoryAndGate(r,events,b,meta){
  const memoryPass=mem.n<5?null:(mem.vote==="SUPPORT");
  const eventDanger=events.filter(e=>(e.severity||0)>=3).length>=5;
  let gate=(technicalPass&&alignPass&&uncPass&&conflictPass&&!eventDanger)?"PASS":"WAIT";
+ if(r.consensus&&r.consensus.gate!=="PASS")gate=r.consensus.gate;
  if(memoryPass===false)gate="REJECT";
  $("edgeState").textContent=technicalPass&&alignPass?"STRUCTURE OK":"WEAK";
  $("edgeRisk").textContent=eventDanger?"EVENT SHOCK":meta.uncertainty>.58?"UNCERTAIN":"NORMAL";
@@ -1186,10 +1250,10 @@ function renderBrain(r,events){
  $("brainTech").textContent=(b.technical*100).toFixed(0);
  $("brainNews").textContent=r.news.items.length?`${r.news.items.length} direct`:"0 direct";
  $("brainRisk").textContent=b.severe>=3?"HIGH":b.severe?"MEDIUM":"LOW";
- $("brainAgree").textContent=`${b.agree}/3`;
- $("brainState").textContent=b.conflicts?`CONFLICT ${b.conflicts}`:"ALIGNED";
- const forcedWait=meta.uncertainty>.65||meta.cf.ratio>.5;
- $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?"META-BRAIN GATE: evidence is too conflicted/uncertain to trust an aggressive entry.":"Cross-layer evidence passed the meta-brain gate."}`;
+ $("brainAgree").textContent=`${r.consensus?.support??b.agree}/4`;
+ const forcedWait=r.consensus?.gate!=="PASS";
+ $("brainState").textContent=forcedWait?`WAIT • ${r.consensus?.reason||"GATE"}`:(b.conflicts?`CONFLICT ${b.conflicts}`:"ALIGNED");
+ $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?`CONSENSUS GATE: ${r.consensus?.reason||"evidence incomplete"}. Directional bias may exist, but TITAN will not publish an aggressive trade.`:"Cross-layer evidence passed the consensus gate."}`;
  const dna=eventClassify(events).filter(x=>x[1]>0).slice(0,5);
  $("eventDNA").innerHTML=dna.length?dna.map(([k,v])=>`<div class="scoreline"><span>${k}</span><b>${v.toFixed(1)}</b></div>`).join("")+(`<div class="small" style="margin-top:8px">${b.causal.reasons.length?b.causal.reasons.map(x=>`${x.score>0?"+":""}${x.score.toFixed(1)} ${esc(x.why)}`).join(" • "):"No strong causal rule matched this symbol."}</div>`):"<p>No material event cluster detected.</p>";
  const prev=titanState[r.sym],now={v:r.v,conf:r.conf,market:r.market,news:r.news.score,price:r.main.price||0,t:Date.now()};
@@ -1209,7 +1273,7 @@ function recordJournal(r,b){
  if(r.signalLocked && r.rawV==="WAIT" && last&&last.sym===r.sym&&actionableDirection(last.v)===r.activeSignal?.direction)return;
  if(last&&r.activeSignal&&last.signalLock?.id===r.activeSignal.id)return;
  if(last&&last.sym===r.sym&&last.v===r.v&&Date.now()-last.t<60000)return;
- const plan=r.activeSignal?.plan||executionPlan(r),newsEvidence=(r.news?.items||[]).slice(0,10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0})),eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);titanJournal.unshift({id:"TITAN-"+Date.now().toString(36).toUpperCase(),modelVersion:"TITAN-GOD-7.0",t:Date.now(),sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ const plan=r.activeSignal?.plan||executionPlan(r),newsEvidence=(r.news?.items||[]).slice(0,10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0})),eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);titanJournal.unshift({id:"TITAN-"+Date.now().toString(36).toUpperCase(),modelVersion:"TITAN-GOD-8.0",t:Date.now(),sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=titanJournal.slice(0,100);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
 }
 function renderJournal(){
@@ -1260,7 +1324,9 @@ $("scanAll").onclick=async()=>{
     leader.total=leader.market+leader.news.score*.75;leader.v=verdict(leader.total);
     leader.conf=Math.round(clamp(50+Math.abs(leader.total)*8+agree*3,45,94));if(leader.v==="WAIT")leader.conf=Math.min(leader.conf,68);
     const deepR={sym:leader.sym,tf:"30min",res:{"30min":leader.main,"15min":r15,"1h":r1h},market:leader.market,news:leader.news,total:leader.total,main:leader.main,align:leader.align,valid:leader.valid,v:leader.v,conf:leader.conf};
-    Object.assign(leader,deepGateForBest(deepR,ev));
+    deepR.rawTechnicalV=deepR.v;deepR.rawTechnicalConf=deepR.conf;deepR.consensus=decisionConsensus(deepR,ev);
+    const dg=deepGateForBest(deepR,ev);Object.assign(leader,dg,{consensus:deepR.consensus});
+    if(deepR.consensus.gate!=="PASS")leader.gate=deepR.consensus.gate;
    }catch(e){leader.gate="WAIT";leader.quality=leader.conf;leader.deepError=e.message}
   }
   const min=+$("minConf").value;
@@ -1269,9 +1335,10 @@ $("scanAll").onclick=async()=>{
    const isLeader=leader&&x.sym===leader.sym;
    const gate=isLeader?(x.gate||"WAIT"):"RANK ONLY";
    const label=gate==="PASS"?"TRADE CANDIDATE":gate==="REJECT"?"REJECT":gate==="RANK ONLY"?"RANK ONLY":"NO TRADE";
-   const detail=isLeader?`${x.align}/${x.valid} TF • uncertainty ${Math.round((x.uncertainty||0)*100)}% • ${x.news.items.length} direct news`:`M30 ranked • ${x.news.items.length} direct news • market ${x.market.toFixed(2)}`;
+   const detail=isLeader?`${x.align}/${x.valid} TF • uncertainty ${Math.round(((x.consensus?.uncertainty ?? x.uncertainty) || 0)*100)}% • ${x.news.items.length} direct news`:`M30 ranked • ${x.news.items.length} direct news • market ${x.market.toFixed(2)}`;
    const q=isLeader?(x.quality||x.conf):x.conf;
-   return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(x.v)}">${x.v}</span></b><small>${detail}</small><small><b>${label}</b>${isLeader&&x.memN?` • ${x.memN} analogs`:""}</small></div><div class="right"><b>${q}%</b><small>${isLeader?"quality":"rank score"}</small></div></div>`
+   const shownVerdict=isLeader&&x.consensus?.gate!=="PASS"?x.consensus.biasLabel:x.v;
+   return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(shownVerdict)}">${shownVerdict}</span></b><small>${detail}</small><small><b>${label}</b>${isLeader&&x.consensus?.reason?` • ${esc(x.consensus.reason)}`:""}${isLeader&&x.memN?` • ${x.memN} analogs`:""}</small></div><div class="right"><b>${q}%</b><small>${isLeader?"quality":"rank score"}</small></div></div>`
   }).join(""):'<div class="item"><p>No setup passed the current score threshold. That is a valid TITAN result.</p></div>'
  }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`}
  finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES"}
