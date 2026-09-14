@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>TITAN GOD 8.2 — LIVE MARKET DISPLAY</title>
+<title>TITAN GOD 9 — PROOF ENGINE</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -119,7 +119,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 8.6 • STABILIZED GOD</div></div>
+ <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 9.0 • PROOF ENGINE</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -234,6 +234,26 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Evidence</span><b id="edgeEvidence">—</b></div>
    </div>
    <div id="edgeNarrative" class="small" style="margin-top:10px">No edge verdict yet.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🧪 PROOF ENGINE</h3><span id="proofBadge" class="badge">UNPROVEN</span></div>
+   <div class="grid4">
+    <div class="k"><span>Matched proof cases</span><b id="proofSample">0</b></div>
+    <div class="k"><span>TP-first hit</span><b id="proofHit">—</b></div>
+    <div class="k"><span>Expectancy</span><b id="proofExp">—</b></div>
+    <div class="k"><span>Calibration error</span><b id="proofCal">—</b></div>
+   </div>
+   <div class="item" style="margin-top:10px"><b>SETUP DNA PASSPORT</b><p id="proofDna">Waiting for a scan.</p></div>
+   <div id="proofNarrative" class="small" style="margin-top:10px">TITAN will not promote a setup to proven until real resolved outcomes support it.</div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>🕵️ WAIT AUDITOR</h3><span id="waitAuditBadge" class="badge">LEARNING</span></div>
+   <div class="grid3">
+    <div class="k"><span>WAITs audited</span><b id="waitAudN">0</b></div>
+    <div class="k"><span>Good skips</span><b id="waitSaved">—</b></div>
+    <div class="k"><span>Missed moves</span><b id="waitMiss">—</b></div>
+   </div>
+   <div id="waitNarrative" class="small" style="margin-top:10px">WAIT decisions are audited too, so TITAN can learn whether caution protected you or missed too many clean moves.</div>
   </div>
   <div class="card">
    <div class="title"><h3>🧠 ADAPTIVE META-BRAIN</h3><span id="metaBadge" class="badge">LEARNING MODE</span></div>
@@ -1277,6 +1297,83 @@ function gradeFromBars(r){
  }
  if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
 }
+
+function waitAuditDirection(x){
+ const b=String(x.bias||x.rawV||"").toUpperCase();
+ if(b.includes("BUY")||b.includes("BULL"))return 1;
+ if(b.includes("SELL")||b.includes("BEAR"))return -1;
+ return 0
+}
+function gradeWaitAuditFromBars(r){
+ if(!r.raw5?.length)return;
+ const rows=r.raw5.filter(x=>x.datetime).sort((a,b)=>String(a.datetime).localeCompare(String(b.datetime)));
+ let changed=false;
+ for(const x of titanJournal){
+  if(x.sym!==r.sym||x.v!=="WAIT"||!x.entry||!x.barTime||x.waitAudit?.resolved)continue;
+  const dir=waitAuditDirection(x);if(!dir)continue;
+  const after=rows.filter(z=>String(z.datetime)>=String(x.barTime));
+  if(after.length<=24)continue;
+  const p=+after[24].close,ret=(p-x.entry)/x.entry,dirMove=dir*ret;
+  const threshold=Math.max(.0008,Math.min(.004,((x.dna?.atrPct||.15)/100)*.35));
+  x.waitAudit={resolved:true,dir,ret,dirMove,threshold,missed:dirMove>threshold,goodSkip:dirMove<=threshold,t:Date.now()};changed=true;
+ }
+ if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+}
+function waitAuditStats(sym){
+ const rows=titanJournal.filter(x=>x.sym===sym&&x.v==="WAIT"&&x.waitAudit?.resolved);
+ const missed=rows.filter(x=>x.waitAudit.missed).length,good=rows.length-missed;
+ return{n:rows.length,missed,good,missRate:rows.length?missed/rows.length:null}
+}
+function cohortProof(r,dna){
+ const dir=dirSign(r.v)||waitAuditDirection({bias:r.consensus?.biasLabel||r.rawV});
+ if(!dir||!dna)return{n:0,hit:null,exp:null,distance:null,rows:[]};
+ const rows=titanJournal.filter(x=>x.sym===r.sym&&dirSign(x.v)===dir&&x.dna&&x.firstHit?.resolved&&x.plan)
+  .map(x=>({x,d:dnaDistance(dna,x.dna)})).sort((a,b)=>a.d-b.d).filter(z=>z.d<=.75).slice(0,20);
+ if(!rows.length)return{n:0,hit:null,exp:null,distance:null,rows:[]};
+ let wins=0,rSum=0,ws=0,hitW=0;
+ for(const z of rows){
+  const x=z.x,risk=Math.abs(x.entry-x.plan.sl);if(!risk)continue;
+  const wt=1/Math.max(.12,z.d),won=x.firstHit.hit!=="SL";let rr=-1;
+  if(won){const tgt=x.firstHit.hit==="TP3"?x.plan.tp3:x.firstHit.hit==="TP2"?x.plan.tp2:x.plan.tp1;rr=Math.abs(tgt-x.entry)/risk;wins++}
+  hitW+=(won?1:0)*wt;rSum+=rr*wt;ws+=wt;
+ }
+ return{n:rows.length,hit:ws?hitW/ws:null,exp:ws?rSum/ws:null,distance:avg(rows.map(z=>z.d)),rows}
+}
+function calibrationError(sym=null){
+ const rows=titanJournal.filter(x=>(!sym||x.sym===sym)&&dirSign(x.v)&&x.firstHit?.resolved&&Number.isFinite(+x.conf));
+ if(rows.length<5)return{n:rows.length,ece:null};
+ let err=0,ws=0;
+ for(const x of rows){const p=clamp((+x.conf||50)/100,.05,.95),y=x.firstHit.hit!=="SL"?1:0,w=1;err+=Math.abs(p-y)*w;ws+=w}
+ return{n:rows.length,ece:err/ws}
+}
+function dnaPassport(dna){
+ if(!dna)return"No DNA yet.";
+ const rsiBand=dna.rsi>=70?"RSI HOT":dna.rsi<=30?"RSI COLD":dna.rsi>=55?"RSI BULL ZONE":dna.rsi<=45?"RSI BEAR ZONE":"RSI NEUTRAL";
+ const vol=dna.atrPct>=.8?"HIGH VOL":dna.atrPct>=.35?"NORMAL VOL":"LOW VOL";
+ const br=dna.breakout>0?"UP BREAKOUT":dna.breakout<0?"DOWN BREAKOUT":"NO BREAKOUT";
+ return `${dna.regime} • ${dna.session} • ${rsiBand} • ${vol} • ${br} • TF ${Math.round((dna.tf||0)*100)} • NEWS ${Math.round((dna.news||0)*100)} • CAUSAL ${Math.round((dna.causal||0)*100)}`
+}
+function renderProofEngine(r,events,b,meta,mg){
+ gradeWaitAuditFromBars(r);
+ const dna=mg?.dna||makeDNA(r,events,b),cp=cohortProof(r,dna),cal=calibrationError(r.sym),wa=waitAuditStats(r.sym),dr=driftCheck(r.sym);
+ $("proofSample").textContent=cp.n;
+ $("proofHit").textContent=cp.hit==null?"—":Math.round(cp.hit*100)+"%";
+ $("proofExp").textContent=cp.exp==null?"—":cp.exp.toFixed(2)+"R";
+ $("proofCal").textContent=cal.ece==null?`learning ${cal.n}/5`:Math.round(cal.ece*100)+"%";
+ $("proofDna").textContent=dnaPassport(dna);
+ let state="UNPROVEN";
+ if(cp.n>=20&&cp.exp>0.10&&cp.hit>=.52&&cal.ece!=null&&cal.ece<=.22&&dr.state!=="NEGATIVE DRIFT")state="PROVEN EDGE";
+ else if(cp.n>=8&&(cp.exp<=0||cp.hit<.45))state="EDGE WARNING";
+ else if(cp.n>=5)state="BUILDING PROOF";
+ $("proofBadge").textContent=state;
+ $("proofNarrative").textContent=cp.n?`${cp.n} close DNA matches for ${r.sym}. Weighted TP-first ${Math.round(cp.hit*100)}%, expectancy ${cp.exp.toFixed(2)}R, average DNA distance ${cp.distance.toFixed(2)}. ${state==="PROVEN EDGE"?"This setup has earned evidence-based promotion; normal safety gates still apply.":state==="EDGE WARNING"?"Historical twins are weak; TITAN should remain conservative.":"Sample is still too small for a strong claim."}`:"No resolved close DNA matches yet. TITAN is recording this setup for future proof instead of inventing confidence.";
+ $("waitAudN").textContent=wa.n;$("waitSaved").textContent=wa.n?wa.good:"—";$("waitMiss").textContent=wa.n?wa.missed:"—";
+ $("waitAuditBadge").textContent=wa.n>=20?(wa.missRate>.45?"TOO CAUTIOUS":"WAIT HEALTHY"):`LEARNING • ${wa.n}/20`;
+ $("waitNarrative").textContent=wa.n?`${wa.n} WAIT decisions have matured to a 2h audit. ${wa.good} avoided a directional move worth chasing; ${wa.missed} missed a move in TITAN's underlying bias. ${wa.n>=20&&wa.missRate>.45?"Caution is now missing too many moves — future threshold tuning should be validated, not guessed.":"No automatic loosening occurs from a small sample."}`:"No WAIT has matured to a 2h audit yet. TITAN will score caution as rigorously as BUY/SELL calls.";
+ r.proof={cohort:cp,calibration:cal,waitAudit:wa,state}
+ return r.proof
+}
+
 function renderMemoryAndGate(r,events,b,meta){
  const dna=makeDNA(r,events,b),mem=analogMemory(dna,dirSign(r.v));
  $("memN").textContent=mem.n;$("memHit").textContent=mem.hit==null?"—":Math.round(mem.hit*100)+"%";
@@ -1353,14 +1450,14 @@ function renderBrain(r,events){
   $("changedBox").innerHTML=changes.length?changes.map(x=>`<p>⚡ ${esc(x)}</p>`).join(""):"<p>No material state change since the previous scan.</p>";
  }
  titanState[r.sym]=now;localStorage.setItem("titan_state_v2",JSON.stringify(titanState));
- const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; recordJournal(r,b);renderJournal();
+ const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); recordJournal(r,b);renderJournal();
 }
 function recordJournal(r,b){
  const last=titanJournal[0];
  if(r.signalLocked && r.rawV==="WAIT" && last&&last.sym===r.sym&&actionableDirection(last.v)===r.activeSignal?.direction)return;
  if(last&&r.activeSignal&&last.signalLock?.id===r.activeSignal.id)return;
  if(last&&last.sym===r.sym&&last.v===r.v&&Date.now()-last.t<60000)return;
- const plan=r.activeSignal?.plan||executionPlan(r),newsEvidence=(r.news?.items||[]).slice(0,10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0})),eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);titanJournal.unshift({id:"TITAN-"+Date.now().toString(36).toUpperCase(),modelVersion:"TITAN-GOD-8.6",t:Date.now(),sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ const plan=r.activeSignal?.plan||executionPlan(r),newsEvidence=(r.news?.items||[]).slice(0,10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0})),eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);titanJournal.unshift({id:"TITAN-"+Date.now().toString(36).toUpperCase(),modelVersion:"TITAN-GOD-9.0",t:Date.now(),sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=titanJournal.slice(0,100);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
 }
 function renderJournal(){
@@ -1484,7 +1581,7 @@ renderJournal();
 (function titanIntegrityCheck(){
  const required=["signal","status","conf","meter","riskBox","covHeadlines","covSources","covThemes","covKeywords",
  "ensBadge","wTech","wNews","wCausal","wTF","scenarioBadge","scBull","scBase","scBear",
- "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote",
+ "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote","proofBadge","proofSample","proofHit","proofExp","proofCal","proofDna","proofNarrative","waitAuditBadge","waitAudN","waitSaved","waitMiss","waitNarrative",
  "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
  "hzScalp","hzDay","hzSwing","hzConsensus","brainState","brainTech","brainNews","brainRisk","brainAgree",
  "changedBox","eventDNA","histNewsBadge","histNewsN","histNewsHit","histNewsMove","histNewsVote","histNewsList","newsLiveBadge","newsLiveCount","newsLiveBias","newsLiveHigh","newsLiveTime","newsLiveList","origEntry","entry","entryState","planUpdated","sl","tp1","tp2","tp3","grade","scores","why","impactMap",
@@ -1499,7 +1596,7 @@ renderJournal();
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"TITAN63",exportedAt:new Date().toISOString(),journal:JSON.parse(localStorage.getItem("titan_journal_v2")||"[]"),state:JSON.parse(localStorage.getItem("titan_state_v2")||"{}"),activeSignals:JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}"),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"TITAN-GOD-9.0",exportedAt:new Date().toISOString(),journal:JSON.parse(localStorage.getItem("titan_journal_v2")||"[]"),state:JSON.parse(localStorage.getItem("titan_state_v2")||"{}"),activeSignals:JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}"),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
