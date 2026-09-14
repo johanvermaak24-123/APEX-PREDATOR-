@@ -1,31 +1,19 @@
-APEX PREDATOR 1.0 — VERIFIED CORE
+APEX PREDATOR 1.1 — FINAL CORE
 
-Deep surgical rebuild of the TITAN GOD 10.3 stability core. Existing browser-memory keys are deliberately preserved so prior journal/state data can survive the rename.
+This build contains the final surgical event-direction repair and PWA icon integration.
 
-Critical decision fix:
-- Event magnitude and event direction are now separated.
-- A hard event block can only occur when material event clusters are genuinely hostile to the actual BUY/SELL direction.
-- Direct XAU/USD price-action headlines outrank ambiguous generic macro keywords.
-- A bearish gold event cannot be classified as hostile to a SELL simply because the global event environment is severe.
-- Mixed/high event magnitude becomes CAUTION unless opposing risk materially dominates supporting risk.
-- World Brain, Trigger Readiness, Intelligence Core and Expectancy Gate all consume the same directional event profile.
+Key fixes:
+- Hard separation of event magnitude from event direction.
+- Direct XAU price-action headlines outrank broad macro/geopolitical inference.
+- Broad/mixed event magnitude cannot hard-block a trade unless evidence is materially opposite to the proposed direction.
+- Direct symbol news + causal model cross-check prevents false HOSTILE EVENT RISK contradictions.
+- Critical fresh direct opposing events can still fail closed.
+- World Brain / Trigger Radar / Expectancy Gate consume the same unified consensus result.
+- Event-direction self-test added to UI integrity check.
+- Existing TITAN/APEX browser memory keys preserved so learning history can continue.
+- Final Apex Predator artwork included for iPhone Home Screen/PWA: apple-touch-icon.png, icon-192.png, icon-512.png.
 
-Hardening retained:
-- unified decision authority
-- cluster-normalized news shock engine
-- multi-horizon confirmation
-- signal lock / minimum hold
-- proof engine and first-hit grading
-- WAIT shadow learning
-- analog memory and journal compression
-- redundant IndexedDB browser backup/recovery
-- service-worker update handling
-- fail-closed news behavior
+IMPORTANT:
+Upload these extracted files over the existing GitHub Pages repository. Do not clear browser/site storage. After deployment, delete the old Home Screen shortcut and add the page to Home Screen again so iOS refreshes the icon.
 
-New invariant self-tests verify:
-- XAU hawkish/dovish direction semantics
-- direct bearish gold headline = supportive for SELL, not hostile
-- direct bullish gold headline = opposing for SELL
-- memory schema, verdict parser, clamp and page-version consistency
-
-Important: no trading system can guarantee profit or future direction. APEX PREDATOR is an evidence engine; allow resolved outcomes to accumulate before changing thresholds again.
+Learning is evidence-based: it activates after enough resolved outcomes. APEX does not guarantee profitable trades and should not be treated as a substitute for risk management.

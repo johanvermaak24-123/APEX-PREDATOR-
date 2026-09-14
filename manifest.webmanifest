@@ -1,12 +1,24 @@
 {
-  "name": "APEX PREDATOR 1.0 Verified Core",
-  "short_name": "APEX PREDATOR",
+  "name": "Apex Predator",
+  "short_name": "APEX",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#05080c",
   "theme_color": "#071018",
   "icons": [
-    {"src":"icon-192.png","sizes":"192x192","type":"image/png"},
-    {"src":"icon-512.png","sizes":"512x512","type":"image/png"}
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "description": "Apex Predator verified market intelligence and learning engine."
 }
