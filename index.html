@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX 1.1 • FINAL CORE</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX 1.2 • FINAL PRODUCT</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -680,10 +680,23 @@ function sourceQuality(e){
  if(/fool\.com/.test(d))return .45;
  return e.trust||.55
 }
+function isXauSportsOrCompanyNoise(title){
+ const t=String(title||"").toLowerCase();
+ return /\b(matchweek|fixture|coach|player|football|soccer|premier league|gpl|nasco|awards?|goal|club|team|ashantigold|gold fields ltd|goldfields ltd)\b/.test(t);
+}
+function xauTopicStrength(title){
+ const t=String(title||"").toLowerCase();
+ if(isXauSportsOrCompanyNoise(t))return 0;
+ let score=0;
+ if(/\b(gold|bullion|xau(?:\/usd|usd)?)\b/.test(t))score+=3;
+ if(/\b(federal reserve|fed|fomc|treasury|treasuries|yield|yields|real yield|dollar|dxy|inflation|cpi|pce|interest rate|rate hike|rate cut)\b/.test(t))score+=2;
+ if(/\b(war|geopolitical|missile|attack|sanction|safe haven|central bank|oil|crude|opec|hormuz|red sea)\b/.test(t))score+=1;
+ return score;
+}
 function symbolEntityScore(sym,title){
  const t=String(title||"").toLowerCase(),s=sym.toUpperCase();
+ if(s==="XAU/USD")return xauTopicStrength(t);
  const aliases={
-  "XAU/USD":["gold","xau","bullion","fed","fomc","treasury","yield","dollar","inflation","cpi","pce","war","geopolitical","safe haven","central bank"],
   "BTC/USD":["bitcoin","btc","crypto","etf","sec","exchange","liquidation","stablecoin","fed","liquidity"],
   "ETH/USD":["ethereum","ether","eth","crypto","etf","sec","staking","defi"],
   "EUR/USD":["euro","eur","ecb","eurozone","fed","dollar","fomc","inflation"],
@@ -706,7 +719,8 @@ function clusterStories(items){
 function symbolPriorityWeight(sym,title){
  const t=String(title||"").toLowerCase(),s=String(sym||"").toUpperCase();
  if(s==="XAU/USD"){
-  if(/gold|bullion|xau/.test(t))return 1.45;
+  if(isXauSportsOrCompanyNoise(t))return .05;
+  if(/\b(gold|bullion|xau(?:\/usd|usd)?)\b/.test(t))return 1.45;
   if(/federal reserve|\bfed\b|fomc|treasury|yield|real yield|dollar|dxy|interest rate|rate hike|rate cut/.test(t))return 1.25;
   if(/inflation|cpi|pce|payroll|unemployment|war|attack|missile|geopolit|sanction|tariff/.test(t))return 1.00;
   if(/oil|opec|crude|hormuz|shipping/.test(t))return .72;
@@ -731,7 +745,11 @@ function newsUtility(sym,e){
  return ((ent>0?.46:0)+Math.min(ent,3)/3*.18+sourceQuality(e)*.18+(e.fresh||.65)*.1+Math.min(1,(e.severity||0)/5)*.08+corroboration)*priority
 }
 function relevantNews(events,sym){
- const direct=events.filter(e=>symbolEntityScore(sym,e.title)>0);
+ const isXau=String(sym||"").toUpperCase()==="XAU/USD";
+ const direct=events.filter(e=>{
+   if(isXau&&isXauSportsOrCompanyNoise(e.title))return false;
+   return symbolEntityScore(sym,e.title)>0;
+ });
  return clusterStories(direct).map(e=>({...e,priority:symbolPriorityWeight(sym,e.title),utility:newsUtility(sym,e)})).filter(e=>e.utility>=.32).sort((a,b)=>b.utility-a.utility).slice(0,30)
 }
 function newsScore(events,sym){
@@ -830,12 +848,17 @@ function directionalEventProfile(events,sym,tradeDir){
  const directionConfidence=classifiedRisk>0?Math.min(1,Math.abs(net)/classifiedRisk):0;
  let supportiveDominant=supportRisk>=.45&&supportRisk>opposeRisk*1.18;
  let hostileDominant=opposeRisk>=.90&&opposeRisk>supportRisk*1.55&&(opposeRisk-supportRisk)>=.65&&directOppose>=Math.min(.50,opposeRisk*.40);
- // Two independent model layers aligned with the trade veto a non-critical "hostile"
- // label unless direct opposing XAU evidence truly dominates.
- if(modelSupports>=2&&!criticalAgainst&&directOppose<=directSupport*1.10){hostileDominant=false;supportiveDominant=true;}
+ // FINAL arbitration rule: if BOTH symbol-specific news and causal model agree with
+ // the proposed trade, generic macro clusters are not allowed to flip that setup to
+ // HOSTILE. Only a fresh, high-confidence, directly opposing XAU headline can override.
+ const directCriticalOverride=criticalAgainst&&directOppose>=Math.max(.85,directSupport*1.35);
+ if(modelSupports>=2&&!directCriticalOverride){
+   hostileDominant=false;
+   supportiveDominant=true;
+ }
  // Conversely, two model layers against the trade strengthen a genuine opposing read.
  if(modelOpposes>=2&&directOppose>directSupport&&opposeRisk>=.75)hostileDominant=true;
- let block=criticalAgainst||(hostileDominant&&opposeRisk>=1.10&&base.score>=1.60&&directionConfidence>=.22);
+ let block=directCriticalOverride||(hostileDominant&&opposeRisk>=1.10&&base.score>=1.60&&directionConfidence>=.22);
  // Mixed/large events remain CAUTION, never a false hard block.
  const caution=!block&&(base.caution||base.block||base.score>=1||neutralRisk>=.75||supportiveDominant||opposeRisk>.45);
  return {...base,block,caution,state:block?"BLOCK":caution?"CAUTION":"NORMAL",supportRisk,opposeRisk,neutralRisk,directSupport,directOppose,supportiveDominant,hostileDominant,criticalAgainst,directionConfidence,modelNewsSign,causalSign,modelSupports,modelOpposes};
@@ -1650,7 +1673,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-1.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-1.2",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);
 }
 
@@ -1794,6 +1817,8 @@ renderJournal();
   req(verdict(0)==="WAIT","neutral verdict");
   req(actionableDirection("STRONG BUY")==="BUY"&&actionableDirection("SELL")==="SELL","direction parser");
   req(eventImpactSign("XAU/USD","Fed signals rate hike",0)===-1&&eventImpactSign("XAU/USD","Geopolitical war escalates",0)===1,"XAU event direction semantics");
+  req(symbolEntityScore("XAU/USD","AshantiGold player wins football award")===0,"XAU sports/company noise must be rejected");
+  req(symbolEntityScore("XAU/USD","Gold falls as strong US dollar pressures bullion")>0,"Direct XAU headline must be relevant");
   req(eventImpactSign("XAU/USD","Gold falls as strong US dollar pressures bullion",1)===-1,"direct bearish gold headline");
   req(eventImpactSign("XAU/USD","Gold surges as dollar weakens",-1)===1,"direct bullish gold headline");
   const _sellSupport=directionalEventProfile([{title:"Gold falls as strong US dollar pressures bullion",severity:4.6,fresh:.95,score:1,source:"Reuters"}],"XAU/USD","SELL");
@@ -1825,14 +1850,14 @@ renderJournal();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"UI + decision integrity PASS ✓ Event direction, critical screen elements and core arbitration loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"FINAL integrity PASS ✓ Event direction regression, XAU relevance filter, critical UI and core arbitration loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"APEX-PREDATOR-1.1",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-PREDATOR-1.2",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };

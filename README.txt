@@ -1,4 +1,4 @@
-APEX PREDATOR 1.1 — FINAL CORE
+APEX PREDATOR 1.2 — FINAL CORE
 
 This build contains the final surgical event-direction repair and PWA icon integration.
 
@@ -17,3 +17,9 @@ IMPORTANT:
 Upload these extracted files over the existing GitHub Pages repository. Do not clear browser/site storage. After deployment, delete the old Home Screen shortcut and add the page to Home Screen again so iOS refreshes the icon.
 
 Learning is evidence-based: it activates after enough resolved outcomes. APEX does not guarantee profitable trades and should not be treated as a substitute for risk management.
+
+
+APEX 1.2 FINAL PRODUCT FIXES:
+- Rejects XAU false-positive sports/company headlines such as AshantiGold.
+- Bearish news + bearish causal + SELL can no longer be mislabeled hostile unless fresh direct opposing XAU evidence overrides.
+- Direction/magnitude arbitration regression checks added.
