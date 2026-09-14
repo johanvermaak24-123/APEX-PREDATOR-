@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>TITAN GOD 9 — PROOF ENGINE</title>
+<title>TITAN GOD 9.1 — PROOF MEMORY ACCELERATOR</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -115,11 +115,16 @@ button.primary, #scan, #scanAll {
 .liveMarket .lmMeta{text-align:right}.liveMarket .lmMeta b{display:block;font-size:13px;color:#fff}.liveMarket .lmMeta span{display:block;font-size:10px;color:var(--mut);margin-top:4px}
 @media(max-width:600px){.liveMarket .lmPrice{font-size:30px}}
 
+.triggerBar{height:10px;background:#05101a;border:1px solid #1c3548;border-radius:999px;overflow:hidden;margin-top:9px}
+.triggerBar>div{height:100%;width:0;background:linear-gradient(90deg,#ff5266,#ffc857,#5be8ff,#19de83);transition:width .25s ease}
+.gateRow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid #172532;font-size:10px}.gateRow:last-child{border-bottom:0}.gatePass{color:var(--green);font-weight:900}.gateFail{color:var(--amber);font-weight:900}.gateBlock{color:var(--red);font-weight:900}
+.miniPill{display:inline-block;padding:4px 7px;border:1px solid #28465d;border-radius:999px;font-size:9px;font-weight:900;margin:2px 3px 2px 0;color:#a7dfff;background:#0a1b28}
+
 </style>
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 9.0 • PROOF ENGINE</div></div>
+ <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 9.1 • MEMORY ACCELERATOR</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -169,6 +174,18 @@ button.primary, #scan, #scanAll {
    <div id="lockNarrative" class="small" style="margin-top:10px">
     TITAN only commits when a BUY/SELL is actionable. A later weak WAIT does not cancel a live signal.
    </div>
+  </div>
+  <div class="card">
+   <div class="title"><h3>⚡ TRIGGER READINESS RADAR</h3><span id="triggerBadge" class="badge">WAITING</span></div>
+   <div class="grid4">
+    <div class="k"><span>Directional bias</span><b id="triggerBias">—</b></div>
+    <div class="k"><span>Readiness</span><b id="triggerReady">—</b></div>
+    <div class="k"><span>Primary blocker</span><b id="triggerBlocker">—</b></div>
+    <div class="k"><span>Setup stage</span><b id="triggerStage">—</b></div>
+   </div>
+   <div class="triggerBar"><div id="triggerMeter"></div></div>
+   <div id="triggerNarrative" class="small" style="margin-top:10px">Run a scan. TITAN will show exactly what still has to happen before a directional bias can become an actionable trade.</div>
+   <div id="triggerGates" style="margin-top:8px"></div>
   </div>
 
   <div class="card">
@@ -248,10 +265,11 @@ button.primary, #scan, #scanAll {
   </div>
   <div class="card">
    <div class="title"><h3>🕵️ WAIT AUDITOR</h3><span id="waitAuditBadge" class="badge">LEARNING</span></div>
-   <div class="grid3">
+   <div class="grid4">
     <div class="k"><span>WAITs audited</span><b id="waitAudN">0</b></div>
     <div class="k"><span>Good skips</span><b id="waitSaved">—</b></div>
     <div class="k"><span>Missed moves</span><b id="waitMiss">—</b></div>
+    <div class="k"><span>Shadow TP-first</span><b id="waitShadow">—</b></div>
    </div>
    <div id="waitNarrative" class="small" style="margin-top:10px">WAIT decisions are audited too, so TITAN can learn whether caution protected you or missed too many clean moves.</div>
   </div>
@@ -546,7 +564,8 @@ function newsTrack(provider,ok,err=""){
 }
 function normalizeNewsArticle(a,provider){
  const title=a?.title||"";const source=a?.sitename||a?.host||a?.domain||"";const date=a?.published_at||a?.crawled_at||a?.seendate||"";
- return{title,source,date,url:a?.url||"",lang:a?.lang||a?.language||"",provider,score:sent(title),severity:severity(title),trust:trust(a?.host||a?.domain||source),fresh:freshness(date),hits:keywordHits(title)}
+ let domain=a?.host||a?.domain||"";try{if(!domain&&a?.url)domain=new URL(a.url).hostname}catch(e){}
+ return{title,source,domain,date,url:a?.url||"",lang:a?.lang||a?.language||"",provider,score:sent(title),severity:severity(title),trust:trust(domain||source),fresh:freshness(date),hits:keywordHits(title)}
 }
 function newsDateParams(hours){hours=+hours||24;if(hours<=24)return `from=now-${hours}h`;if(hours<=48)return 'date=48h';return 'date=7d'}
 async function freeNews(q,hours,maxrecords=80){
@@ -649,7 +668,7 @@ function jaccardTitle(a,b){
  return i/(A.size+B.size-i)
 }
 function sourceQuality(e){
- const d=(e.domain||"").toLowerCase();
+ const d=(e.domain||e.source||"").toLowerCase();
  if(/reuters|apnews|bloomberg|ft\.com|wsj|cnbc|bbc|economist|federalreserve|ecb|bankofengland|imf|worldbank|opec|sec\.gov/.test(d))return 1;
  if(/marketwatch|investing|coindesk|cointelegraph|yahoo|forbes/.test(d))return .78;
  if(/fool\.com/.test(d))return .45;
@@ -678,14 +697,36 @@ function clusterStories(items){
  }
  return clusters.map(c=>({...c.best,clusterSize:c.items.length,clusterSources:new Set(c.items.map(z=>z.domain||"")).size}))
 }
+function symbolPriorityWeight(sym,title){
+ const t=String(title||"").toLowerCase(),s=String(sym||"").toUpperCase();
+ if(s==="XAU/USD"){
+  if(/gold|bullion|xau/.test(t))return 1.45;
+  if(/federal reserve|\bfed\b|fomc|treasury|yield|real yield|dollar|dxy|interest rate|rate hike|rate cut/.test(t))return 1.25;
+  if(/inflation|cpi|pce|payroll|unemployment|war|attack|missile|geopolit|sanction|tariff/.test(t))return 1.00;
+  if(/oil|opec|crude|hormuz|shipping/.test(t))return .72;
+  if(/bitcoin|ethereum|crypto|stablecoin/.test(t))return .12;
+ }
+ if(/BTC|ETH|SOL|XRP/.test(s)){
+  if(/bitcoin|ethereum|ether|crypto|etf|sec|liquidation|exchange|stablecoin|staking|defi/.test(t))return 1.35;
+  if(/fed|fomc|yield|liquidity|inflation|rates/.test(t))return .85;
+ }
+ if(s.includes("/")){
+  const [a,b]=s.split("/");
+  const aa=(assetAliases[a]||[]).some(x=>t.includes(x)),bb=(assetAliases[b]||[]).some(x=>t.includes(x));
+  if(aa||bb)return 1.20;
+  if(/inflation|central bank|interest rate|yield|risk sentiment/.test(t))return .72;
+ }
+ return 1;
+}
 function newsUtility(sym,e){
  const ent=symbolEntityScore(sym,e.title);
  const corroboration=Math.min(.18,Math.max(0,(e.clusterSources||1)-1)*.06);
- return (ent>0?.46:0)+Math.min(ent,3)/3*.18+sourceQuality(e)*.18+(e.fresh||.65)*.1+Math.min(1,(e.severity||0)/5)*.08+corroboration
+ const priority=symbolPriorityWeight(sym,e.title);
+ return ((ent>0?.46:0)+Math.min(ent,3)/3*.18+sourceQuality(e)*.18+(e.fresh||.65)*.1+Math.min(1,(e.severity||0)/5)*.08+corroboration)*priority
 }
 function relevantNews(events,sym){
  const direct=events.filter(e=>symbolEntityScore(sym,e.title)>0);
- return clusterStories(direct).map(e=>({...e,utility:newsUtility(sym,e)})).filter(e=>e.utility>=.30).sort((a,b)=>b.utility-a.utility).slice(0,30)
+ return clusterStories(direct).map(e=>({...e,priority:symbolPriorityWeight(sym,e.title),utility:newsUtility(sym,e)})).filter(e=>e.utility>=.32).sort((a,b)=>b.utility-a.utility).slice(0,30)
 }
 function newsScore(events,sym){
  const rel=relevantNews(events,sym);let num=0,den=0;
@@ -921,7 +962,7 @@ function renderNewsRadar(r,events){
  $("newsLiveBias").textContent=bias;
  $("newsLiveHigh").textContent=String(high);
  $("newsLiveTime").textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — TITAN could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>News feed reachable, but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`;
+ $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • priority ${Number(x.priority||1).toFixed(2)}× • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — TITAN could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>News feed reachable, but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`;
  renderHistoricalNews(r,events);
 }
 function render(r,events){
@@ -1319,10 +1360,30 @@ function gradeWaitAuditFromBars(r){
  }
  if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
 }
+function gradeWaitShadowFromBars(r){
+ if(!r.raw5?.length)return;
+ let changed=false;
+ for(const x of titanJournal){
+  if(x.sym!==r.sym||x.v!=="WAIT"||!x.shadowPlan||!x.shadowV||x.shadowFirstHit?.resolved)continue;
+  const fake={v:x.shadowV,plan:x.shadowPlan,entry:x.entry,barTime:x.barTime};
+  const fh=firstHitPath(r.raw5,fake);if(!fh?.hit)continue;
+  x.shadowFirstHit={resolved:true,...fh};changed=true;
+ }
+ if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal));
+}
+function waitShadowStats(sym){
+ const rows=titanJournal.filter(x=>x.sym===sym&&x.v==="WAIT"&&x.shadowFirstHit?.resolved&&x.shadowPlan);
+ let wins=0,rSum=0,n=0;
+ for(const x of rows){const risk=Math.abs(x.entry-x.shadowPlan.sl);if(!risk)continue;n++;if(x.shadowFirstHit.hit==="SL")rSum-=1;else{wins++;const tgt=x.shadowFirstHit.hit==="TP3"?x.shadowPlan.tp3:x.shadowFirstHit.hit==="TP2"?x.shadowPlan.tp2:x.shadowPlan.tp1;rSum+=Math.abs(tgt-x.entry)/risk}}
+ return{n,wins,hit:n?wins/n:null,exp:n?rSum/n:null};
+}
 function waitAuditStats(sym){
  const rows=titanJournal.filter(x=>x.sym===sym&&x.v==="WAIT"&&x.waitAudit?.resolved);
  const missed=rows.filter(x=>x.waitAudit.missed).length,good=rows.length-missed;
  return{n:rows.length,missed,good,missRate:rows.length?missed/rows.length:null}
+}
+function wilsonLower(wins,n,z=1.2816){
+ if(!n)return 0;const p=wins/n,z2=z*z,den=1+z2/n;return (p+z2/(2*n)-z*Math.sqrt((p*(1-p)+z2/(4*n))/n))/den
 }
 function cohortProof(r,dna){
  const dir=dirSign(r.v)||waitAuditDirection({bias:r.consensus?.biasLabel||r.rawV});
@@ -1337,7 +1398,8 @@ function cohortProof(r,dna){
   if(won){const tgt=x.firstHit.hit==="TP3"?x.plan.tp3:x.firstHit.hit==="TP2"?x.plan.tp2:x.plan.tp1;rr=Math.abs(tgt-x.entry)/risk;wins++}
   hitW+=(won?1:0)*wt;rSum+=rr*wt;ws+=wt;
  }
- return{n:rows.length,hit:ws?hitW/ws:null,exp:ws?rSum/ws:null,distance:avg(rows.map(z=>z.d)),rows}
+ const effectiveN=rows.filter(z=>z.x?.firstHit?.resolved).length,lower=effectiveN?wilsonLower(wins,effectiveN):0;
+ return{n:rows.length,wins,effectiveN,hit:ws?hitW/ws:null,hitLower:lower,exp:ws?rSum/ws:null,distance:avg(rows.map(z=>z.d)),rows}
 }
 function calibrationError(sym=null){
  const rows=titanJournal.filter(x=>(!sym||x.sym===sym)&&dirSign(x.v)&&x.firstHit?.resolved&&Number.isFinite(+x.conf));
@@ -1354,23 +1416,23 @@ function dnaPassport(dna){
  return `${dna.regime} • ${dna.session} • ${rsiBand} • ${vol} • ${br} • TF ${Math.round((dna.tf||0)*100)} • NEWS ${Math.round((dna.news||0)*100)} • CAUSAL ${Math.round((dna.causal||0)*100)}`
 }
 function renderProofEngine(r,events,b,meta,mg){
- gradeWaitAuditFromBars(r);
- const dna=mg?.dna||makeDNA(r,events,b),cp=cohortProof(r,dna),cal=calibrationError(r.sym),wa=waitAuditStats(r.sym),dr=driftCheck(r.sym);
+ gradeWaitAuditFromBars(r); gradeWaitShadowFromBars(r);
+ const dna=mg?.dna||makeDNA(r,events,b),cp=cohortProof(r,dna),cal=calibrationError(r.sym),wa=waitAuditStats(r.sym),ws=waitShadowStats(r.sym),dr=driftCheck(r.sym);
  $("proofSample").textContent=cp.n;
  $("proofHit").textContent=cp.hit==null?"—":Math.round(cp.hit*100)+"%";
  $("proofExp").textContent=cp.exp==null?"—":cp.exp.toFixed(2)+"R";
  $("proofCal").textContent=cal.ece==null?`learning ${cal.n}/5`:Math.round(cal.ece*100)+"%";
  $("proofDna").textContent=dnaPassport(dna);
  let state="UNPROVEN";
- if(cp.n>=20&&cp.exp>0.10&&cp.hit>=.52&&cal.ece!=null&&cal.ece<=.22&&dr.state!=="NEGATIVE DRIFT")state="PROVEN EDGE";
+ if(cp.n>=20&&cp.exp>0.10&&cp.hit>=.52&&cp.hitLower>=.45&&cal.ece!=null&&cal.ece<=.22&&dr.state!=="NEGATIVE DRIFT")state="PROVEN EDGE";
  else if(cp.n>=8&&(cp.exp<=0||cp.hit<.45))state="EDGE WARNING";
  else if(cp.n>=5)state="BUILDING PROOF";
  $("proofBadge").textContent=state;
- $("proofNarrative").textContent=cp.n?`${cp.n} close DNA matches for ${r.sym}. Weighted TP-first ${Math.round(cp.hit*100)}%, expectancy ${cp.exp.toFixed(2)}R, average DNA distance ${cp.distance.toFixed(2)}. ${state==="PROVEN EDGE"?"This setup has earned evidence-based promotion; normal safety gates still apply.":state==="EDGE WARNING"?"Historical twins are weak; TITAN should remain conservative.":"Sample is still too small for a strong claim."}`:"No resolved close DNA matches yet. TITAN is recording this setup for future proof instead of inventing confidence.";
- $("waitAudN").textContent=wa.n;$("waitSaved").textContent=wa.n?wa.good:"—";$("waitMiss").textContent=wa.n?wa.missed:"—";
+ $("proofNarrative").textContent=cp.n?`${cp.n} close DNA matches for ${r.sym}. Weighted TP-first ${Math.round(cp.hit*100)}%, conservative hit floor ${Math.round((cp.hitLower||0)*100)}%, expectancy ${cp.exp.toFixed(2)}R, average DNA distance ${cp.distance.toFixed(2)}. ${state==="PROVEN EDGE"?"This setup has earned evidence-based promotion; normal safety gates still apply.":state==="EDGE WARNING"?"Historical twins are weak; TITAN should remain conservative.":"Sample is still too small for a strong claim."}`:"No resolved close DNA matches yet. TITAN is recording this setup for future proof instead of inventing confidence.";
+ $("waitAudN").textContent=wa.n;$("waitSaved").textContent=wa.n?wa.good:"—";$("waitMiss").textContent=wa.n?wa.missed:"—";$("waitShadow").textContent=ws.n?`${Math.round(ws.hit*100)}% / ${ws.exp.toFixed(2)}R`:`${ws.n}/5`;
  $("waitAuditBadge").textContent=wa.n>=20?(wa.missRate>.45?"TOO CAUTIOUS":"WAIT HEALTHY"):`LEARNING • ${wa.n}/20`;
- $("waitNarrative").textContent=wa.n?`${wa.n} WAIT decisions have matured to a 2h audit. ${wa.good} avoided a directional move worth chasing; ${wa.missed} missed a move in TITAN's underlying bias. ${wa.n>=20&&wa.missRate>.45?"Caution is now missing too many moves — future threshold tuning should be validated, not guessed.":"No automatic loosening occurs from a small sample."}`:"No WAIT has matured to a 2h audit yet. TITAN will score caution as rigorously as BUY/SELL calls.";
- r.proof={cohort:cp,calibration:cal,waitAudit:wa,state}
+ $("waitNarrative").textContent=wa.n?`${wa.n} WAIT decisions have matured to a 2h audit. ${wa.good} avoided a directional move worth chasing; ${wa.missed} missed a move in TITAN's underlying bias. ${wa.n>=20&&wa.missRate>.45?"Caution is now missing too many moves — future threshold tuning should be validated, not guessed.":"No automatic loosening occurs from a small sample."}`:"No WAIT has matured to a 2h audit yet. Every directional WAIT now also receives a non-trading shadow plan so TITAN can learn whether the blocked setup would have hit TP or SL without pretending a trade was taken.";
+ r.proof={cohort:cp,calibration:cal,waitAudit:wa,waitShadow:ws,state}
  return r.proof
 }
 
@@ -1427,9 +1489,46 @@ function buildBrain(r,events){
  quality=Math.round(clamp(quality,35,93));
  return {technical,news,cause,agree,conflicts,severe,quality,causal}
 }
+function triggerReadiness(r,events,meta){
+ const raw=r.rawTechnicalV||r.rawV||r.v,dir=actionableDirection(raw)||(r.market>0?"BUY":r.market<0?"SELL":null);
+ const severe=events.filter(e=>(e.severity||0)>=3).length;
+ const adaptive=adaptiveFusion(r,events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ const structure=Math.abs(r.market),structureNeed=1.35;
+ const alignNeed=Math.max(2,Math.ceil(r.valid*.5));
+ const gates=[
+  {k:"STRUCTURE",pass:structure>=structureNeed,block:false,detail:`${structure.toFixed(2)} / ${structureNeed.toFixed(2)}`},
+  {k:"TIMEFRAMES",pass:r.align>=alignNeed,block:false,detail:`${r.align}/${r.valid} aligned • need ${alignNeed}`},
+  {k:"UNCERTAINTY",pass:meta.uncertainty<=.58,block:false,detail:`${Math.round(meta.uncertainty*100)}% • max 58%`},
+  {k:"CONFLICT",pass:meta.cf.ratio<=.45,block:false,detail:`${Math.round(meta.cf.ratio*100)}% • max 45%`},
+  {k:"EVENT SHOCK",pass:severe<5,block:severe>=5,detail:`${severe} severe • max 4`},
+  {k:"FUSION",pass:Math.abs(adaptive.fused)>=.16,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} / 16 minimum`}
+ ];
+ if(es.n>=20)gates.push({k:"EXPECTANCY",pass:es.exp>0,block:es.exp<=0,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
+ if(dr.state!=="LEARNING")gates.push({k:"DRIFT",pass:dr.state!=="NEGATIVE DRIFT",block:dr.state==="NEGATIVE DRIFT",detail:dr.state});
+ const pass=gates.filter(g=>g.pass).length,hard=gates.find(g=>g.block&&!g.pass),first=gates.find(g=>!g.pass);
+ let pct=Math.round(100*pass/gates.length);
+ // Reward a coherent directional bias without pretending it is an entry.
+ const horizon=horizonScores(r,events),labs=[horizon.scalp.label,horizon.day.label,horizon.swing.label],same=labs.every(x=>x===labs[0]&&x!=="WAIT");
+ if(same&&dir&&labs[0]===dir)pct=Math.min(99,pct+5);
+ let stage=pct>=92?"ARMED":pct>=75?"NEAR TRIGGER":pct>=50?"BUILDING":"EARLY";
+ if(hard)stage="BLOCKED";
+ const blocker=hard||first;
+ return{dir,pct,stage,blocker,gates,severe,adaptive,horizon};
+}
+function renderTriggerRadar(r,events,meta){
+ const t=triggerReadiness(r,events,meta);
+ $("triggerBias").textContent=t.dir||"NEUTRAL";$("triggerReady").textContent=t.pct+"%";$("triggerStage").textContent=t.stage;
+ $("triggerBlocker").textContent=t.blocker?t.blocker.k:"NONE";$("triggerMeter").style.width=t.pct+"%";
+ $("triggerBadge").textContent=t.stage+(t.dir?` • ${t.dir} BIAS`:"");
+ $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":"gateFail"}">${g.pass?"PASS":g.block?"BLOCK":"WAIT"}</b></div>`).join("");
+ const m=t.blocker;
+ $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but TITAN is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. When the failing gate improves on a fresh verified scan, TITAN can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Final execution still obeys signal lock, proof and live-data validation.`;
+ r.trigger=t;return t;
+}
+
 function renderBrain(r,events){
  const b=buildBrain(r,events),sg=dirSign(r.v);
- gradeFromBars(r); gradeFirstHit(r); const meta=renderMeta(r,events);
+ gradeFromBars(r); gradeFirstHit(r); const meta=renderMeta(r,events); renderTriggerRadar(r,events,meta);
  const adaptive=renderEnsemble(r,events); renderScenario(r,events,adaptive); const edgeCtl=renderEdgeControl(r);
  $("brainTech").textContent=(b.technical*100).toFixed(0);
  $("brainNews").textContent=r.news.items.length?`${r.news.items.length} direct`:"0 direct";
@@ -1452,17 +1551,37 @@ function renderBrain(r,events){
  titanState[r.sym]=now;localStorage.setItem("titan_state_v2",JSON.stringify(titanState));
  const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); recordJournal(r,b);renderJournal();
 }
+function waitStateFingerprint(r){
+ const dna=r._dna||{},bias=String(r.consensus?.biasLabel||r.rawV||"WAIT").replace(/\s+/g," "),reason=r.consensus?.reason||"WAIT";
+ const rsiBand=(dna.rsi||50)>=60?"H":(dna.rsi||50)<=40?"L":"M",reg=dna.regime||"?";
+ return [r.sym,bias,reason,reg,rsiBand,r.align,r.valid,Math.round((r.consensus?.uncertainty||0)*10)].join("|");
+}
+function pruneJournalSmart(rows){
+ const actionable=rows.filter(x=>dirSign(x.v)),waits=rows.filter(x=>x.v==="WAIT");
+ // Keep more trading outcomes than repeated WAIT states; newest items win.
+ const keepWait=waits.slice(0,90),keepAction=actionable.slice(0,210),ids=new Set([...keepWait,...keepAction].map(x=>x.id));
+ return rows.filter(x=>ids.has(x.id)).slice(0,260);
+}
 function recordJournal(r,b){
- const last=titanJournal[0];
+ const now=Date.now(),last=titanJournal[0];
  if(r.signalLocked && r.rawV==="WAIT" && last&&last.sym===r.sym&&actionableDirection(last.v)===r.activeSignal?.direction)return;
  if(last&&r.activeSignal&&last.signalLock?.id===r.activeSignal.id)return;
- if(last&&last.sym===r.sym&&last.v===r.v&&Date.now()-last.t<60000)return;
- const plan=r.activeSignal?.plan||executionPlan(r),newsEvidence=(r.news?.items||[]).slice(0,10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0})),eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);titanJournal.unshift({id:"TITAN-"+Date.now().toString(36).toUpperCase(),modelVersion:"TITAN-GOD-9.0",t:Date.now(),sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
- titanJournal=titanJournal.slice(0,100);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+ const waitFp=r.v==="WAIT"?waitStateFingerprint(r):null;
+ if(r.v==="WAIT"){
+  const recentSame=titanJournal.find(x=>x.sym===r.sym&&x.v==="WAIT"&&x.waitFingerprint===waitFp&&now-x.t<15*60*1000);
+  if(recentSame)return; // compress repeated WAIT noise while preserving genuinely new states
+ }else if(last&&last.sym===r.sym&&last.v===r.v&&now-last.t<60000)return;
+ const plan=r.activeSignal?.plan||executionPlan(r);
+ const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
+ const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
+ const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
+ titanJournal.unshift({id:"TITAN-"+now.toString(36).toUpperCase(),modelVersion:"TITAN-GOD-9.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal=pruneJournalSmart(titanJournal);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal));
 }
+
 function renderJournal(){
  must("jCount").textContent=titanJournal.length;must("jBuy").textContent=titanJournal.filter(x=>/BUY/.test(x.v)).length;must("jSell").textContent=titanJournal.filter(x=>/SELL/.test(x.v)).length;must("jWait").textContent=titanJournal.filter(x=>x.v==="WAIT").length;
- must("journalList").innerHTML=titanJournal.slice(0,7).map(x=>{const fh=x.firstHit?.resolved?x.firstHit.hit:"pending",mfe=x.outcome?.mfe!=null?`MFE ${(x.outcome.mfe*100).toFixed(2)}%`:"",mae=x.outcome?.mae!=null?`MAE ${(x.outcome.mae*100).toFixed(2)}%`:"";return `<div class="item"><b>${esc(x.sym)} • ${esc(x.v)} • ${esc(x.gate||"")}</b><div class="small">${new Date(x.t).toLocaleString()} • first-hit ${fh} • quality ${x.quality}/100${mfe?" • "+mfe:""}${mae?" • "+mae:""} • ${x.id}</div></div>`}).join("")||'<div class="item"><p>No signals stored yet.</p></div>'
+ must("journalList").innerHTML=titanJournal.slice(0,7).map(x=>{const fh=x.firstHit?.resolved?x.firstHit.hit:"pending",mfe=x.outcome?.mfe!=null?`MFE ${(x.outcome.mfe*100).toFixed(2)}%`:"",mae=x.outcome?.mae!=null?`MAE ${(x.outcome.mae*100).toFixed(2)}%`:"";return `<div class="item"><b>${esc(x.sym)} • ${esc(x.v)} • ${esc(x.gate||"")}</b><div class="small">${new Date(x.t).toLocaleString()} • first-hit ${fh} • quality ${x.quality}/100${x.trigger?` • trigger ${x.trigger.pct}% ${x.trigger.blocker||"ready"}`:""}${mfe?" • "+mfe:""}${mae?" • "+mae:""} • ${x.id}</div></div>`}).join("")||'<div class="item"><p>No signals stored yet.</p></div>'
 }
 function renderCoverage(events){
  const sources=new Set(events.map(e=>e.source).filter(Boolean)),themes=new Set(events.map(e=>e.cat).filter(Boolean)),counts={};
@@ -1536,15 +1655,15 @@ const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
 const TITAN_AUTO_MEMORY_STORE="brain";
 const TITAN_AUTO_MEMORY_KEY="latest";
 function titanMemorySnapshot(){
- return {schema:2,savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
+ return {schema:3,savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
 }
 function titanMemoryOpen(){return new Promise((resolve,reject)=>{try{const q=indexedDB.open(TITAN_AUTO_MEMORY_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(TITAN_AUTO_MEMORY_STORE))db.createObjectStore(TITAN_AUTO_MEMORY_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)}catch(e){reject(e)}})}
 function renderAutoMemoryStatus(savedAt=null){
  const badge=document.getElementById("autoMemBadge"),st=document.getElementById("autoMemStatus"),last=document.getElementById("autoMemLast"),rec=document.getElementById("autoMemRecords"),ln=document.getElementById("autoLearnN"),nar=document.getElementById("autoMemNarrative");
  const L=componentLearning();
- if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln)ln.textContent=String(L.n||0);
+ if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots save automatically in this browser. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; API key is not copied into brain backups.`;
+ if(nar)nar.textContent=`Brain snapshots and compressed state memory save automatically in this browser. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; API key is not copied into brain backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt)}catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("TITAN auto-memory save skipped",e)}
@@ -1581,8 +1700,8 @@ renderJournal();
 (function titanIntegrityCheck(){
  const required=["signal","status","conf","meter","riskBox","covHeadlines","covSources","covThemes","covKeywords",
  "ensBadge","wTech","wNews","wCausal","wTF","scenarioBadge","scBull","scBase","scBear",
- "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote","proofBadge","proofSample","proofHit","proofExp","proofCal","proofDna","proofNarrative","waitAuditBadge","waitAudN","waitSaved","waitMiss","waitNarrative",
- "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
+ "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote","proofBadge","proofSample","proofHit","proofExp","proofCal","proofDna","proofNarrative","waitAuditBadge","waitAudN","waitSaved","waitMiss","waitShadow","waitNarrative",
+ "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","triggerBadge","triggerBias","triggerReady","triggerBlocker","triggerStage","triggerMeter","triggerNarrative","triggerGates","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
  "hzScalp","hzDay","hzSwing","hzConsensus","brainState","brainTech","brainNews","brainRisk","brainAgree",
  "changedBox","eventDNA","histNewsBadge","histNewsN","histNewsHit","histNewsMove","histNewsVote","histNewsList","newsLiveBadge","newsLiveCount","newsLiveBias","newsLiveHigh","newsLiveTime","newsLiveList","origEntry","entry","entryState","planUpdated","sl","tp1","tp2","tp3","grade","scores","why","impactMap",
  "jCount","jBuy","jSell","jWait","journalList","clearJournal","autoMemBadge","autoMemStatus","autoMemLast","autoMemRecords","autoLearnN","autoMemNarrative","exportTitan","importTitan","importTitanText","backupMsg"];
@@ -1596,7 +1715,7 @@ renderJournal();
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"TITAN-GOD-9.0",exportedAt:new Date().toISOString(),journal:JSON.parse(localStorage.getItem("titan_journal_v2")||"[]"),state:JSON.parse(localStorage.getItem("titan_state_v2")||"{}"),activeSignals:JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}"),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"TITAN-GOD-9.1",exportedAt:new Date().toISOString(),journal:JSON.parse(localStorage.getItem("titan_journal_v2")||"[]"),state:JSON.parse(localStorage.getItem("titan_state_v2")||"{}"),activeSignals:JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}"),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
