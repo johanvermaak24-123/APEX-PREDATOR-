@@ -1,3 +1,24 @@
+TITAN GOD 9.2 — SMART EVENT SHOCK
+
+Upgraded from TITAN GOD 9.1 without changing the existing browser-memory keys.
+
+Major upgrades in 9.2:
+- Smart Event Shock Engine: duplicate headlines are clustered into independent event stories before risk is calculated.
+- Symbol-aware shock relevance: XAU/USD prioritizes gold, Fed/FOMC, Treasury/yields/USD, inflation and geopolitical catalysts while suppressing unrelated crypto noise.
+- Freshness decay: old headlines lose shock power instead of permanently blocking trades.
+- Source-quality weighting: corroboration from multiple sources increases confidence, but 30 copies of one story do not count as 30 shocks.
+- Material-cluster hard block: EVENT SHOCK only hard-blocks when independent, fresh, sufficiently material clusters justify it.
+- Event CAUTION state: elevated risk can warn TITAN without automatically killing an otherwise valid setup.
+- Trigger Radar now reports cluster-normalized risk score, number of material clusters and NORMAL/CAUTION/BLOCK state.
+- DeepGate, Expectancy Gate, Meta-Brain and decision consensus now use the same Smart Event Shock profile.
+- Existing 9.1 WAIT compression, shadow proof learning, proof engine, signal locks and journal memory remain intact.
+
+IMPORTANT:
+Upload these files over the existing GitHub Pages repository. Do not delete browser/site data if you want to keep local TITAN memory. The service-worker cache name was bumped to 9.2 so the new build can replace the previous cached shell.
+
+Safety: TITAN is a research/prototype decision-support system. It does not guarantee future price direction or profits.
+
+--- PREVIOUS 9.1 NOTES ---
 TITAN GOD 9.1 — PROOF MEMORY ACCELERATOR
 
 Upgraded from TITAN GOD 9.0 without deleting the existing browser memory keys.

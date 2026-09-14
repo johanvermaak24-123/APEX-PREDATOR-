@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>TITAN GOD 9.1 — PROOF MEMORY ACCELERATOR</title>
+<title>TITAN GOD 9.2 — SMART EVENT SHOCK</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 9.1 • MEMORY ACCELERATOR</div></div>
+ <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 9.2 • SMART EVENT SHOCK</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -737,6 +737,38 @@ function newsScore(events,sym){
  }
  return {items:rel,score:clamp(den?num/den:0,-2,2)}
 }
+
+// TITAN GOD 9.2 — Smart Event Shock Engine.
+// Counts independent event clusters, not raw headline volume. Duplicate coverage is
+// corroboration, never 30 separate shocks. Risk is symbol-specific, freshness-decayed
+// and source-quality weighted. A hard block requires genuinely material evidence.
+function smartEventShock(events,sym){
+ const s=String(sym||"").toUpperCase();
+ const macroCritical=/war|invasion|missile|attack|ceasefire|sanction|tariff|federal reserve|\bfed\b|fomc|treasury|yield|inflation|cpi|pce|payroll|unemployment|rate hike|rate cut|oil|opec|hormuz|shipping|default|bankruptcy/;
+ const candidates=(events||[]).filter(e=>{
+   const sev=e.severity||0,t=String(e.title||"").toLowerCase();
+   if(sev<1.5)return false;
+   const direct=symbolEntityScore(s,e.title)>0;
+   const macro=macroCritical.test(t);
+   return direct||macro;
+ });
+ const clusters=clusterStories(candidates).map(e=>{
+   const sev=e.severity||0,fresh=e.fresh||.65,quality=sourceQuality(e);
+   const priority=clamp(symbolPriorityWeight(s,e.title),.12,1.45);
+   const corroboration=Math.min(1.28,1+Math.max(0,(e.clusterSources||1)-1)*.07);
+   const direct=symbolEntityScore(s,e.title)>0?1:.62;
+   const risk=(sev/3)*fresh*quality*priority*corroboration*direct;
+   return {...e,shockRisk:risk};
+ }).sort((a,b)=>b.shockRisk-a.shockRisk);
+ const top=clusters.slice(0,6);
+ const score=top.reduce((a,x)=>a+x.shockRisk,0);
+ const critical=top.some(x=>(x.severity||0)>=4.5&&(x.fresh||0)>=.68&&sourceQuality(x)>=.78&&x.shockRisk>=1.20);
+ const material=top.filter(x=>x.shockRisk>=.45).length;
+ const block=critical||(score>=3.00&&material>=2);
+ const caution=!block&&(score>=1.25||material>=2);
+ const state=block?"BLOCK":caution?"CAUTION":"NORMAL";
+ return {state,block,caution,score,clusters:clusters.length,material,top,rawSevere:(events||[]).filter(e=>(e.severity||0)>=3).length};
+}
 function impactMap(events){const text=events.map(x=>x.title.toLowerCase()).join(" ");let impacts=[];
  const push=(a,d,r)=>impacts.push({a,d,r});
  if(/war|attack|missile|invasion|geopolitical|sanction/.test(text)){push("XAU/USD","+","safe-haven / geopolitical risk");push("Oil","+","risk premium / supply concern");push("Risk assets","−","risk-off pressure")}
@@ -764,7 +796,7 @@ function decisionConsensus(r,events){
  const alignPass=r.align>=Math.max(2,Math.ceil(r.valid*.5));
  const conflictPass=cf.ratio<=.45;
  const uncertaintyPass=uncertainty<=.58;
- const severe=events.filter(e=>(e.severity||0)>=3).length,eventDanger=severe>=5;
+ const shock=smartEventShock(events,r.sym),eventDanger=shock.block;
  const hist=historicalNewsAnalogs({...r,v:rawVerdict},events);
  const es=edgeStats(r.sym),dr=driftCheck(r.sym);
  let gate=(rawDir&&technicalPass&&alignPass&&conflictPass&&uncertaintyPass&&!eventDanger)?"PASS":"WAIT";
@@ -789,7 +821,7 @@ function decisionConsensus(r,events){
  }
  const biasLabel=rawDir?`${rawDir} BIAS — WAIT`:"WAIT";
  const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":!technicalPass?"STRUCTURE TOO WEAK":!alignPass?"TIMEFRAMES NOT ALIGNED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":eventDanger?"EVENT SHOCK RISK":"WAIT FOR CONFIRMATION";
- return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed};
+ return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed,eventShock:shock};
 }
 
 const TITAN_SIGNAL_LOCK_KEY="titan_active_signals_v2";
@@ -1071,7 +1103,7 @@ function regimeDetect(r){
 function evidenceVector(r,events){
  const rel=r.news.items||[];
  const causal=causalBias(r.sym,rel.length?rel:events);
- const evRisk=Math.min(1,events.filter(e=>(e.severity||0)>=2.5).length/8);
+ const evRisk=clamp(smartEventShock(events,r.sym).score/3,0,1);
  const freshRel=rel.length?avg(rel.map(x=>x.fresh||.65)):0;
  const trustRel=rel.length?avg(rel.map(x=>x.trust||.55)):0;
  const tfAgree=r.valid?Math.abs(r.align/r.valid):0;
@@ -1444,12 +1476,12 @@ function renderMemoryAndGate(r,events,b,meta){
  $("memoryNarrative").textContent=mem.n?`${mem.n} comparable completed setups found. Average DNA distance ${mem.distance.toFixed(2)}. This is local empirical memory, not a guaranteed forecast.`:"Not enough comparable completed setups yet.";
  const technicalPass=Math.abs(r.market)>=1.35,alignPass=r.align>=Math.max(2,Math.ceil(r.valid*.5)),uncPass=meta.uncertainty<=.58,conflictPass=meta.cf.ratio<=.45;
  const memoryPass=mem.n<5?null:(mem.vote==="SUPPORT");
- const eventDanger=events.filter(e=>(e.severity||0)>=3).length>=5;
+ const shock=smartEventShock(events,r.sym),eventDanger=shock.block;
  let gate=(technicalPass&&alignPass&&uncPass&&conflictPass&&!eventDanger)?"PASS":"WAIT";
  if(r.consensus&&r.consensus.gate!=="PASS")gate=r.consensus.gate;
  if(memoryPass===false)gate="REJECT";
  $("edgeState").textContent=technicalPass&&alignPass?"STRUCTURE OK":"WEAK";
- $("edgeRisk").textContent=eventDanger?"EVENT SHOCK":meta.uncertainty>.58?"UNCERTAIN":"NORMAL";
+ $("edgeRisk").textContent=eventDanger?"EVENT SHOCK":shock.caution?"EVENT CAUTION":meta.uncertainty>.58?"UNCERTAIN":"NORMAL";
  $("edgeGate").textContent=gate;$("edgeEvidence").textContent=mem.n>=5?`${mem.n} analogs`:"building";
  $("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"MEMORY REJECT":"NO TRADE";
  $("edgeNarrative").textContent=gate==="PASS"?(mem.n>=5?`Current structure passed the risk gate and local analog memory ${mem.vote.toLowerCase()}s the direction.`:"Current structure passed the risk gate, but TITAN still needs more completed analogs before calling the edge proven."):gate==="REJECT"?"Historical local analogs currently reject this setup.":"One or more safety gates failed; forcing a trade is not justified.";
@@ -1483,15 +1515,15 @@ function buildBrain(r,events){
  const technical=clamp(r.market/4,-1,1),news=clamp(r.news.score/2,-1,1),cause=clamp(causal.score/2,-1,1);
  const sign=dirSign(r.v),agree=[technical,news,cause].filter(x=>Math.sign(x)===sign&&Math.abs(x)>.08).length;
  const conflicts=[technical,news,cause].filter(x=>sign&&Math.sign(x)===-sign&&Math.abs(x)>.18).length;
- const severe=events.filter(e=>(e.severity||0)>=2.5).length;
- let quality=50+Math.abs(technical)*18+Math.abs(news)*10+Math.abs(cause)*10+agree*5-conflicts*9-Math.min(severe,5)*1.5;
+ const shock=smartEventShock(events,r.sym),severe=shock.material;
+ let quality=50+Math.abs(technical)*18+Math.abs(news)*10+Math.abs(cause)*10+agree*5-conflicts*9-Math.min(shock.score,3)*2.0;
  if(r.v==="WAIT")quality=Math.min(quality,64);
  quality=Math.round(clamp(quality,35,93));
- return {technical,news,cause,agree,conflicts,severe,quality,causal}
+ return {technical,news,cause,agree,conflicts,severe,quality,causal,shock}
 }
 function triggerReadiness(r,events,meta){
  const raw=r.rawTechnicalV||r.rawV||r.v,dir=actionableDirection(raw)||(r.market>0?"BUY":r.market<0?"SELL":null);
- const severe=events.filter(e=>(e.severity||0)>=3).length;
+ const shock=smartEventShock(events,r.sym),severe=shock.material;
  const adaptive=adaptiveFusion(r,events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
  const structure=Math.abs(r.market),structureNeed=1.35;
  const alignNeed=Math.max(2,Math.ceil(r.valid*.5));
@@ -1500,7 +1532,7 @@ function triggerReadiness(r,events,meta){
   {k:"TIMEFRAMES",pass:r.align>=alignNeed,block:false,detail:`${r.align}/${r.valid} aligned • need ${alignNeed}`},
   {k:"UNCERTAINTY",pass:meta.uncertainty<=.58,block:false,detail:`${Math.round(meta.uncertainty*100)}% • max 58%`},
   {k:"CONFLICT",pass:meta.cf.ratio<=.45,block:false,detail:`${Math.round(meta.cf.ratio*100)}% • max 45%`},
-  {k:"EVENT SHOCK",pass:severe<5,block:severe>=5,detail:`${severe} severe • max 4`},
+  {k:"EVENT SHOCK",pass:!shock.block,block:shock.block,detail:`${shock.score.toFixed(2)} risk • ${shock.material} material clusters • ${shock.state}`},
   {k:"FUSION",pass:Math.abs(adaptive.fused)>=.16,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} / 16 minimum`}
  ];
  if(es.n>=20)gates.push({k:"EXPECTANCY",pass:es.exp>0,block:es.exp<=0,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
@@ -1513,7 +1545,7 @@ function triggerReadiness(r,events,meta){
  let stage=pct>=92?"ARMED":pct>=75?"NEAR TRIGGER":pct>=50?"BUILDING":"EARLY";
  if(hard)stage="BLOCKED";
  const blocker=hard||first;
- return{dir,pct,stage,blocker,gates,severe,adaptive,horizon};
+ return{dir,pct,stage,blocker,gates,severe,adaptive,horizon,shock};
 }
 function renderTriggerRadar(r,events,meta){
  const t=triggerReadiness(r,events,meta);
@@ -1522,7 +1554,7 @@ function renderTriggerRadar(r,events,meta){
  $("triggerBadge").textContent=t.stage+(t.dir?` • ${t.dir} BIAS`:"");
  $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":"gateFail"}">${g.pass?"PASS":g.block?"BLOCK":"WAIT"}</b></div>`).join("");
  const m=t.blocker;
- $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but TITAN is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. When the failing gate improves on a fresh verified scan, TITAN can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Final execution still obeys signal lock, proof and live-data validation.`;
+ $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but TITAN is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT SHOCK"?"9.2 is counting independent fresh event clusters, not duplicate headlines. ":""}When the failing gate improves on a fresh verified scan, TITAN can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
  r.trigger=t;return t;
 }
 
@@ -1532,7 +1564,7 @@ function renderBrain(r,events){
  const adaptive=renderEnsemble(r,events); renderScenario(r,events,adaptive); const edgeCtl=renderEdgeControl(r);
  $("brainTech").textContent=(b.technical*100).toFixed(0);
  $("brainNews").textContent=r.news.items.length?`${r.news.items.length} direct`:"0 direct";
- $("brainRisk").textContent=b.severe>=3?"HIGH":b.severe?"MEDIUM":"LOW";
+ $("brainRisk").textContent=b.shock?.block?"HIGH":b.shock?.caution?"MEDIUM":"LOW";
  $("brainAgree").textContent=`${r.consensus?.support??b.agree}/4`;
  const forcedWait=r.consensus?.gate!=="PASS";
  $("brainState").textContent=forcedWait?`WAIT • ${r.consensus?.reason||"GATE"}`:(b.conflicts?`CONFLICT ${b.conflicts}`:"ALIGNED");
@@ -1575,7 +1607,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"TITAN-"+now.toString(36).toUpperCase(),modelVersion:"TITAN-GOD-9.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"TITAN-"+now.toString(36).toUpperCase(),modelVersion:"TITAN-GOD-9.2",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal));
 }
 
@@ -1600,8 +1632,8 @@ $("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPD
 function deepGateForBest(r,events){
  const e=evidenceVector(r,events),cf=conflictMatrix(e),u=renderlessUncertainty(e),b=buildBrain(r,events),rg=regimeDetect(r);
  const mem=analogMemory(makeDNA(r,events,b),dirSign(r.v)),es=edgeStats(r.sym),dr=driftCheck(r.sym);
- const severe=events.filter(x=>(x.severity||0)>=3).length;
- let gate=(Math.abs(r.market)>=1.35 && r.align>=Math.max(2,Math.ceil(r.valid*.5)) && u<=.58 && cf.ratio<=.45 && severe<5)?"PASS":"WAIT";
+ const shock=smartEventShock(events,r.sym);
+ let gate=(Math.abs(r.market)>=1.35 && r.align>=Math.max(2,Math.ceil(r.valid*.5)) && u<=.58 && cf.ratio<=.45 && !shock.block)?"PASS":"WAIT";
  if(mem.n>=5 && mem.vote==="REJECT")gate="REJECT";
  if(es.n>=20 && es.exp<=0)gate="REJECT";
  if(dr.state==="NEGATIVE DRIFT" && gate==="PASS")gate="WAIT";
