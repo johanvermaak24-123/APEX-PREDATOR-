@@ -19,7 +19,13 @@ Upload these extracted files over the existing GitHub Pages repository. Do not c
 Learning is evidence-based: it activates after enough resolved outcomes. APEX does not guarantee profitable trades and should not be treated as a substitute for risk management.
 
 
-APEX 1.2 FINAL PRODUCT FIXES:
+APEX 1.3 FINAL PRODUCT FIXES:
 - Rejects XAU false-positive sports/company headlines such as AshantiGold.
 - Bearish news + bearish causal + SELL can no longer be mislabeled hostile unless fresh direct opposing XAU evidence overrides.
 - Direction/magnitude arbitration regression checks added.
+
+APEX 1.3 FINAL NEWS FILTER:
+- Final XAU/USD relevance hardening: rejects Gold Coast/place names, medals/sports, jewellery/fashion, and mining/exploration headlines that are not about the bullion market.
+- Generic “gold” now requires explicit bullion/price/macro market context before it can count as direct XAU evidence.
+- Added live regression tests for the exact false-positive examples observed in APEX 1.2.
+- Decision/event/learning architecture otherwise unchanged to preserve continuity and browser memory.

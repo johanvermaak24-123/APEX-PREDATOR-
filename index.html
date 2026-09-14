@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX 1.2 • FINAL PRODUCT</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX 1.3 • FINAL NEWS FILTER</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -682,13 +682,26 @@ function sourceQuality(e){
 }
 function isXauSportsOrCompanyNoise(title){
  const t=String(title||"").toLowerCase();
- return /\b(matchweek|fixture|coach|player|football|soccer|premier league|gpl|nasco|awards?|goal|club|team|ashantigold|gold fields ltd|goldfields ltd)\b/.test(t);
+ // “Gold” is an extremely ambiguous word. Reject obvious non-bullion uses before
+ // any symbol scoring so sport, geography, fashion, jewellery and mining-company
+ // headlines cannot contaminate XAU/USD sentiment merely because they contain gold.
+ return /\b(matchweek|fixture|coach|player|football|soccer|premier league|gpl|nasco|awards?|goal|club|team|ashantigold|gold fields ltd|goldfields ltd|gold coast|gold medal(?:list|ist)?|medallist|medalist|olympic|asian games|commonwealth games|jewel(?:ry|lery)?|jewellery|jewelry|zari|kanjeevaram|saree|dress|fashion|karat|carat|necklace|bracelet|ring|mayor|council|drill(?:ing)?|intersects?|intercepts?|assay|ore|deposit|exploration|resource estimate|grams? per tonne|g\/t|mining project|gold mine|gold mining)\b/.test(t);
+}
+function xauMarketContext(title){
+ const t=String(title||"").toLowerCase();
+ return /\b(bullion|xau(?:\/usd|usd)?|spot gold|gold prices?|gold market|gold futures?|precious metals?|ounce|ounces|oz|comex|commodity|commodities|safe haven|real yields?|treasury yields?|dxy|dollar|federal reserve|fed|fomc|inflation|cpi|pce|interest rates?|rate hike|rate cut|hawkish|dovish|rall(?:y|ies|ied)|surges?|soars?|rises?|gains?|rebounds?|falls?|fell|slips?|slides?|drops?|declines?|plunges?|sinks?|sell[- ]?off|pressure(?:d)?|weighs? on)\b/.test(t);
 }
 function xauTopicStrength(title){
  const t=String(title||"").toLowerCase();
- if(isXauSportsOrCompanyNoise(t))return 0;
+ const noisy=isXauSportsOrCompanyNoise(t);
+ const marketCtx=xauMarketContext(t);
+ // Noise is rejected unless the SAME headline also contains explicit bullion-market
+ // language (e.g. “miners fall as gold prices slide”). This prevents false positives
+ // such as Gold Coast, gold medallist, gold zari and exploration drill results.
+ if(noisy&&!marketCtx)return 0;
  let score=0;
- if(/\b(gold|bullion|xau(?:\/usd|usd)?)\b/.test(t))score+=3;
+ const hasDirect=/\b(gold|bullion|xau(?:\/usd|usd)?)\b/.test(t);
+ if(hasDirect&&marketCtx)score+=3;
  if(/\b(federal reserve|fed|fomc|treasury|treasuries|yield|yields|real yield|dollar|dxy|inflation|cpi|pce|interest rate|rate hike|rate cut)\b/.test(t))score+=2;
  if(/\b(war|geopolitical|missile|attack|sanction|safe haven|central bank|oil|crude|opec|hormuz|red sea)\b/.test(t))score+=1;
  return score;
@@ -1673,7 +1686,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-1.2",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-1.3",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);
 }
 
@@ -1818,6 +1831,10 @@ renderJournal();
   req(actionableDirection("STRONG BUY")==="BUY"&&actionableDirection("SELL")==="SELL","direction parser");
   req(eventImpactSign("XAU/USD","Fed signals rate hike",0)===-1&&eventImpactSign("XAU/USD","Geopolitical war escalates",0)===1,"XAU event direction semantics");
   req(symbolEntityScore("XAU/USD","AshantiGold player wins football award")===0,"XAU sports/company noise must be rejected");
+  req(symbolEntityScore("XAU/USD","Gold Coast mayor clarifies claim after White House rebuke")===0,"Gold Coast geography noise must be rejected");
+  req(symbolEntityScore("XAU/USD","Radhika Ambani wore a jewel pink Kanjeevaram with gold zari")===0,"Gold jewellery/fashion noise must be rejected");
+  req(symbolEntityScore("XAU/USD","Asian Games gold medallist hits out at selection process")===0,"Gold medal sport noise must be rejected");
+  req(symbolEntityScore("XAU/USD","Blue Jay Gold intersects 14.0 m of 6.15 g/t gold")===0,"Gold exploration/mining noise must be rejected");
   req(symbolEntityScore("XAU/USD","Gold falls as strong US dollar pressures bullion")>0,"Direct XAU headline must be relevant");
   req(eventImpactSign("XAU/USD","Gold falls as strong US dollar pressures bullion",1)===-1,"direct bearish gold headline");
   req(eventImpactSign("XAU/USD","Gold surges as dollar weakens",-1)===1,"direct bullish gold headline");
@@ -1850,14 +1867,14 @@ renderJournal();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"FINAL integrity PASS ✓ Event direction regression, XAU relevance filter, critical UI and core arbitration loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"FINAL integrity PASS ✓ Event direction regression, strict XAU bullion relevance filter, critical UI and core arbitration loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"APEX-PREDATOR-1.2",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-PREDATOR-1.3",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
