@@ -1,5 +1,16 @@
-const CACHE="titan-god-9-2-smart-event-shock";
+const CACHE="titan-god-10-3-verified-stability-core";
 const STATIC=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)).catch(()=>{}))});
+self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting()});
+self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
-self.addEventListener("fetch",e=>{const r=e.request;if(r.mode==="navigate"||r.destination==="document"){e.respondWith(fetch(r,{cache:"no-store"}).catch(()=>caches.match("./index.html")));return}e.respondWith(fetch(r).then(x=>{if(x&&x.ok){const y=x.clone();caches.open(CACHE).then(c=>c.put(r,y)).catch(()=>{})}return x}).catch(()=>caches.match(r)))})
+self.addEventListener("fetch",e=>{
+ const r=e.request;if(r.method!=="GET")return;
+ if(r.mode==="navigate"||r.destination==="document"){
+  e.respondWith(fetch(r,{cache:"no-store"}).then(res=>{if(res&&res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put("./index.html",copy)).catch(()=>{})}return res}).catch(()=>caches.match("./index.html")));
+  return;
+ }
+ const url=new URL(r.url);
+ if(url.origin===self.location.origin){
+  e.respondWith(fetch(r,{cache:"no-cache"}).then(res=>{if(res&&res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(r,copy)).catch(()=>{})}return res}).catch(()=>caches.match(r)));
+ }
+});

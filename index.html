@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>TITAN GOD 9.2 — SMART EVENT SHOCK</title>
+<title>TITAN GOD 10.3 — VERIFIED STABILITY CORE</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 9.2 • SMART EVENT SHOCK</div></div>
+ <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 10.3 • VERIFIED STABILITY CORE</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -430,9 +430,15 @@ button.primary, #scan, #scanAll {
 </div>
 <script>
 const $=x=>document.getElementById(x), must=x=>{const e=$(x);if(!e)throw new Error("UI element missing: #"+x);return e}, clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+function safeJSON(raw,fallback){try{const v=JSON.parse(raw);return v??fallback}catch(e){return fallback}}
+function readStoredJSON(key,fallback,legacyKey=null){const raw=localStorage.getItem(key)??(legacyKey?localStorage.getItem(legacyKey):null);return raw==null?fallback:safeJSON(raw,fallback)}
+function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(value));try{localStorage.setItem("titan_last_persist_ms",String(Date.now()))}catch(_e){}return true}catch(e){console.warn("TITAN storage write failed",key,e);return false}}
+function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
+function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("TITAN storage text write failed",key,e);return false}}
+function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
-$("tdKey").value="FREE";$("hours").value=localStorage.titan_hours||"24";$("minConf").value=localStorage.titan_min||"72";$("newsMode").value=localStorage.titan_news_mode||"turbo";
-$("save").onclick=()=>{localStorage.removeItem("titan_td");localStorage.titan_hours=$("hours").value;localStorage.titan_min=$("minConf").value;localStorage.titan_news_mode=$("newsMode").value;$("connMsg").textContent="Saved."};
+$("tdKey").value="FREE";$("hours").value=readStoredText("titan_hours","24");$("minConf").value=readStoredText("titan_min","72");$("newsMode").value=readStoredText("titan_news_mode","turbo");
+$("save").onclick=()=>{removeStored("titan_td");persistText("titan_hours",$("hours").value);persistText("titan_min",$("minConf").value);persistText("titan_news_mode",$("newsMode").value);$("connMsg").textContent="Saved."};
 
 function ema(v,p){const k=2/(p+1),o=[v[0]];for(let i=1;i<v.length;i++)o.push(v[i]*k+o[i-1]*(1-k));return o}
 function rsi(v,p=14){let o=Array(v.length).fill(50);if(v.length<p+2)return o;let g=0,l=0;for(let i=1;i<=p;i++){let d=v[i]-v[i-1];if(d>=0)g+=d;else l-=d}let ag=g/p,al=l/p;o[p]=al===0?100:100-100/(1+ag/al);for(let i=p+1;i<v.length;i++){let d=v[i]-v[i-1],gg=Math.max(d,0),ll=Math.max(-d,0);ag=(ag*(p-1)+gg)/p;al=(al*(p-1)+ll)/p;o[i]=al===0?100:100-100/(1+ag/al)}return o}
@@ -769,6 +775,31 @@ function smartEventShock(events,sym){
  const state=block?"BLOCK":caution?"CAUTION":"NORMAL";
  return {state,block,caution,score,clusters:clusters.length,material,top,rawSevere:(events||[]).filter(e=>(e.severity||0)>=3).length};
 }
+
+// TITAN GOD 10.0: interpret event magnitude separately from trade direction.
+function eventImpactSign(sym,title,score=0){
+ const s=String(sym||"").toUpperCase(),t=String(title||"").toLowerCase();
+ const hawkish=/rate hike|hawkish|treasury.*(rise|jump|surge|high)|yield.*(rise|jump|surge|high)|hot inflation|strong(er)? (us )?dollar|dollar (rise|surge|strength)|fed.*tighten/;
+ const dovish=/rate cut|dovish|easing|yield.*(fall|drop|lower)|weak(er)? (us )?dollar|dollar (fall|drop|weaken)|fed.*ease/;
+ const geo=/war|invasion|missile|attack|geopolitical|hormuz|red sea|sanction/;
+ const supply=/opec|pipeline|refinery|shipping disruption|supply cut|hormuz|red sea/;
+ if(/XAU|GOLD/.test(s)){if(hawkish.test(t))return -1;if(dovish.test(t)||geo.test(t))return 1;}
+ if(/USD|DXY/.test(s)){if(hawkish.test(t))return 1;if(dovish.test(t))return -1;}
+ if(/BTC|ETH|NAS|USTEC|NDX/.test(s)){if(hawkish.test(t))return -1;if(dovish.test(t))return 1;}
+ if(/OIL|WTI|BRENT/.test(s)&&supply.test(t))return 1;
+ return Math.abs(score)>=.5?Math.sign(score):0;
+}
+function directionalEventProfile(events,sym,tradeDir){
+ const base=smartEventShock(events,sym),dir=tradeDir==="BUY"?1:tradeDir==="SELL"?-1:0;
+ if(!dir)return {...base,supportRisk:0,opposeRisk:0,neutralRisk:base.score,supportiveDominant:false,hostileDominant:false};
+ let supportRisk=0,opposeRisk=0,neutralRisk=0,criticalAgainst=false;
+ for(const x of base.top||[]){const imp=eventImpactSign(sym,x.title,x.score||0),risk=x.shockRisk||0;if(imp===dir)supportRisk+=risk;else if(imp===-dir){opposeRisk+=risk;if((x.severity||0)>=4&&(x.fresh||0)>=.60)criticalAgainst=true;}else neutralRisk+=risk;}
+ const supportiveDominant=supportRisk>=.75&&supportRisk>opposeRisk*1.30;
+ const hostileDominant=opposeRisk>=.75&&opposeRisk>supportRisk*1.20;
+ let block=base.block;if(base.block&&supportiveDominant&&!criticalAgainst&&!hostileDominant)block=false;if(hostileDominant&&base.score>=2)block=true;
+ const caution=!block&&(base.caution||base.block||base.score>=1);
+ return {...base,block,caution,state:block?"BLOCK":caution?"CAUTION":"NORMAL",supportRisk,opposeRisk,neutralRisk,supportiveDominant,hostileDominant,criticalAgainst};
+}
 function impactMap(events){const text=events.map(x=>x.title.toLowerCase()).join(" ");let impacts=[];
  const push=(a,d,r)=>impacts.push({a,d,r});
  if(/war|attack|missile|invasion|geopolitical|sanction/.test(text)){push("XAU/USD","+","safe-haven / geopolitical risk");push("Oil","+","risk premium / supply concern");push("Risk assets","−","risk-off pressure")}
@@ -791,41 +822,28 @@ function consensusUncertainty(v){
 }
 function decisionConsensus(r,events){
  const v=evidenceVector(r,events),cf=conflictMatrix(v),uncertainty=consensusUncertainty(v),nh=newsHealth(events);
- const rawVerdict=r.rawTechnicalV||r.v,rawDir=actionableDirection(rawVerdict);
- const technicalPass=Math.abs(r.market)>=1.35;
- const alignPass=r.align>=Math.max(2,Math.ceil(r.valid*.5));
- const conflictPass=cf.ratio<=.45;
- const uncertaintyPass=uncertainty<=.58;
- const shock=smartEventShock(events,r.sym),eventDanger=shock.block;
- const hist=historicalNewsAnalogs({...r,v:rawVerdict},events);
- const es=edgeStats(r.sym),dr=driftCheck(r.sym);
- let gate=(rawDir&&technicalPass&&alignPass&&conflictPass&&uncertaintyPass&&!eventDanger)?"PASS":"WAIT";
- if(hist.n>=5&&hist.vote==="REJECT")gate="REJECT";
- if(es.n>=20&&es.exp<=0)gate="REJECT";
- if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";
- if(nh.degraded&&gate==="PASS")gate="WAIT";
- const sg=rawDir==="BUY"?1:rawDir==="SELL"?-1:0;
- const signed=[v.tech,v.news,v.causal,v.tf];
- const support=signed.filter(x=>sg&&Math.sign(x)===sg&&Math.abs(x)>.10).length;
- const oppose=signed.filter(x=>sg&&Math.sign(x)===-sg&&Math.abs(x)>.10).length;
- let directionalConfidence=clamp((r.rawConf??r.conf)-uncertainty*28-cf.ratio*18+support*2-oppose*4,35,92);
- if(nh.degraded)directionalConfidence=Math.min(directionalConfidence,58);
- if(gate!=="PASS")directionalConfidence=Math.min(directionalConfidence,64);
- if(hist.n>=5&&hist.vote==="SUPPORT")directionalConfidence=Math.min(94,directionalConfidence+4);
- if(hist.n>=5&&hist.vote==="REJECT")directionalConfidence=Math.min(directionalConfidence,52);
- const strongAllowed=gate==="PASS"&&support>=3&&uncertainty<=.38&&cf.ratio<=.25&&(!nh.degraded)&&(hist.n<5||hist.vote!=="REJECT");
- let finalVerdict="WAIT";
- if(gate==="PASS"&&rawDir){
-  const wantsStrong=/STRONG/.test(rawVerdict)&&strongAllowed;
-  finalVerdict=rawDir==="BUY"?(wantsStrong?"STRONG BUY":"BUY"):(wantsStrong?"STRONG SELL":"SELL");
- }
+ const rawVerdict=r.rawTechnicalV||r.v,hz=horizonScores(r,events),labs=[hz.scalp.label,hz.day.label,hz.swing.label];
+ const hzDir=(labs.every(x=>x===labs[0])&&labs[0]!=="WAIT")?labs[0]:null;
+ const rawDir=actionableDirection(rawVerdict)||hzDir,horizonConfirm=!!(rawDir&&hzDir===rawDir);
+ const technicalNeed=horizonConfirm?1.05:1.35,alignNeed=horizonConfirm?Math.max(2,Math.ceil(r.valid*.40)):Math.max(2,Math.ceil(r.valid*.50));
+ const technicalPass=Math.abs(r.market)>=technicalNeed,alignPass=r.align>=alignNeed,conflictPass=cf.ratio<=.45,uncertaintyPass=uncertainty<=.58;
+ const shock=directionalEventProfile(events,r.sym,rawDir),eventDanger=shock.block,hist=historicalNewsAnalogs({...r,v:rawDir||rawVerdict},events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ const fusion=adaptiveFusion(r,events),sg=rawDir==="BUY"?1:rawDir==="SELL"?-1:0,fusionPass=!!(sg&&Math.abs(fusion.fused)>=.16&&Math.sign(fusion.fused)===sg);
+ let gate=(rawDir&&technicalPass&&alignPass&&conflictPass&&uncertaintyPass&&fusionPass&&!eventDanger)?"PASS":"WAIT";
+ if(hist.n>=5&&hist.vote==="REJECT")gate="REJECT";if(es.n>=20&&es.exp<=0)gate="REJECT";if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";if(nh.degraded&&gate==="PASS")gate="WAIT";
+ const signed=[v.tech,v.news,v.causal,v.tf],support=signed.filter(x=>sg&&Math.sign(x)===sg&&Math.abs(x)>.10).length,oppose=signed.filter(x=>sg&&Math.sign(x)===-sg&&Math.abs(x)>.10).length;
+ let directionalConfidence=clamp((r.rawConf??r.conf)-uncertainty*28-cf.ratio*18+support*2-oppose*4+(horizonConfirm?4:0)+(shock.supportiveDominant?2:0),35,92);
+ if(shock.caution)directionalConfidence=Math.min(directionalConfidence,82);if(nh.degraded)directionalConfidence=Math.min(directionalConfidence,58);if(gate!=="PASS")directionalConfidence=Math.min(directionalConfidence,64);
+ if(hist.n>=5&&hist.vote==="SUPPORT")directionalConfidence=Math.min(94,directionalConfidence+4);if(hist.n>=5&&hist.vote==="REJECT")directionalConfidence=Math.min(directionalConfidence,52);
+ const strongAllowed=gate==="PASS"&&support>=3&&uncertainty<=.38&&cf.ratio<=.25&&!shock.caution&&!nh.degraded&&(hist.n<5||hist.vote!=="REJECT");
+ let finalVerdict="WAIT";if(gate==="PASS"&&rawDir){const strong=/STRONG/.test(rawVerdict)&&strongAllowed;finalVerdict=rawDir==="BUY"?(strong?"STRONG BUY":"BUY"):(strong?"STRONG SELL":"SELL");}
  const biasLabel=rawDir?`${rawDir} BIAS — WAIT`:"WAIT";
- const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":!technicalPass?"STRUCTURE TOO WEAK":!alignPass?"TIMEFRAMES NOT ALIGNED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":eventDanger?"EVENT SHOCK RISK":"WAIT FOR CONFIRMATION";
- return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed,eventShock:shock};
+ const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":eventDanger?"EVENT RISK AGAINST SETUP":!technicalPass?`STRUCTURE ${Math.abs(r.market).toFixed(2)}/${technicalNeed.toFixed(2)}`:!alignPass?`TIMEFRAMES ${r.align}/${alignNeed}`:!fusionPass?"FUSION NOT CONFIRMED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":shock.caution?"EVENT CAUTION":"WAIT FOR CONFIRMATION";
+ return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,technicalNeed,alignNeed,fusionPass,fusion,horizonConfirm,hz,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed,eventShock:shock,rawDir};
 }
 
 const TITAN_SIGNAL_LOCK_KEY="titan_active_signals_v2";
-let titanActiveSignals=JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||localStorage.getItem("titan_active_signals_v1")||"{}");
+let titanActiveSignals=readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{},"titan_active_signals_v1");
 
 function holdMinutesForTF(tf){
  const map={"5min":45,"15min":90,"30min":180,"1h":360,"4h":1440,"1day":4320};
@@ -840,7 +858,7 @@ function humanDuration(ms){
 }
 function actionableDirection(v){return /BUY/.test(v)?"BUY":/SELL/.test(v)?"SELL":null}
 function signalLockStatus(sym){return titanActiveSignals[sym]||null}
-function saveSignalLocks(){localStorage.setItem(TITAN_SIGNAL_LOCK_KEY,JSON.stringify(titanActiveSignals));localStorage.removeItem("titan_active_signals_v1")}
+function saveSignalLocks(){persistJSON(TITAN_SIGNAL_LOCK_KEY,titanActiveSignals);removeStored("titan_active_signals_v1")}
 function clearSignalLock(sym,reason="MANUAL"){
  if(titanActiveSignals[sym]){
   titanActiveSignals[sym].closedAt=Date.now();
@@ -1029,11 +1047,11 @@ renderBrain(r,events);renderNewsRadar(r,events);
         /federal reserve|fomc|ecb|boe|boj|inflation|cpi|pce|payroll|unemployment|treasury|yield|war|attack|missile|sanction|tariff/.test(t)
 });
 const highImpact=macroEvents.filter(e=>(e.severity||0)>=2).length,macro=macroEvents.length;
-const nh2=r.consensus?.nh||newsHealth(events);
-$("riskBox").className=(nh2.degraded||highImpact>=3||macro>=18)?"warn":"good";
+const nh2=r.consensus?.nh||newsHealth(events),smart=r.consensus?.eventShock||directionalEventProfile(events,r.sym,r.consensus?.rawDir);
+$("riskBox").className=(nh2.degraded||smart.block||smart.caution)?"warn":"good";
 const providerText=nh2.providers?.length?nh2.providers.join(" + "):"none";
-$("riskBox").textContent=nh2.degraded?`⚠️ NEWS FEED OFFLINE: all keyless news providers failed (${nh2.failures}/${nh2.attempts}). TITAN fails closed and will not invent “no news”.`:nh2.partial?`✓ NEWS ACTIVE via ${providerText}. One provider failed, fallback succeeded. Event risk: ${macro} macro/geopolitical, ${highImpact} high-impact.`:(highImpact>=3||macro>=18)?`⚠️ Elevated event risk: ${macro} macro/geopolitical headlines, ${highImpact} high-impact. Source: ${providerText}.`:`✓ News feed verified via ${providerText}. Event risk currently moderate: ${macro} macro/geopolitical headlines, ${highImpact} high-impact.`;
- $("scores").innerHTML=`<div class="scoreline"><span>Market structure</span><b>${r.market.toFixed(2)}</b></div><div class="scoreline"><span>World news</span><b>${r.news.items.length?r.news.score.toFixed(2):"NO DIRECT NEWS"}</b></div><div class="scoreline"><span>Macro risk</span><b>${highImpact>=3||macro>=18?"HIGH":macro>=7?"MEDIUM":"LOW"}</b></div><div class="scoreline"><span>Timeframe alignment</span><b>${r.align}/${r.valid}</b></div>`;
+$("riskBox").textContent=nh2.degraded?`⚠️ NEWS FEED OFFLINE: all keyless news providers failed (${nh2.failures}/${nh2.attempts}). TITAN fails closed and will not invent “no news”.`:`${smart.block?"⚠️":"✓"} Smart event risk ${smart.score.toFixed(2)} • ${smart.material} independent clusters • ${smart.state}${smart.supportiveDominant?" • supports current bias":smart.hostileDominant?" • opposes current bias":""}. Coverage ${macro} macro/geopolitical headlines (${highImpact} high-impact) via ${providerText}.`;
+ $("scores").innerHTML=`<div class="scoreline"><span>Market structure</span><b>${r.market.toFixed(2)}</b></div><div class="scoreline"><span>World news</span><b>${r.news.items.length?r.news.score.toFixed(2):"NO DIRECT NEWS"}</b></div><div class="scoreline"><span>Smart event risk</span><b>${smart.state} ${smart.score.toFixed(2)}</b></div><div class="scoreline"><span>Timeframe alignment</span><b>${r.align}/${r.valid}</b></div>`;
  $("why").innerHTML=(r.news.items.slice(0,4).map(x=>`<div class="item"><h4>${esc(x.title)}</h4><p>${esc(x.source)} • ${esc(x.cat)} • sentiment ${x.score.toFixed(1)}</p></div>`).join("")||'<div class="item"><p>No strongly relevant world-news items found for this symbol.</p></div>')+(main.why.slice(0,4).map(x=>`<div class="item"><p>${x.v>0?"Bullish":"Bearish"} market evidence: ${esc(x.t)}</p></div>`).join(""));
  const im=impactMap(events);$("impactMap").innerHTML=im.length?im.map(x=>`<div class="event"><div><b>${esc(x.a)}</b></div><div class="small">${esc(x.r)}</div><div class="impact ${x.d==="+"?"pos":x.d==="−"?"neg":"neu"}">${x.d}</div></div>`).join(""):'<div class="item"><p>No dominant causal theme detected.</p></div>'
 }
@@ -1045,8 +1063,8 @@ async function ensureEvents(force=false){
  cachedEvents=await worldEvents(force);renderEvents(cachedEvents);return cachedEvents
 }
 
-const titanState=JSON.parse(localStorage.getItem("titan_state_v2")||"{}");
-let titanJournal=JSON.parse(localStorage.getItem("titan_journal_v2")||"[]");
+const titanState=readStoredJSON("titan_state_v2",{});
+let titanJournal=readStoredJSON("titan_journal_v2",[]);
 function dirSign(v){return /BUY/.test(v)?1:/SELL/.test(v)?-1:0}
 function eventClassify(events){
  const groups={GEOPOLITICS:0,RATES:0,INFLATION:0,ENERGY:0,CRYPTO:0,CORPORATE:0,CYBER:0,SUPPLY:0};
@@ -1161,7 +1179,7 @@ function gradePastSignals(sym,currentPrice){
      x.outcome.closed=true;x.outcome.correct=x.outcome.snapshots["2h"].correct;changed=true;
    }
  }
- if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+ if(changed)persistJSON("titan_journal_v2",titanJournal)
 }
 
 
@@ -1219,7 +1237,7 @@ function gradeFirstHit(r){
      changed=true;
    }
  }
- if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+ if(changed)persistJSON("titan_journal_v2",titanJournal)
 }
 function componentLearning(){
  const rows=titanJournal.filter(x=>x.dna&&x.firstHit?.resolved&&dirSign(x.v));
@@ -1368,7 +1386,7 @@ function gradeFromBars(r){
   snap(6,"30m");snap(24,"2h");snap(72,"6h");
   if(x.outcome.snapshots["2h"]&&!x.outcome.closed){x.outcome.closed=true;x.outcome.correct=x.outcome.snapshots["2h"].correct;changed=true}
  }
- if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+ if(changed)persistJSON("titan_journal_v2",titanJournal)
 }
 
 function waitAuditDirection(x){
@@ -1390,7 +1408,7 @@ function gradeWaitAuditFromBars(r){
   const threshold=Math.max(.0008,Math.min(.004,((x.dna?.atrPct||.15)/100)*.35));
   x.waitAudit={resolved:true,dir,ret,dirMove,threshold,missed:dirMove>threshold,goodSkip:dirMove<=threshold,t:Date.now()};changed=true;
  }
- if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal))
+ if(changed)persistJSON("titan_journal_v2",titanJournal)
 }
 function gradeWaitShadowFromBars(r){
  if(!r.raw5?.length)return;
@@ -1401,7 +1419,7 @@ function gradeWaitShadowFromBars(r){
   const fh=firstHitPath(r.raw5,fake);if(!fh?.hit)continue;
   x.shadowFirstHit={resolved:true,...fh};changed=true;
  }
- if(changed)localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal));
+ if(changed)persistJSON("titan_journal_v2",titanJournal);
 }
 function waitShadowStats(sym){
  const rows=titanJournal.filter(x=>x.sym===sym&&x.v==="WAIT"&&x.shadowFirstHit?.resolved&&x.shadowPlan);
@@ -1470,27 +1488,12 @@ function renderProofEngine(r,events,b,meta,mg){
 
 function renderMemoryAndGate(r,events,b,meta){
  const dna=makeDNA(r,events,b),mem=analogMemory(dna,dirSign(r.v));
- $("memN").textContent=mem.n;$("memHit").textContent=mem.hit==null?"—":Math.round(mem.hit*100)+"%";
- $("memMove").textContent=mem.avgMove==null?"—":(mem.avgMove*100).toFixed(2)+"%";$("memVote").textContent=mem.vote;
- $("memoryBadge").textContent=mem.n>=5?"ANALOG MEMORY ACTIVE":mem.n?"EARLY MEMORY":"NO MEMORY YET";
- $("memoryNarrative").textContent=mem.n?`${mem.n} comparable completed setups found. Average DNA distance ${mem.distance.toFixed(2)}. This is local empirical memory, not a guaranteed forecast.`:"Not enough comparable completed setups yet.";
- const technicalPass=Math.abs(r.market)>=1.35,alignPass=r.align>=Math.max(2,Math.ceil(r.valid*.5)),uncPass=meta.uncertainty<=.58,conflictPass=meta.cf.ratio<=.45;
- const memoryPass=mem.n<5?null:(mem.vote==="SUPPORT");
- const shock=smartEventShock(events,r.sym),eventDanger=shock.block;
- let gate=(technicalPass&&alignPass&&uncPass&&conflictPass&&!eventDanger)?"PASS":"WAIT";
- if(r.consensus&&r.consensus.gate!=="PASS")gate=r.consensus.gate;
- if(memoryPass===false)gate="REJECT";
- $("edgeState").textContent=technicalPass&&alignPass?"STRUCTURE OK":"WEAK";
- $("edgeRisk").textContent=eventDanger?"EVENT SHOCK":shock.caution?"EVENT CAUTION":meta.uncertainty>.58?"UNCERTAIN":"NORMAL";
- $("edgeGate").textContent=gate;$("edgeEvidence").textContent=mem.n>=5?`${mem.n} analogs`:"building";
- $("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"MEMORY REJECT":"NO TRADE";
- $("edgeNarrative").textContent=gate==="PASS"?(mem.n>=5?`Current structure passed the risk gate and local analog memory ${mem.vote.toLowerCase()}s the direction.`:"Current structure passed the risk gate, but TITAN still needs more completed analogs before calling the edge proven."):gate==="REJECT"?"Historical local analogs currently reject this setup.":"One or more safety gates failed; forcing a trade is not justified.";
- const ad=adaptiveFusion(r,events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
- if(Math.abs(ad.fused)<.16&&gate==="PASS")gate="WAIT";
- if(es.n>=20&&es.exp<=0)gate="REJECT";
- if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";
- $("edgeGate").textContent=gate;
- $("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"EDGE REJECT":"NO TRADE";
+ $("memN").textContent=mem.n;$("memHit").textContent=mem.hit==null?"—":Math.round(mem.hit*100)+"%";$("memMove").textContent=mem.avgMove==null?"—":(mem.avgMove*100).toFixed(2)+"%";$("memVote").textContent=mem.vote;
+ $("memoryBadge").textContent=mem.n>=5?"ANALOG MEMORY ACTIVE":mem.n?"EARLY MEMORY":"NO MEMORY YET";$("memoryNarrative").textContent=mem.n?`${mem.n} comparable completed setups found. Average DNA distance ${mem.distance.toFixed(2)}. This is local empirical memory, not a guaranteed forecast.`:"Not enough comparable completed setups yet.";
+ const c=r.consensus||decisionConsensus(r,events),memoryPass=mem.n<5?null:(mem.vote==="SUPPORT");let gate=c.gate;if(memoryPass===false)gate="REJECT";
+ $("edgeState").textContent=c.technicalPass&&c.alignPass?"STRUCTURE OK":"WEAK";$("edgeRisk").textContent=c.eventShock.block?"HOSTILE EVENT RISK":c.eventShock.caution?(c.eventShock.supportiveDominant?"EVENT SUPPORT + CAUTION":"EVENT CAUTION"):"NORMAL";
+ $("edgeGate").textContent=gate;$("edgeEvidence").textContent=mem.n>=5?`${mem.n} analogs`:"building";$("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"EDGE REJECT":"NO TRADE";
+ $("edgeNarrative").textContent=gate==="PASS"?"Unified consensus gate passed; proof memory continues to validate the setup.":gate==="REJECT"?"Historical evidence or expectancy rejects this setup.":`Unified gate is waiting: ${c.reason}. TITAN will not force an entry.`;
  return{dna,mem,gate}
 }
 function renderMeta(r,events){
@@ -1515,25 +1518,25 @@ function buildBrain(r,events){
  const technical=clamp(r.market/4,-1,1),news=clamp(r.news.score/2,-1,1),cause=clamp(causal.score/2,-1,1);
  const sign=dirSign(r.v),agree=[technical,news,cause].filter(x=>Math.sign(x)===sign&&Math.abs(x)>.08).length;
  const conflicts=[technical,news,cause].filter(x=>sign&&Math.sign(x)===-sign&&Math.abs(x)>.18).length;
- const shock=smartEventShock(events,r.sym),severe=shock.material;
+ const shock=directionalEventProfile(events,r.sym,r.consensus?.rawDir||actionableDirection(r.consensus?.biasLabel||r.rawV||r.v)),severe=shock.material;
  let quality=50+Math.abs(technical)*18+Math.abs(news)*10+Math.abs(cause)*10+agree*5-conflicts*9-Math.min(shock.score,3)*2.0;
  if(r.v==="WAIT")quality=Math.min(quality,64);
  quality=Math.round(clamp(quality,35,93));
  return {technical,news,cause,agree,conflicts,severe,quality,causal,shock}
 }
 function triggerReadiness(r,events,meta){
- const raw=r.rawTechnicalV||r.rawV||r.v,dir=actionableDirection(raw)||(r.market>0?"BUY":r.market<0?"SELL":null);
- const shock=smartEventShock(events,r.sym),severe=shock.material;
+ const c=r.consensus||decisionConsensus(r,events),raw=r.rawTechnicalV||r.rawV||r.v,dir=c.rawDir||actionableDirection(raw)||(r.market>0?"BUY":r.market<0?"SELL":null);
+ const shock=c.eventShock||directionalEventProfile(events,r.sym,dir),severe=shock.material;
  const adaptive=adaptiveFusion(r,events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
- const structure=Math.abs(r.market),structureNeed=1.35;
- const alignNeed=Math.max(2,Math.ceil(r.valid*.5));
+ const structure=Math.abs(r.market),structureNeed=c.technicalNeed||1.35;
+ const alignNeed=c.alignNeed||Math.max(2,Math.ceil(r.valid*.5));
  const gates=[
   {k:"STRUCTURE",pass:structure>=structureNeed,block:false,detail:`${structure.toFixed(2)} / ${structureNeed.toFixed(2)}`},
   {k:"TIMEFRAMES",pass:r.align>=alignNeed,block:false,detail:`${r.align}/${r.valid} aligned • need ${alignNeed}`},
   {k:"UNCERTAINTY",pass:meta.uncertainty<=.58,block:false,detail:`${Math.round(meta.uncertainty*100)}% • max 58%`},
   {k:"CONFLICT",pass:meta.cf.ratio<=.45,block:false,detail:`${Math.round(meta.cf.ratio*100)}% • max 45%`},
-  {k:"EVENT SHOCK",pass:!shock.block,block:shock.block,detail:`${shock.score.toFixed(2)} risk • ${shock.material} material clusters • ${shock.state}`},
-  {k:"FUSION",pass:Math.abs(adaptive.fused)>=.16,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} / 16 minimum`}
+  {k:"EVENT RISK",pass:!shock.block,block:shock.block,detail:`${shock.score.toFixed(2)} risk • ${shock.material} clusters • ${shock.state}${shock.supportiveDominant?" • supports bias":shock.hostileDominant?" • opposes bias":""}`},
+  {k:"FUSION",pass:c.fusionPass,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} / 16 minimum`}
  ];
  if(es.n>=20)gates.push({k:"EXPECTANCY",pass:es.exp>0,block:es.exp<=0,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
  if(dr.state!=="LEARNING")gates.push({k:"DRIFT",pass:dr.state!=="NEGATIVE DRIFT",block:dr.state==="NEGATIVE DRIFT",detail:dr.state});
@@ -1554,7 +1557,7 @@ function renderTriggerRadar(r,events,meta){
  $("triggerBadge").textContent=t.stage+(t.dir?` • ${t.dir} BIAS`:"");
  $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":"gateFail"}">${g.pass?"PASS":g.block?"BLOCK":"WAIT"}</b></div>`).join("");
  const m=t.blocker;
- $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but TITAN is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT SHOCK"?"9.2 is counting independent fresh event clusters, not duplicate headlines. ":""}When the failing gate improves on a fresh verified scan, TITAN can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
+ $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but TITAN is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"10.3 separates event magnitude from trade direction and counts independent event clusters, not duplicate headlines. ":""}When the failing gate improves on a fresh verified scan, TITAN can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
  r.trigger=t;return t;
 }
 
@@ -1580,7 +1583,7 @@ function renderBrain(r,events){
   if(Math.sign(prev.market)!==Math.sign(now.market))changes.push("Market structure changed direction");
   $("changedBox").innerHTML=changes.length?changes.map(x=>`<p>⚡ ${esc(x)}</p>`).join(""):"<p>No material state change since the previous scan.</p>";
  }
- titanState[r.sym]=now;localStorage.setItem("titan_state_v2",JSON.stringify(titanState));
+ titanState[r.sym]=now;persistJSON("titan_state_v2",titanState);
  const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); recordJournal(r,b);renderJournal();
 }
 function waitStateFingerprint(r){
@@ -1607,8 +1610,8 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"TITAN-"+now.toString(36).toUpperCase(),modelVersion:"TITAN-GOD-9.2",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
- titanJournal=pruneJournalSmart(titanJournal);localStorage.setItem("titan_journal_v2",JSON.stringify(titanJournal));
+ titanJournal.unshift({id:"TITAN-"+now.toString(36).toUpperCase(),modelVersion:"TITAN-GOD-10.3",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);
 }
 
 function renderJournal(){
@@ -1624,21 +1627,24 @@ function renderCoverage(events){
  $("keywordRadar").innerHTML=top.length?"Top live keywords: "+top.map(([k,n])=>`<span class="badge" style="margin:2px">${esc(k)} ×${n}</span>`).join(" "):"No priority keywords detected.";
 }
 function renderEvents(events){$("eventCount").textContent=events.length+" EVENTS";renderCoverage(events);$("eventList").innerHTML=events.slice(0,100).map(e=>`<div class="event"><div><b>${e.icon} ${esc(e.cat)}</b><div class="small">sev ${(e.severity||0).toFixed(1)} • trust ${Math.round((e.trust||.55)*100)}%</div></div><div><b style="font-size:12px">${esc(e.title)}</b><div class="small">${esc(e.source)} • ${e.lang?esc(e.lang):"global"} • ${(e.hits||[]).slice(0,4).map(h=>esc(h.k)).join(", ")}</div></div><div class="impact ${e.score>0?"pos":e.score<0?"neg":"neu"}">${e.score>0?"+":""}${e.score}</div></div>`).join("")||'<div class="item"><p>No events returned.</p></div>'}
-const _lastManual=+localStorage.titan_last_manual_update||0;if(_lastManual&&$("manualLastUpdate"))$("manualLastUpdate").textContent=new Date(_lastManual).toLocaleString();
+const _lastManual=+readStoredText("titan_last_manual_update","0")||0;if(_lastManual&&$("manualLastUpdate"))$("manualLastUpdate").textContent=new Date(_lastManual).toLocaleString();
 $("refreshEvents").onclick=async()=>{$("eventList").innerHTML='<div class="item"><p>Refreshing world news...</p></div>';cachedEvents=await worldEvents(true);renderEvents(cachedEvents)}
-$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev);localStorage.titan_last_manual_update=String(Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+localStorage.titan_last_manual_update).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("modelScore");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds."}finally{b.disabled=false;b.textContent="🔄 UPDATE / SCAN MARKET"}}
+$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev);persistText("titan_last_manual_update",Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+readStoredText("titan_last_manual_update","0")).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("conf");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds."}finally{b.disabled=false;b.textContent="🔄 UPDATE / SCAN MARKET"}}
 
 
 function deepGateForBest(r,events){
- const e=evidenceVector(r,events),cf=conflictMatrix(e),u=renderlessUncertainty(e),b=buildBrain(r,events),rg=regimeDetect(r);
- const mem=analogMemory(makeDNA(r,events,b),dirSign(r.v)),es=edgeStats(r.sym),dr=driftCheck(r.sym);
- const shock=smartEventShock(events,r.sym);
- let gate=(Math.abs(r.market)>=1.35 && r.align>=Math.max(2,Math.ceil(r.valid*.5)) && u<=.58 && cf.ratio<=.45 && !shock.block)?"PASS":"WAIT";
- if(mem.n>=5 && mem.vote==="REJECT")gate="REJECT";
- if(es.n>=20 && es.exp<=0)gate="REJECT";
- if(dr.state==="NEGATIVE DRIFT" && gate==="PASS")gate="WAIT";
- const quality=Math.round(clamp(b.quality-u*22+(gate==="PASS"?8:gate==="REJECT"?-14:-4),30,94));
- return {gate,quality,uncertainty:u,regime:rg.regime,memN:mem.n,expN:es.n,exp:es.exp}
+ const c=r.consensus||decisionConsensus(r,events),b=buildBrain(r,events),rg=regimeDetect(r);
+ const dna=makeDNA(r,events,b),dir=c.rawDir==="BUY"?1:c.rawDir==="SELL"?-1:0;
+ const mem=analogMemory(dna,dir),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ let gate=c.gate;
+ // One authority for market/news/event/timeframe gating. Memory may veto a candidate,
+ // but BEST NOW must never invent a second set of thresholds that contradicts World Brain.
+ if(mem.n>=5&&mem.vote==="REJECT")gate="REJECT";
+ if(es.n>=20&&es.exp<=0)gate="REJECT";
+ if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";
+ let quality=Math.round(clamp((c.confidence||b.quality)+(gate==="PASS"?5:gate==="REJECT"?-12:-2),30,94));
+ if(c.nh?.degraded)quality=Math.min(quality,58);
+ return {gate,quality,uncertainty:c.uncertainty,regime:rg.regime,memN:mem.n,expN:es.n,exp:es.exp}
 }
 $("scanAll").onclick=async()=>{
  const b=$("scanAll");b.disabled=true;b.textContent="RANKING MARKETS...";
@@ -1703,17 +1709,24 @@ async function titanAutoMemorySave(){
 async function titanAutoMemoryRecover(){
  try{const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readonly");const req=tx.objectStore(TITAN_AUTO_MEMORY_STORE).get(TITAN_AUTO_MEMORY_KEY);const snap=await new Promise((res,rej)=>{req.onsuccess=()=>res(req.result);req.onerror=()=>rej(req.error)});db.close();
   if(!snap||!Array.isArray(snap.journal)||!snap.state||!snap.activeSignals)return false;
-  const localJ=JSON.parse(localStorage.getItem("titan_journal_v2")||"[]");
-  const localS=JSON.parse(localStorage.getItem("titan_state_v2")||"{}");
-  const localA=JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}");
+  const localJ=readStoredJSON("titan_journal_v2",[]);
+  const localS=readStoredJSON("titan_state_v2",{});
+  const localA=readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{});
   const localHas=localJ.length||Object.keys(localS).length||Object.keys(localA).length;
   const snapHas=snap.journal.length||Object.keys(snap.state).length||Object.keys(snap.activeSignals).length;
-  if(!localHas&&snapHas){
-   localStorage.setItem("titan_journal_v2",JSON.stringify(snap.journal));
-   localStorage.setItem("titan_state_v2",JSON.stringify(snap.state));
-   localStorage.setItem(TITAN_SIGNAL_LOCK_KEY,JSON.stringify(snap.activeSignals));
-   titanJournal=snap.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,snap.state);titanActiveSignals=snap.activeSignals;renderJournal();
-   const m=document.getElementById("backupMsg");if(m)m.textContent=`Auto-memory restored from app: ${snap.journal.length} signals loaded.`;renderAutoMemoryStatus(snap.savedAt);
+  const localNewest=localJ.reduce((m,x)=>Math.max(m,Number(x?.t)||0),0),snapNewest=snap.journal.reduce((m,x)=>Math.max(m,Number(x?.t)||0),0);
+  const localPersist=Number(localStorage.getItem("titan_last_persist_ms")||0);
+  const snapshotNewer=Number(snap.savedAt||0)>localPersist+15000;
+  const shouldRecover=snapHas&&(!localHas||snapshotNewer||snapNewest>localNewest+60000);
+  if(shouldRecover){
+   const mergedMap=new Map();
+   for(const x of [...snap.journal,...localJ]){const k=x?.id||`${x?.sym||""}|${x?.t||0}|${x?.v||""}`;const prev=mergedMap.get(k);if(!prev||Number(x?.t||0)>=Number(prev?.t||0))mergedMap.set(k,x)}
+   const mergedJ=pruneJournalSmart([...mergedMap.values()].sort((a,b)=>Number(b?.t||0)-Number(a?.t||0)));
+   const useSnapState=!localHas||snapshotNewer;
+   const nextS=useSnapState?snap.state:localS,nextA=useSnapState?snap.activeSignals:localA;
+   persistJSON("titan_journal_v2",mergedJ);persistJSON("titan_state_v2",nextS);persistJSON(TITAN_SIGNAL_LOCK_KEY,nextA);
+   titanJournal=mergedJ;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,nextS);titanActiveSignals=nextA;renderJournal();
+   const m=document.getElementById("backupMsg");if(m)m.textContent=`Auto-memory reconciled: ${mergedJ.length} signals retained.`;renderAutoMemoryStatus(snap.savedAt);
    return true;
   }
  }catch(e){console.warn("TITAN auto-memory recovery skipped",e)}
@@ -1722,12 +1735,32 @@ async function titanAutoMemoryRecover(){
 window.addEventListener("load",async()=>{await titanAutoMemoryRecover();await titanAutoMemorySave()});
 window.addEventListener("pagehide",()=>{titanAutoMemorySave()});
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")titanAutoMemorySave()});
-setInterval(titanAutoMemorySave,5000);
+setInterval(titanAutoMemorySave,20000);
 
-if("serviceWorker" in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});if(window.caches)caches.keys().then(ks=>ks.forEach(k=>caches.delete(k))).catch(()=>{})}
+if("serviceWorker" in navigator){
+ let titanSwReloaded=false;
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{if(titanSwReloaded)return;titanSwReloaded=true;try{if(sessionStorage.getItem("titan_sw_reloaded")!=="1"){sessionStorage.setItem("titan_sw_reloaded","1");location.reload()}}catch(_e){location.reload()}});
+ window.addEventListener("load",()=>{try{sessionStorage.removeItem("titan_sw_reloaded")}catch(_e){}navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{reg.update().catch(()=>{});if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});reg.addEventListener("updatefound",()=>{const w=reg.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)w.postMessage({type:"SKIP_WAITING"})})})}).catch(e=>console.warn("TITAN service worker unavailable",e))});
+}
 
-must("clearJournal").onclick=()=>{titanJournal=[];localStorage.removeItem("titan_journal_v2");renderJournal()};
+must("clearJournal").onclick=()=>{titanJournal=[];persistJSON("titan_journal_v2",[]);renderJournal();titanAutoMemorySave().catch(()=>{})};
 renderJournal();
+
+(function titanCoreSelfTest(){
+ const failures=[];
+ const req=(ok,msg)=>{if(!ok)failures.push(msg)};
+ try{
+  req(verdict(4)==="STRONG BUY"&&verdict(-4)==="STRONG SELL","verdict thresholds");
+  req(verdict(0)==="WAIT","neutral verdict");
+  req(actionableDirection("STRONG BUY")==="BUY"&&actionableDirection("SELL")==="SELL","direction parser");
+  req(eventImpactSign("XAU/USD","Fed signals rate hike",0)===-1&&eventImpactSign("XAU/USD","Geopolitical war escalates",0)===1,"XAU event direction semantics");
+  req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
+  req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
+  req(document.title.includes("10.3"),"page version/title consistency");
+ }catch(e){failures.push(e.message||String(e))}
+ window.TITAN_SELF_TEST={passed:failures.length===0,failures,version:"10.3"};
+ if(failures.length)console.error("TITAN CORE SELF-TEST FAIL",failures);else console.info("TITAN CORE SELF-TEST PASS 10.3");
+})();
 
 (function titanIntegrityCheck(){
  const required=["signal","status","conf","meter","riskBox","covHeadlines","covSources","covThemes","covKeywords",
@@ -1747,7 +1780,7 @@ renderJournal();
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"TITAN-GOD-9.1",exportedAt:new Date().toISOString(),journal:JSON.parse(localStorage.getItem("titan_journal_v2")||"[]"),state:JSON.parse(localStorage.getItem("titan_state_v2")||"{}"),activeSignals:JSON.parse(localStorage.getItem(TITAN_SIGNAL_LOCK_KEY)||"{}"),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"TITAN-GOD-10.3",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
@@ -1755,7 +1788,7 @@ must("importTitan").onclick=()=>{
  try{
   const p=JSON.parse(must("importTitanText").value.trim());
   if(!p||!Array.isArray(p.journal)||typeof p.state!=="object")throw new Error("Invalid TITAN backup");
-  localStorage.setItem("titan_journal_v2",JSON.stringify(p.journal));localStorage.setItem("titan_state_v2",JSON.stringify(p.state));localStorage.setItem(TITAN_SIGNAL_LOCK_KEY,JSON.stringify(p.activeSignals||{}));localStorage.removeItem("titan_active_signals_v1");
+  p.journal=pruneJournalSmart(p.journal);persistJSON("titan_journal_v2",p.journal);persistJSON("titan_state_v2",p.state);persistJSON(TITAN_SIGNAL_LOCK_KEY,p.activeSignals||{});removeStored("titan_active_signals_v1");
   titanJournal=p.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,p.state);titanActiveSignals=p.activeSignals||{};renderJournal();
   titanAutoMemorySave();must("backupMsg").textContent=`Restore complete: ${p.journal.length} signals loaded and auto-saved.`;
  }catch(e){must("backupMsg").textContent="Restore failed: "+e.message}

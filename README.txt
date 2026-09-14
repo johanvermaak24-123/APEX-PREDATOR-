@@ -1,42 +1,23 @@
-TITAN GOD 9.2 — SMART EVENT SHOCK
+TITAN GOD 10.3 — VERIFIED STABILITY CORE
 
-Upgraded from TITAN GOD 9.1 without changing the existing browser-memory keys.
+This is a second forensic hardening pass over 10.2. It preserves the 10.x trading architecture and existing browser-memory keys.
 
-Major upgrades in 9.2:
-- Smart Event Shock Engine: duplicate headlines are clustered into independent event stories before risk is calculated.
-- Symbol-aware shock relevance: XAU/USD prioritizes gold, Fed/FOMC, Treasury/yields/USD, inflation and geopolitical catalysts while suppressing unrelated crypto noise.
-- Freshness decay: old headlines lose shock power instead of permanently blocking trades.
-- Source-quality weighting: corroboration from multiple sources increases confidence, but 30 copies of one story do not count as 30 shocks.
-- Material-cluster hard block: EVENT SHOCK only hard-blocks when independent, fresh, sufficiently material clusters justify it.
-- Event CAUTION state: elevated risk can warn TITAN without automatically killing an otherwise valid setup.
-- Trigger Radar now reports cluster-normalized risk score, number of material clusters and NORMAL/CAUTION/BLOCK state.
-- DeepGate, Expectancy Gate, Meta-Brain and decision consensus now use the same Smart Event Shock profile.
-- Existing 9.1 WAIT compression, shadow proof learning, proof engine, signal locks and journal memory remain intact.
+Verified fixes in 10.3:
+- BEST NOW now delegates to the same unified consensus engine as World Brain instead of re-applying legacy 9.x thresholds. This removes a real source of contradictory PASS/WAIT results.
+- Browser preference and manual-update writes are guarded so a storage exception cannot crash the UI.
+- Page title, model journal version, export version, manifest and service-worker cache are version-consistent.
+- Service-worker installation is fail-closed: a broken static asset will not silently activate a partial offline cache.
+- Core self-test now checks XAU event-direction semantics as well as verdict parsing, memory schema, clamping and page-version integrity.
+- Existing Smart Event Shock, directional-event interpretation, signal locking, proof engine, WAIT shadow learning, journal compression, backup/restore and redundant IndexedDB memory remain intact.
 
-IMPORTANT:
-Upload these files over the existing GitHub Pages repository. Do not delete browser/site data if you want to keep local TITAN memory. The service-worker cache name was bumped to 9.2 so the new build can replace the previous cached shell.
+Audit suite performed on the packaged build:
+- JavaScript syntax check for application and service worker.
+- HTML duplicate-ID and JavaScript referenced-ID scan.
+- Manifest JSON validation and icon-dimension validation.
+- Service-worker static asset existence check.
+- Version consistency scan across UI/title/journal/export/manifest/cache.
+- Unsafe direct localStorage write scan.
+- Decision-engine scan for duplicate/legacy BEST NOW gating.
+- ZIP CRC/integrity verification.
 
-Safety: TITAN is a research/prototype decision-support system. It does not guarantee future price direction or profits.
-
---- PREVIOUS 9.1 NOTES ---
-TITAN GOD 9.1 — PROOF MEMORY ACCELERATOR
-
-Upgraded from TITAN GOD 9.0 without deleting the existing browser memory keys.
-
-Major upgrades in 9.1:
-- Trigger Readiness Radar: shows BUY/SELL bias, readiness %, setup stage, exact blocker and every gate.
-- WAIT Memory Compression: repeated identical WAIT states are no longer allowed to flood the journal.
-- Shadow Proof Engine: directional WAITs now get a NON-TRADING shadow plan so future candles can prove whether the blocked setup would have hit TP or SL. This accelerates learning without pretending a trade was taken.
-- Symbol-specific News Priority: gold now gives highest decision weight to gold/bullion, Fed/FOMC, Treasury/yields/USD, inflation and geopolitics while reducing unrelated crypto noise.
-- Source-quality fix: article domains are preserved and used in source weighting.
-- Stronger Proof Engine: adds a conservative Wilson hit-rate floor before a setup may be called PROVEN EDGE.
-- Smarter journal retention: prioritizes actionable outcomes and unique WAIT states instead of endless duplicate scans.
-- Trigger state is saved into journal records for later autopsy and threshold research.
-- Auto-memory snapshot schema upgraded while retaining TITAN 9.0 localStorage data compatibility.
-- Existing verified MT5 feed, XAU secondary validation, signal lock, live execution map, multi-timeframe engine, scenario tree, causal map, historical-news evidence and fail-closed logic preserved.
-
-IMPORTANT:
-- Do NOT delete browser site data if you want the existing TITAN learning/journal to remain.
-- Replace the files in the SAME GitHub Pages repository. Do not create a new project.
-- A WAIT shadow result is research evidence only; it is not a real executed trade.
-- PROVEN EDGE is empirical evidence, not a guarantee of profit.
+No trading system can guarantee profit or perfect future direction. Treat 10.3 as the stable evidence-collection build and do not change thresholds merely because a single scan says WAIT.
