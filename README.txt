@@ -1,23 +1,31 @@
-TITAN GOD 10.3 — VERIFIED STABILITY CORE
+APEX PREDATOR 1.0 — VERIFIED CORE
 
-This is a second forensic hardening pass over 10.2. It preserves the 10.x trading architecture and existing browser-memory keys.
+Deep surgical rebuild of the TITAN GOD 10.3 stability core. Existing browser-memory keys are deliberately preserved so prior journal/state data can survive the rename.
 
-Verified fixes in 10.3:
-- BEST NOW now delegates to the same unified consensus engine as World Brain instead of re-applying legacy 9.x thresholds. This removes a real source of contradictory PASS/WAIT results.
-- Browser preference and manual-update writes are guarded so a storage exception cannot crash the UI.
-- Page title, model journal version, export version, manifest and service-worker cache are version-consistent.
-- Service-worker installation is fail-closed: a broken static asset will not silently activate a partial offline cache.
-- Core self-test now checks XAU event-direction semantics as well as verdict parsing, memory schema, clamping and page-version integrity.
-- Existing Smart Event Shock, directional-event interpretation, signal locking, proof engine, WAIT shadow learning, journal compression, backup/restore and redundant IndexedDB memory remain intact.
+Critical decision fix:
+- Event magnitude and event direction are now separated.
+- A hard event block can only occur when material event clusters are genuinely hostile to the actual BUY/SELL direction.
+- Direct XAU/USD price-action headlines outrank ambiguous generic macro keywords.
+- A bearish gold event cannot be classified as hostile to a SELL simply because the global event environment is severe.
+- Mixed/high event magnitude becomes CAUTION unless opposing risk materially dominates supporting risk.
+- World Brain, Trigger Readiness, Intelligence Core and Expectancy Gate all consume the same directional event profile.
 
-Audit suite performed on the packaged build:
-- JavaScript syntax check for application and service worker.
-- HTML duplicate-ID and JavaScript referenced-ID scan.
-- Manifest JSON validation and icon-dimension validation.
-- Service-worker static asset existence check.
-- Version consistency scan across UI/title/journal/export/manifest/cache.
-- Unsafe direct localStorage write scan.
-- Decision-engine scan for duplicate/legacy BEST NOW gating.
-- ZIP CRC/integrity verification.
+Hardening retained:
+- unified decision authority
+- cluster-normalized news shock engine
+- multi-horizon confirmation
+- signal lock / minimum hold
+- proof engine and first-hit grading
+- WAIT shadow learning
+- analog memory and journal compression
+- redundant IndexedDB browser backup/recovery
+- service-worker update handling
+- fail-closed news behavior
 
-No trading system can guarantee profit or perfect future direction. Treat 10.3 as the stable evidence-collection build and do not change thresholds merely because a single scan says WAIT.
+New invariant self-tests verify:
+- XAU hawkish/dovish direction semantics
+- direct bearish gold headline = supportive for SELL, not hostile
+- direct bullish gold headline = opposing for SELL
+- memory schema, verdict parser, clamp and page-version consistency
+
+Important: no trading system can guarantee profit or future direction. APEX PREDATOR is an evidence engine; allow resolved outcomes to accumulate before changing thresholds again.

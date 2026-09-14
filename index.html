@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>TITAN GOD 10.3 — VERIFIED STABILITY CORE</title>
+<title>APEX PREDATOR 1.0 — VERIFIED CORE</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -78,7 +78,7 @@ header, .hero {
   position:relative;
 }
 header::after {
-  content:"TITAN";
+  content:"APEX";
   position:absolute;
   right:18px;
   top:10px;
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">TITAN <span>GOD</span></div><div class="lab">GOD 10.3 • VERIFIED STABILITY CORE</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX 1.0 • VERIFIED CORE</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -144,7 +144,7 @@ button.primary, #scan, #scanAll {
     <div><label>ENTRY TIMEFRAME</label><select id="tf"><option value="5min">M5</option><option value="15min">M15</option><option value="30min" selected>M30</option><option value="1h">H1</option><option value="4h">H4</option></select></div>
    </div>
    <button id="scan">🔄 UPDATE / SCAN MARKET</button>
-   <div class="small" style="margin-top:8px">Manual mode: TITAN only pulls fresh market/news data when you press UPDATE / SCAN MARKET. The last signal stays on screen between scans. No paid market-data key is required.</div>
+   <div class="small" style="margin-top:8px">Manual mode: APEX only pulls fresh market/news data when you press UPDATE / SCAN MARKET. The last signal stays on screen between scans. No paid market-data key is required.</div>
    <div class="grid3" style="margin-top:10px"><div class="k"><span>Data mode</span><b>FREE / MANUAL</b></div><div class="k"><span>Last update</span><b id="manualLastUpdate">NEVER</b></div><div class="k"><span>API credits</span><b>NOT REQUIRED</b></div></div>
   </div>
 
@@ -154,7 +154,7 @@ button.primary, #scan, #scanAll {
     <div class="lmMeta"><b id="liveSymbol">NO MARKET</b><span id="liveTf">—</span><span id="livePriceTime">NOT UPDATED</span><span id="liveSource">SOURCE —</span></div>
    </div>
    <div class="hero">
-    <div><div class="small">TITAN DECISION</div><div id="signal" class="sig wait">WAIT</div><div id="status" class="small">Ready.</div></div>
+    <div><div class="small">APEX DECISION</div><div id="signal" class="sig wait">WAIT</div><div id="status" class="small">Ready.</div></div>
     <div class="conf"><span class="small">Model Score</span><br><strong id="conf">—</strong></div>
    </div>
    <div class="meter"><div id="meter"></div></div>
@@ -172,7 +172,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Current raw scan</span><b id="lockRaw">—</b></div>
    </div>
    <div id="lockNarrative" class="small" style="margin-top:10px">
-    TITAN only commits when a BUY/SELL is actionable. A later weak WAIT does not cancel a live signal.
+    APEX only commits when a BUY/SELL is actionable. A later weak WAIT does not cancel a live signal.
    </div>
   </div>
   <div class="card">
@@ -184,7 +184,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Setup stage</span><b id="triggerStage">—</b></div>
    </div>
    <div class="triggerBar"><div id="triggerMeter"></div></div>
-   <div id="triggerNarrative" class="small" style="margin-top:10px">Run a scan. TITAN will show exactly what still has to happen before a directional bias can become an actionable trade.</div>
+   <div id="triggerNarrative" class="small" style="margin-top:10px">Run a scan. APEX will show exactly what still has to happen before a directional bias can become an actionable trade.</div>
    <div id="triggerGates" style="margin-top:8px"></div>
   </div>
 
@@ -230,7 +230,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Expectancy</span><b id="expR">—</b></div>
     <div class="k"><span>Drift</span><b id="driftState">—</b></div>
    </div>
-   <div id="driftNarrative" class="small" style="margin-top:10px">TITAN will not call an edge proven without enough first-hit outcomes.</div>
+   <div id="driftNarrative" class="small" style="margin-top:10px">APEX will not call an edge proven without enough first-hit outcomes.</div>
   </div>
   <div class="card">
    <div class="title"><h3>🧬 SIGNAL MEMORY / ANALOGS</h3><span id="memoryBadge" class="badge">NO MEMORY YET</span></div>
@@ -240,7 +240,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Avg move</span><b id="memMove">—</b></div>
     <div class="k"><span>Memory vote</span><b id="memVote">—</b></div>
    </div>
-   <div id="memoryNarrative" class="small" style="margin-top:10px">TITAN needs real completed signals before analog memory becomes meaningful.</div>
+   <div id="memoryNarrative" class="small" style="margin-top:10px">APEX needs real completed signals before analog memory becomes meaningful.</div>
   </div>
   <div class="card">
    <div class="title"><h3>📐 EXPECTANCY GATE</h3><span id="edgeBadge" class="badge">UNPROVEN</span></div>
@@ -261,7 +261,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Calibration error</span><b id="proofCal">—</b></div>
    </div>
    <div class="item" style="margin-top:10px"><b>SETUP DNA PASSPORT</b><p id="proofDna">Waiting for a scan.</p></div>
-   <div id="proofNarrative" class="small" style="margin-top:10px">TITAN will not promote a setup to proven until real resolved outcomes support it.</div>
+   <div id="proofNarrative" class="small" style="margin-top:10px">APEX will not promote a setup to proven until real resolved outcomes support it.</div>
   </div>
   <div class="card">
    <div class="title"><h3>🕵️ WAIT AUDITOR</h3><span id="waitAuditBadge" class="badge">LEARNING</span></div>
@@ -271,7 +271,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Missed moves</span><b id="waitMiss">—</b></div>
     <div class="k"><span>Shadow TP-first</span><b id="waitShadow">—</b></div>
    </div>
-   <div id="waitNarrative" class="small" style="margin-top:10px">WAIT decisions are audited too, so TITAN can learn whether caution protected you or missed too many clean moves.</div>
+   <div id="waitNarrative" class="small" style="margin-top:10px">WAIT decisions are audited too, so APEX can learn whether caution protected you or missed too many clean moves.</div>
   </div>
   <div class="card">
    <div class="title"><h3>🧠 ADAPTIVE META-BRAIN</h3><span id="metaBadge" class="badge">LEARNING MODE</span></div>
@@ -293,14 +293,14 @@ button.primary, #scan, #scanAll {
    </div>
   </div>
   <div class="card">
-   <div class="title"><h3>🧠 TITAN INTELLIGENCE CORE</h3><span id="brainState" class="badge">WAITING</span></div>
+   <div class="title"><h3>🧠 APEX INTELLIGENCE CORE</h3><span id="brainState" class="badge">WAITING</span></div>
    <div class="grid4">
     <div class="k"><span>Technical</span><b id="brainTech">—</b></div>
     <div class="k"><span>News relevance</span><b id="brainNews">—</b></div>
     <div class="k"><span>Event risk</span><b id="brainRisk">—</b></div>
     <div class="k"><span>Agreement</span><b id="brainAgree">—</b></div>
    </div>
-   <div id="brainNarrative" class="small" style="margin-top:10px">TITAN has not formed a thesis yet.</div>
+   <div id="brainNarrative" class="small" style="margin-top:10px">APEX has not formed a thesis yet.</div>
   </div>
   <div class="card">
    <div class="title"><h3>🛰️ LIVE NEWS RADAR</h3><span id="newsLiveBadge" class="badge">NOT SCANNED</span></div>
@@ -310,7 +310,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>High impact</span><b id="newsLiveHigh">0</b></div>
     <div class="k"><span>Last scan</span><b id="newsLiveTime">—</b></div>
    </div>
-   <div id="newsLiveList" style="margin-top:10px"><div class="item"><p>Run a scan to see the actual headlines TITAN used.</p></div></div>
+   <div id="newsLiveList" style="margin-top:10px"><div class="item"><p>Run a scan to see the actual headlines APEX used.</p></div></div>
   </div>
   <div class="card">
    <div class="title"><h3>🕰️ HISTORICAL NEWS EVIDENCE</h3><span id="histNewsBadge" class="badge">BUILDING MEMORY</span></div>
@@ -320,7 +320,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Avg 2h move</span><b id="histNewsMove">—</b></div>
     <div class="k"><span>Historical vote</span><b id="histNewsVote">—</b></div>
    </div>
-   <div id="histNewsList" style="margin-top:10px"><div class="item"><p>TITAN will preserve the exact news evidence used at each decision and compare future BUY/SELL decisions with resolved historical event patterns.</p></div></div>
+   <div id="histNewsList" style="margin-top:10px"><div class="item"><p>APEX will preserve the exact news evidence used at each decision and compare future BUY/SELL decisions with resolved historical event patterns.</p></div></div>
    <div class="small" style="margin-top:8px">Forensic rule: this panel only uses news that was actually available at the original decision time. It does not backfill future headlines.</div>
   </div>
 
@@ -349,7 +349,7 @@ button.primary, #scan, #scanAll {
 
 
   <div class="card">
-   <div class="title"><h3>📚 TITAN AUTOPSY JOURNAL</h3><button id="clearJournal" class="secondary" style="width:auto;margin:0;padding:7px 10px">CLEAR</button></div>
+   <div class="title"><h3>📚 APEX AUTOPSY JOURNAL</h3><button id="clearJournal" class="secondary" style="width:auto;margin:0;padding:7px 10px">CLEAR</button></div>
    <div class="grid4">
     <div class="k"><span>Signals stored</span><b id="jCount">0</b></div>
     <div class="k"><span>BUY</span><b id="jBuy">0</b></div>
@@ -396,7 +396,7 @@ button.primary, #scan, #scanAll {
  <section id="settingsTab" class="hidden">
   <div class="card">
    <div class="title"><h3>⚙️ CONNECTIONS</h3><span class="badge">NO-CREDIT MODE</span></div>
-   <div class="good"><b>FREE / MANUAL MARKET DATA</b><br>No Twelve Data key. No OpenAI key. TITAN fetches keyless market data only when you press UPDATE / SCAN MARKET.</div>
+   <div class="good"><b>FREE / MANUAL MARKET DATA</b><br>No Twelve Data key. No OpenAI key. APEX fetches keyless market data only when you press UPDATE / SCAN MARKET.</div>
    <input id="tdKey" type="hidden" value="FREE"/>
    <div class="grid2" style="margin-top:10px">
     <div><label>WORLD NEWS LOOKBACK</label><select id="hours"><option value="6">6 hours</option><option value="12">12 hours</option><option value="24" selected>24 hours</option><option value="48">48 hours</option></select></div><div><label>NEWS SCAN MODE</label><select id="newsMode"><option value="turbo" selected>TURBO</option><option value="deep">DEEP</option></select></div>
@@ -414,27 +414,27 @@ button.primary, #scan, #scanAll {
      <div class="k"><span>Records</span><b id="autoMemRecords">0</b></div>
      <div class="k"><span>Resolved learning</span><b id="autoLearnN">0</b></div>
     </div>
-    <div id="autoMemNarrative" class="small" style="margin-top:9px">TITAN keeps a redundant brain snapshot inside this browser. API credentials are excluded.</div>
+    <div id="autoMemNarrative" class="small" style="margin-top:9px">APEX keeps a redundant brain snapshot inside this browser. API credentials are excluded.</div>
    </div>
    <div class="card" style="margin-top:14px;padding:14px">
-    <div class="title"><h3>💾 TITAN BACKUP</h3><span class="badge">MEMORY SAFE</span></div>
-    <button id="exportTitan" class="secondary">EXPORT TITAN MEMORY</button>
-    <textarea id="importTitanText" placeholder="Paste a TITAN backup here to restore…" style="width:100%;min-height:90px;margin-top:10px"></textarea>
-    <button id="importTitan" class="secondary">RESTORE TITAN MEMORY</button>
+    <div class="title"><h3>💾 APEX BACKUP</h3><span class="badge">MEMORY SAFE</span></div>
+    <button id="exportTitan" class="secondary">EXPORT APEX MEMORY</button>
+    <textarea id="importTitanText" placeholder="Paste an APEX backup here to restore…" style="width:100%;min-height:90px;margin-top:10px"></textarea>
+    <button id="importTitan" class="secondary">RESTORE APEX MEMORY</button>
     <div id="backupMsg" class="small" style="margin-top:8px">AUTO MEMORY is active inside this app. Manual Export/Restore remains an emergency backup.</div>
    </div>
   </div>
  </section>
 
- <div class="note">Prototype only. TITAN World Brain produces model scores and evidence gates; it does not guarantee future price direction. Coverage is deliberately broad and multilingual through GDELT's global index, but no system can literally access every private, paywalled, unpublished or unindexed article on Earth.</div>
+ <div class="note">Prototype only. APEX World Brain produces model scores and evidence gates; it does not guarantee future price direction. Coverage is deliberately broad and multilingual through GDELT's global index, but no system can literally access every private, paywalled, unpublished or unindexed article on Earth.</div>
 </div>
 <script>
 const $=x=>document.getElementById(x), must=x=>{const e=$(x);if(!e)throw new Error("UI element missing: #"+x);return e}, clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
 function safeJSON(raw,fallback){try{const v=JSON.parse(raw);return v??fallback}catch(e){return fallback}}
 function readStoredJSON(key,fallback,legacyKey=null){const raw=localStorage.getItem(key)??(legacyKey?localStorage.getItem(legacyKey):null);return raw==null?fallback:safeJSON(raw,fallback)}
-function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(value));try{localStorage.setItem("titan_last_persist_ms",String(Date.now()))}catch(_e){}return true}catch(e){console.warn("TITAN storage write failed",key,e);return false}}
+function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(value));try{localStorage.setItem("titan_last_persist_ms",String(Date.now()))}catch(_e){}return true}catch(e){console.warn("APEX storage write failed",key,e);return false}}
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
-function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("TITAN storage text write failed",key,e);return false}}
+function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
 $("tdKey").value="FREE";$("hours").value=readStoredText("titan_hours","24");$("minConf").value=readStoredText("titan_min","72");$("newsMode").value=readStoredText("titan_news_mode","turbo");
@@ -779,26 +779,44 @@ function smartEventShock(events,sym){
 // TITAN GOD 10.0: interpret event magnitude separately from trade direction.
 function eventImpactSign(sym,title,score=0){
  const s=String(sym||"").toUpperCase(),t=String(title||"").toLowerCase();
- const hawkish=/rate hike|hawkish|treasury.*(rise|jump|surge|high)|yield.*(rise|jump|surge|high)|hot inflation|strong(er)? (us )?dollar|dollar (rise|surge|strength)|fed.*tighten/;
+ const goldDown=/gold|bullion|xau/; const downVerb=/falls?|fell|slips?|slides?|drops?|lower|declines?|pressure|weighs? on|selloff|plunges?/;
+ const goldUp=/gold|bullion|xau/; const upVerb=/rises?|rose|gains?|jumps?|surges?|rall(?:y|ies)|higher|rebounds?|soars?/;
+ const hawkish=/rate hike|hawkish|treasury.*(rise|jump|surge|high)|yield.*(rise|jump|surge|high)|hot inflation|strong(er)? (us )?dollar|dollar (rise|surge|strength)|fed.*tighten|higher for longer/;
  const dovish=/rate cut|dovish|easing|yield.*(fall|drop|lower)|weak(er)? (us )?dollar|dollar (fall|drop|weaken)|fed.*ease/;
  const geo=/war|invasion|missile|attack|geopolitical|hormuz|red sea|sanction/;
  const supply=/opec|pipeline|refinery|shipping disruption|supply cut|hormuz|red sea/;
- if(/XAU|GOLD/.test(s)){if(hawkish.test(t))return -1;if(dovish.test(t)||geo.test(t))return 1;}
+ if(/XAU|GOLD/.test(s)){
+   // Direct price-action headlines outrank generic macro keyword ambiguity.
+   if(goldDown.test(t)&&downVerb.test(t))return -1;
+   if(goldUp.test(t)&&upVerb.test(t))return 1;
+   if(hawkish.test(t))return -1;
+   if(dovish.test(t))return 1;
+   if(geo.test(t))return 1;
+   return 0;
+ }
  if(/USD|DXY/.test(s)){if(hawkish.test(t))return 1;if(dovish.test(t))return -1;}
  if(/BTC|ETH|NAS|USTEC|NDX/.test(s)){if(hawkish.test(t))return -1;if(dovish.test(t))return 1;}
  if(/OIL|WTI|BRENT/.test(s)&&supply.test(t))return 1;
- return Math.abs(score)>=.5?Math.sign(score):0;
+ // Generic sentiment is too noisy to decide whether a macro shock helps or hurts a trade.
+ return 0;
 }
 function directionalEventProfile(events,sym,tradeDir){
  const base=smartEventShock(events,sym),dir=tradeDir==="BUY"?1:tradeDir==="SELL"?-1:0;
- if(!dir)return {...base,supportRisk:0,opposeRisk:0,neutralRisk:base.score,supportiveDominant:false,hostileDominant:false};
- let supportRisk=0,opposeRisk=0,neutralRisk=0,criticalAgainst=false;
- for(const x of base.top||[]){const imp=eventImpactSign(sym,x.title,x.score||0),risk=x.shockRisk||0;if(imp===dir)supportRisk+=risk;else if(imp===-dir){opposeRisk+=risk;if((x.severity||0)>=4&&(x.fresh||0)>=.60)criticalAgainst=true;}else neutralRisk+=risk;}
- const supportiveDominant=supportRisk>=.75&&supportRisk>opposeRisk*1.30;
- const hostileDominant=opposeRisk>=.75&&opposeRisk>supportRisk*1.20;
- let block=base.block;if(base.block&&supportiveDominant&&!criticalAgainst&&!hostileDominant)block=false;if(hostileDominant&&base.score>=2)block=true;
- const caution=!block&&(base.caution||base.block||base.score>=1);
- return {...base,block,caution,state:block?"BLOCK":caution?"CAUTION":"NORMAL",supportRisk,opposeRisk,neutralRisk,supportiveDominant,hostileDominant,criticalAgainst};
+ if(!dir)return {...base,supportRisk:0,opposeRisk:0,neutralRisk:base.score,supportiveDominant:false,hostileDominant:false,criticalAgainst:false};
+ let supportRisk=0,opposeRisk=0,neutralRisk=0,criticalAgainst=false,directSupport=0,directOppose=0;
+ for(const x of base.top||[]){
+   const imp=eventImpactSign(sym,x.title,x.score||0),risk=x.shockRisk||0,direct=symbolEntityScore(sym,x.title)>0;
+   const weightedRisk=risk*(direct?1.12:.88);
+   if(imp===dir){supportRisk+=weightedRisk;if(direct)directSupport+=weightedRisk;}
+   else if(imp===-dir){opposeRisk+=weightedRisk;if(direct)directOppose+=weightedRisk;if((x.severity||0)>=4.5&&(x.fresh||0)>=.72&&direct)criticalAgainst=true;}
+   else neutralRisk+=risk;
+ }
+ const supportiveDominant=supportRisk>=.65&&supportRisk>opposeRisk*1.18;
+ const hostileDominant=opposeRisk>=.85&&opposeRisk>supportRisk*1.35&&directOppose>=Math.min(.55,opposeRisk*.45);
+ // Magnitude alone is never a hostile block. A hard block requires directional opposition.
+ let block=criticalAgainst||(hostileDominant&&opposeRisk>=1.15&&base.score>=1.75);
+ const caution=!block&&(base.caution||base.block||base.score>=1||neutralRisk>=.75);
+ return {...base,block,caution,state:block?"BLOCK":caution?"CAUTION":"NORMAL",supportRisk,opposeRisk,neutralRisk,directSupport,directOppose,supportiveDominant,hostileDominant,criticalAgainst};
 }
 function impactMap(events){const text=events.map(x=>x.title.toLowerCase()).join(" ");let impacts=[];
  const push=(a,d,r)=>impacts.push({a,d,r});
@@ -827,7 +845,7 @@ function decisionConsensus(r,events){
  const rawDir=actionableDirection(rawVerdict)||hzDir,horizonConfirm=!!(rawDir&&hzDir===rawDir);
  const technicalNeed=horizonConfirm?1.05:1.35,alignNeed=horizonConfirm?Math.max(2,Math.ceil(r.valid*.40)):Math.max(2,Math.ceil(r.valid*.50));
  const technicalPass=Math.abs(r.market)>=technicalNeed,alignPass=r.align>=alignNeed,conflictPass=cf.ratio<=.45,uncertaintyPass=uncertainty<=.58;
- const shock=directionalEventProfile(events,r.sym,rawDir),eventDanger=shock.block,hist=historicalNewsAnalogs({...r,v:rawDir||rawVerdict},events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ const shock=directionalEventProfile(events,r.sym,rawDir),eventDanger=shock.block&&shock.hostileDominant,hist=historicalNewsAnalogs({...r,v:rawDir||rawVerdict},events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
  const fusion=adaptiveFusion(r,events),sg=rawDir==="BUY"?1:rawDir==="SELL"?-1:0,fusionPass=!!(sg&&Math.abs(fusion.fused)>=.16&&Math.sign(fusion.fused)===sg);
  let gate=(rawDir&&technicalPass&&alignPass&&conflictPass&&uncertaintyPass&&fusionPass&&!eventDanger)?"PASS":"WAIT";
  if(hist.n>=5&&hist.vote==="REJECT")gate="REJECT";if(es.n>=20&&es.exp<=0)gate="REJECT";if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";if(nh.degraded&&gate==="PASS")gate="WAIT";
@@ -838,7 +856,7 @@ function decisionConsensus(r,events){
  const strongAllowed=gate==="PASS"&&support>=3&&uncertainty<=.38&&cf.ratio<=.25&&!shock.caution&&!nh.degraded&&(hist.n<5||hist.vote!=="REJECT");
  let finalVerdict="WAIT";if(gate==="PASS"&&rawDir){const strong=/STRONG/.test(rawVerdict)&&strongAllowed;finalVerdict=rawDir==="BUY"?(strong?"STRONG BUY":"BUY"):(strong?"STRONG SELL":"SELL");}
  const biasLabel=rawDir?`${rawDir} BIAS — WAIT`:"WAIT";
- const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":eventDanger?"EVENT RISK AGAINST SETUP":!technicalPass?`STRUCTURE ${Math.abs(r.market).toFixed(2)}/${technicalNeed.toFixed(2)}`:!alignPass?`TIMEFRAMES ${r.align}/${alignNeed}`:!fusionPass?"FUSION NOT CONFIRMED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":shock.caution?"EVENT CAUTION":"WAIT FOR CONFIRMATION";
+ const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":eventDanger?"HOSTILE EVENT RISK":!technicalPass?`STRUCTURE ${Math.abs(r.market).toFixed(2)}/${technicalNeed.toFixed(2)}`:!alignPass?`TIMEFRAMES ${r.align}/${alignNeed}`:!fusionPass?"FUSION NOT CONFIRMED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":shock.caution?"EVENT CAUTION":"WAIT FOR CONFIRMATION";
  return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,technicalNeed,alignNeed,fusionPass,fusion,horizonConfirm,hz,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed,eventShock:shock,rawDir};
 }
 
@@ -960,13 +978,13 @@ function renderSignalLock(r){
  const a=r.activeSignal,now=Date.now();
  if(!a){
   $("lockBadge").textContent=r.lockExitReason||"NO ACTIVE SIGNAL";$("lockSignal").textContent="—";$("lockHold").textContent="—";$("lockAge").textContent="—";$("lockRaw").textContent=r.rawV||r.v;
-  $("lockNarrative").textContent=r.lockExitReason?`No lock created / previous signal ended: ${r.lockExitReason}. TITAN is waiting for a cleaner confirmed setup.`:"No committed signal is active.";
+  $("lockNarrative").textContent=r.lockExitReason?`No lock created / previous signal ended: ${r.lockExitReason}. APEX is waiting for a cleaner confirmed setup.`:"No committed signal is active.";
   return
  }
  const age=now-a.startedAt,remaining=Math.max(0,a.minHoldMs-age);
  $("lockBadge").textContent=remaining>0?"SIGNAL LOCKED":"HOLD COMPLETE";$("lockSignal").textContent=a.direction;$("lockHold").textContent=remaining>0?humanDuration(remaining)+" left":"minimum met";$("lockAge").textContent=humanDuration(age);$("lockRaw").textContent=r.rawV;
  const rawDir=actionableDirection(r.rawV),conflict=rawDir&&rawDir!==a.direction;
- $("lockNarrative").textContent=remaining>0?`${a.direction} thesis remains committed. Live entry/targets are recalculated on new scans; original entry stays frozen for learning.${conflict?" Raw scan currently disagrees, but not strongly enough to invalidate the thesis.":""}`:`Minimum hold is complete. TITAN keeps updating the live plan while the thesis remains valid.`;
+ $("lockNarrative").textContent=remaining>0?`${a.direction} thesis remains committed. Live entry/targets are recalculated on new scans; original entry stays frozen for learning.${conflict?" Raw scan currently disagrees, but not strongly enough to invalidate the thesis.":""}`:`Minimum hold is complete. APEX keeps updating the live plan while the thesis remains valid.`;
 }
 async function scanSymbol(sym,tf,events){
  const tfs=["5min","15min","30min","1h","4h"],w={"5min":.7,"15min":.9,"30min":1.1,"1h":1.25,"4h":1.05},res={};let raw5=[];await Promise.all(tfs.map(async x=>{try{const rows=await td(sym,x);if(x==="5min")raw5=rows;res[x]=marketAnalyze(rows)}catch(e){res[x]={error:e.message}}}));
@@ -1012,7 +1030,7 @@ function renderNewsRadar(r,events){
  $("newsLiveBias").textContent=bias;
  $("newsLiveHigh").textContent=String(high);
  $("newsLiveTime").textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • priority ${Number(x.priority||1).toFixed(2)}× • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — TITAN could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>News feed reachable, but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`;
+ $("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • priority ${Number(x.priority||1).toFixed(2)}× • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join(""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — APEX could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>News feed reachable, but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`;
  renderHistoricalNews(r,events);
 }
 function render(r,events){
@@ -1050,7 +1068,7 @@ const highImpact=macroEvents.filter(e=>(e.severity||0)>=2).length,macro=macroEve
 const nh2=r.consensus?.nh||newsHealth(events),smart=r.consensus?.eventShock||directionalEventProfile(events,r.sym,r.consensus?.rawDir);
 $("riskBox").className=(nh2.degraded||smart.block||smart.caution)?"warn":"good";
 const providerText=nh2.providers?.length?nh2.providers.join(" + "):"none";
-$("riskBox").textContent=nh2.degraded?`⚠️ NEWS FEED OFFLINE: all keyless news providers failed (${nh2.failures}/${nh2.attempts}). TITAN fails closed and will not invent “no news”.`:`${smart.block?"⚠️":"✓"} Smart event risk ${smart.score.toFixed(2)} • ${smart.material} independent clusters • ${smart.state}${smart.supportiveDominant?" • supports current bias":smart.hostileDominant?" • opposes current bias":""}. Coverage ${macro} macro/geopolitical headlines (${highImpact} high-impact) via ${providerText}.`;
+$("riskBox").textContent=nh2.degraded?`⚠️ NEWS FEED OFFLINE: all keyless news providers failed (${nh2.failures}/${nh2.attempts}). APEX fails closed and will not invent “no news”.`:`${(smart.block&&smart.hostileDominant)?"⚠️":smart.caution?"⚠️":"✓"} Smart event risk ${smart.score.toFixed(2)} • ${smart.material} independent clusters • ${smart.state}${smart.supportiveDominant?" • supports current bias":smart.hostileDominant?" • opposes current bias":""}. Coverage ${macro} macro/geopolitical headlines (${highImpact} high-impact) via ${providerText}.`;
  $("scores").innerHTML=`<div class="scoreline"><span>Market structure</span><b>${r.market.toFixed(2)}</b></div><div class="scoreline"><span>World news</span><b>${r.news.items.length?r.news.score.toFixed(2):"NO DIRECT NEWS"}</b></div><div class="scoreline"><span>Smart event risk</span><b>${smart.state} ${smart.score.toFixed(2)}</b></div><div class="scoreline"><span>Timeframe alignment</span><b>${r.align}/${r.valid}</b></div>`;
  $("why").innerHTML=(r.news.items.slice(0,4).map(x=>`<div class="item"><h4>${esc(x.title)}</h4><p>${esc(x.source)} • ${esc(x.cat)} • sentiment ${x.score.toFixed(1)}</p></div>`).join("")||'<div class="item"><p>No strongly relevant world-news items found for this symbol.</p></div>')+(main.why.slice(0,4).map(x=>`<div class="item"><p>${x.v>0?"Bullish":"Bearish"} market evidence: ${esc(x.t)}</p></div>`).join(""));
  const im=impactMap(events);$("impactMap").innerHTML=im.length?im.map(x=>`<div class="event"><div><b>${esc(x.a)}</b></div><div class="small">${esc(x.r)}</div><div class="impact ${x.d==="+"?"pos":x.d==="−"?"neg":"neu"}">${x.d}</div></div>`).join(""):'<div class="item"><p>No dominant causal theme detected.</p></div>'
@@ -1325,7 +1343,7 @@ function renderEdgeControl(r){
  const s=edgeStats(r.sym),d=driftCheck(r.sym);
  $("fhWin").textContent=s.n?s.wins:"—";$("fhLoss").textContent=s.n?s.loss:"—";$("expR").textContent=s.n?s.exp.toFixed(2)+"R":"—";
  $("driftState").textContent=d.state;$("driftBadge").textContent=s.n>=20?(s.exp>0&&d.state!=="NEGATIVE DRIFT"?"EDGE HEALTHY":"EDGE WARNING"):`LEARNING • ${s.n}/20`;
- $("driftNarrative").textContent=s.n<20?`Only ${s.n} resolved first-hit outcomes for ${r.sym}. TITAN refuses to call this edge proven yet.`:`Resolved expectancy ${s.exp.toFixed(2)}R/trade with ${Math.round(s.wr*100)}% TP-first rate. ${d.state==="NEGATIVE DRIFT"?"Recent performance weakened materially; gate should be conservative.":"No material negative drift detected."}`;
+ $("driftNarrative").textContent=s.n<20?`Only ${s.n} resolved first-hit outcomes for ${r.sym}. APEX refuses to call this edge proven yet.`:`Resolved expectancy ${s.exp.toFixed(2)}R/trade with ${Math.round(s.wr*100)}% TP-first rate. ${d.state==="NEGATIVE DRIFT"?"Recent performance weakened materially; gate should be conservative.":"No material negative drift detected."}`;
  return{s,d}
 }
 function sessionName(){
@@ -1478,10 +1496,10 @@ function renderProofEngine(r,events,b,meta,mg){
  else if(cp.n>=8&&(cp.exp<=0||cp.hit<.45))state="EDGE WARNING";
  else if(cp.n>=5)state="BUILDING PROOF";
  $("proofBadge").textContent=state;
- $("proofNarrative").textContent=cp.n?`${cp.n} close DNA matches for ${r.sym}. Weighted TP-first ${Math.round(cp.hit*100)}%, conservative hit floor ${Math.round((cp.hitLower||0)*100)}%, expectancy ${cp.exp.toFixed(2)}R, average DNA distance ${cp.distance.toFixed(2)}. ${state==="PROVEN EDGE"?"This setup has earned evidence-based promotion; normal safety gates still apply.":state==="EDGE WARNING"?"Historical twins are weak; TITAN should remain conservative.":"Sample is still too small for a strong claim."}`:"No resolved close DNA matches yet. TITAN is recording this setup for future proof instead of inventing confidence.";
+ $("proofNarrative").textContent=cp.n?`${cp.n} close DNA matches for ${r.sym}. Weighted TP-first ${Math.round(cp.hit*100)}%, conservative hit floor ${Math.round((cp.hitLower||0)*100)}%, expectancy ${cp.exp.toFixed(2)}R, average DNA distance ${cp.distance.toFixed(2)}. ${state==="PROVEN EDGE"?"This setup has earned evidence-based promotion; normal safety gates still apply.":state==="EDGE WARNING"?"Historical twins are weak; APEX should remain conservative.":"Sample is still too small for a strong claim."}`:"No resolved close DNA matches yet. APEX is recording this setup for future proof instead of inventing confidence.";
  $("waitAudN").textContent=wa.n;$("waitSaved").textContent=wa.n?wa.good:"—";$("waitMiss").textContent=wa.n?wa.missed:"—";$("waitShadow").textContent=ws.n?`${Math.round(ws.hit*100)}% / ${ws.exp.toFixed(2)}R`:`${ws.n}/5`;
  $("waitAuditBadge").textContent=wa.n>=20?(wa.missRate>.45?"TOO CAUTIOUS":"WAIT HEALTHY"):`LEARNING • ${wa.n}/20`;
- $("waitNarrative").textContent=wa.n?`${wa.n} WAIT decisions have matured to a 2h audit. ${wa.good} avoided a directional move worth chasing; ${wa.missed} missed a move in TITAN's underlying bias. ${wa.n>=20&&wa.missRate>.45?"Caution is now missing too many moves — future threshold tuning should be validated, not guessed.":"No automatic loosening occurs from a small sample."}`:"No WAIT has matured to a 2h audit yet. Every directional WAIT now also receives a non-trading shadow plan so TITAN can learn whether the blocked setup would have hit TP or SL without pretending a trade was taken.";
+ $("waitNarrative").textContent=wa.n?`${wa.n} WAIT decisions have matured to a 2h audit. ${wa.good} avoided a directional move worth chasing; ${wa.missed} missed a move in APEX's underlying bias. ${wa.n>=20&&wa.missRate>.45?"Caution is now missing too many moves — future threshold tuning should be validated, not guessed.":"No automatic loosening occurs from a small sample."}`:"No WAIT has matured to a 2h audit yet. Every directional WAIT now also receives a non-trading shadow plan so APEX can learn whether the blocked setup would have hit TP or SL without pretending a trade was taken.";
  r.proof={cohort:cp,calibration:cal,waitAudit:wa,waitShadow:ws,state}
  return r.proof
 }
@@ -1491,9 +1509,9 @@ function renderMemoryAndGate(r,events,b,meta){
  $("memN").textContent=mem.n;$("memHit").textContent=mem.hit==null?"—":Math.round(mem.hit*100)+"%";$("memMove").textContent=mem.avgMove==null?"—":(mem.avgMove*100).toFixed(2)+"%";$("memVote").textContent=mem.vote;
  $("memoryBadge").textContent=mem.n>=5?"ANALOG MEMORY ACTIVE":mem.n?"EARLY MEMORY":"NO MEMORY YET";$("memoryNarrative").textContent=mem.n?`${mem.n} comparable completed setups found. Average DNA distance ${mem.distance.toFixed(2)}. This is local empirical memory, not a guaranteed forecast.`:"Not enough comparable completed setups yet.";
  const c=r.consensus||decisionConsensus(r,events),memoryPass=mem.n<5?null:(mem.vote==="SUPPORT");let gate=c.gate;if(memoryPass===false)gate="REJECT";
- $("edgeState").textContent=c.technicalPass&&c.alignPass?"STRUCTURE OK":"WEAK";$("edgeRisk").textContent=c.eventShock.block?"HOSTILE EVENT RISK":c.eventShock.caution?(c.eventShock.supportiveDominant?"EVENT SUPPORT + CAUTION":"EVENT CAUTION"):"NORMAL";
+ $("edgeState").textContent=c.technicalPass&&c.alignPass?"STRUCTURE OK":"WEAK";$("edgeRisk").textContent=c.eventShock.block&&c.eventShock.hostileDominant?"HOSTILE EVENT RISK":c.eventShock.caution?(c.eventShock.supportiveDominant?"EVENT SUPPORT + CAUTION":c.eventShock.hostileDominant?"EVENT OPPOSITION + CAUTION":"EVENT CAUTION"):"NORMAL";
  $("edgeGate").textContent=gate;$("edgeEvidence").textContent=mem.n>=5?`${mem.n} analogs`:"building";$("edgeBadge").textContent=gate==="PASS"?"EDGE CANDIDATE":gate==="REJECT"?"EDGE REJECT":"NO TRADE";
- $("edgeNarrative").textContent=gate==="PASS"?"Unified consensus gate passed; proof memory continues to validate the setup.":gate==="REJECT"?"Historical evidence or expectancy rejects this setup.":`Unified gate is waiting: ${c.reason}. TITAN will not force an entry.`;
+ $("edgeNarrative").textContent=gate==="PASS"?"Unified consensus gate passed; proof memory continues to validate the setup.":gate==="REJECT"?"Historical evidence or expectancy rejects this setup.":`Unified gate is waiting: ${c.reason}. APEX will not force an entry.`;
  return{dna,mem,gate}
 }
 function renderMeta(r,events){
@@ -1510,7 +1528,7 @@ function renderMeta(r,events){
  $("hzConsensus").textContent=cons;
  $("metaBadge").textContent=uncertainty>.6?"HIGH UNCERTAINTY":cf.ratio>.45?"CONFLICT":"EVIDENCE FUSED";
  const caution=uncertainty>.6||cf.ratio>.45;
- $("metaNarrative").textContent=`Evidence fusion: technical ${(v.tech*100).toFixed(0)}, news ${(v.news*100).toFixed(0)}, causal ${(v.causal*100).toFixed(0)}, TF ${(v.tf*100).toFixed(0)}. ${caution?"TITAN sees too much uncertainty/conflict — WAIT is safer than forcing a trade.":"Evidence is reasonably coherent across layers."}`;
+ $("metaNarrative").textContent=`Evidence fusion: technical ${(v.tech*100).toFixed(0)}, news ${(v.news*100).toFixed(0)}, causal ${(v.causal*100).toFixed(0)}, TF ${(v.tf*100).toFixed(0)}. ${caution?"APEX sees too much uncertainty/conflict — WAIT is safer than forcing a trade.":"Evidence is reasonably coherent across layers."}`;
  return {uncertainty,cf,hz,cal}
 }
 function buildBrain(r,events){
@@ -1535,7 +1553,7 @@ function triggerReadiness(r,events,meta){
   {k:"TIMEFRAMES",pass:r.align>=alignNeed,block:false,detail:`${r.align}/${r.valid} aligned • need ${alignNeed}`},
   {k:"UNCERTAINTY",pass:meta.uncertainty<=.58,block:false,detail:`${Math.round(meta.uncertainty*100)}% • max 58%`},
   {k:"CONFLICT",pass:meta.cf.ratio<=.45,block:false,detail:`${Math.round(meta.cf.ratio*100)}% • max 45%`},
-  {k:"EVENT RISK",pass:!shock.block,block:shock.block,detail:`${shock.score.toFixed(2)} risk • ${shock.material} clusters • ${shock.state}${shock.supportiveDominant?" • supports bias":shock.hostileDominant?" • opposes bias":""}`},
+  {k:"EVENT RISK",pass:!(shock.block&&shock.hostileDominant),block:(shock.block&&shock.hostileDominant),detail:`${shock.score.toFixed(2)} risk • ${shock.material} clusters • ${shock.state}${shock.supportiveDominant?" • supports bias":shock.hostileDominant?" • opposes bias":""}`},
   {k:"FUSION",pass:c.fusionPass,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} / 16 minimum`}
  ];
  if(es.n>=20)gates.push({k:"EXPECTANCY",pass:es.exp>0,block:es.exp<=0,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
@@ -1557,7 +1575,7 @@ function renderTriggerRadar(r,events,meta){
  $("triggerBadge").textContent=t.stage+(t.dir?` • ${t.dir} BIAS`:"");
  $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":"gateFail"}">${g.pass?"PASS":g.block?"BLOCK":"WAIT"}</b></div>`).join("");
  const m=t.blocker;
- $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but TITAN is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"10.3 separates event magnitude from trade direction and counts independent event clusters, not duplicate headlines. ":""}When the failing gate improves on a fresh verified scan, TITAN can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
+ $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but APEX is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"APEX compares event direction to the actual trade direction and only hard-blocks materially hostile clusters. ":""}When the failing gate improves on a fresh verified scan, APEX can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
  r.trigger=t;return t;
 }
 
@@ -1567,11 +1585,11 @@ function renderBrain(r,events){
  const adaptive=renderEnsemble(r,events); renderScenario(r,events,adaptive); const edgeCtl=renderEdgeControl(r);
  $("brainTech").textContent=(b.technical*100).toFixed(0);
  $("brainNews").textContent=r.news.items.length?`${r.news.items.length} direct`:"0 direct";
- $("brainRisk").textContent=b.shock?.block?"HIGH":b.shock?.caution?"MEDIUM":"LOW";
+ $("brainRisk").textContent=b.shock?.block&&b.shock?.hostileDominant?"HIGH":b.shock?.caution?"MEDIUM":"LOW";
  $("brainAgree").textContent=`${r.consensus?.support??b.agree}/4`;
  const forcedWait=r.consensus?.gate!=="PASS";
  $("brainState").textContent=forcedWait?`WAIT • ${r.consensus?.reason||"GATE"}`:(b.conflicts?`CONFLICT ${b.conflicts}`:"ALIGNED");
- $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?`CONSENSUS GATE: ${r.consensus?.reason||"evidence incomplete"}. Directional bias may exist, but TITAN will not publish an aggressive trade.`:"Cross-layer evidence passed the consensus gate."}`;
+ $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?`CONSENSUS GATE: ${r.consensus?.reason||"evidence incomplete"}. Directional bias may exist, but APEX will not publish an aggressive trade.`:"Cross-layer evidence passed the consensus gate."}`;
  const dna=eventClassify(events).filter(x=>x[1]>0).slice(0,5);
  $("eventDNA").innerHTML=dna.length?dna.map(([k,v])=>`<div class="scoreline"><span>${k}</span><b>${v.toFixed(1)}</b></div>`).join("")+(`<div class="small" style="margin-top:8px">${b.causal.reasons.length?b.causal.reasons.map(x=>`${x.score>0?"+":""}${x.score.toFixed(1)} ${esc(x.why)}`).join(" • "):"No strong causal rule matched this symbol."}</div>`):"<p>No material event cluster detected.</p>";
  const prev=titanState[r.sym],now={v:r.v,conf:r.conf,market:r.market,news:r.news.score,price:r.main.price||0,t:Date.now()};
@@ -1610,7 +1628,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"TITAN-"+now.toString(36).toUpperCase(),modelVersion:"TITAN-GOD-10.3",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-1.0",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);
 }
 
@@ -1681,7 +1699,7 @@ $("scanAll").onclick=async()=>{
    const q=isLeader?(x.quality||x.conf):x.conf;
    const shownVerdict=isLeader&&x.consensus?.gate!=="PASS"?x.consensus.biasLabel:x.v;
    return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(shownVerdict)}">${shownVerdict}</span></b><small>${detail}</small><small><b>${label}</b>${isLeader&&x.consensus?.reason?` • ${esc(x.consensus.reason)}`:""}${isLeader&&x.memN?` • ${x.memN} analogs`:""}</small></div><div class="right"><b>${q}%</b><small>${isLeader?"quality":"rank score"}</small></div></div>`
-  }).join(""):'<div class="item"><p>No setup passed the current score threshold. That is a valid TITAN result.</p></div>'
+  }).join(""):'<div class="item"><p>No setup passed the current score threshold. That is a valid APEX result.</p></div>'
  }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`}
  finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES"}
 }
@@ -1704,7 +1722,7 @@ function renderAutoMemoryStatus(savedAt=null){
  if(nar)nar.textContent=`Brain snapshots and compressed state memory save automatically in this browser. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; API key is not copied into brain backups.`;
 }
 async function titanAutoMemorySave(){
- try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt)}catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("TITAN auto-memory save skipped",e)}
+ try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt)}catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
 }
 async function titanAutoMemoryRecover(){
  try{const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readonly");const req=tx.objectStore(TITAN_AUTO_MEMORY_STORE).get(TITAN_AUTO_MEMORY_KEY);const snap=await new Promise((res,rej)=>{req.onsuccess=()=>res(req.result);req.onerror=()=>rej(req.error)});db.close();
@@ -1729,7 +1747,7 @@ async function titanAutoMemoryRecover(){
    const m=document.getElementById("backupMsg");if(m)m.textContent=`Auto-memory reconciled: ${mergedJ.length} signals retained.`;renderAutoMemoryStatus(snap.savedAt);
    return true;
   }
- }catch(e){console.warn("TITAN auto-memory recovery skipped",e)}
+ }catch(e){console.warn("APEX auto-memory recovery skipped",e)}
  return false;
 }
 window.addEventListener("load",async()=>{await titanAutoMemoryRecover();await titanAutoMemorySave()});
@@ -1740,7 +1758,7 @@ setInterval(titanAutoMemorySave,20000);
 if("serviceWorker" in navigator){
  let titanSwReloaded=false;
  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(titanSwReloaded)return;titanSwReloaded=true;try{if(sessionStorage.getItem("titan_sw_reloaded")!=="1"){sessionStorage.setItem("titan_sw_reloaded","1");location.reload()}}catch(_e){location.reload()}});
- window.addEventListener("load",()=>{try{sessionStorage.removeItem("titan_sw_reloaded")}catch(_e){}navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{reg.update().catch(()=>{});if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});reg.addEventListener("updatefound",()=>{const w=reg.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)w.postMessage({type:"SKIP_WAITING"})})})}).catch(e=>console.warn("TITAN service worker unavailable",e))});
+ window.addEventListener("load",()=>{try{sessionStorage.removeItem("titan_sw_reloaded")}catch(_e){}navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{reg.update().catch(()=>{});if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});reg.addEventListener("updatefound",()=>{const w=reg.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)w.postMessage({type:"SKIP_WAITING"})})})}).catch(e=>console.warn("APEX service worker unavailable",e))});
 }
 
 must("clearJournal").onclick=()=>{titanJournal=[];persistJSON("titan_journal_v2",[]);renderJournal();titanAutoMemorySave().catch(()=>{})};
@@ -1754,12 +1772,18 @@ renderJournal();
   req(verdict(0)==="WAIT","neutral verdict");
   req(actionableDirection("STRONG BUY")==="BUY"&&actionableDirection("SELL")==="SELL","direction parser");
   req(eventImpactSign("XAU/USD","Fed signals rate hike",0)===-1&&eventImpactSign("XAU/USD","Geopolitical war escalates",0)===1,"XAU event direction semantics");
+  req(eventImpactSign("XAU/USD","Gold falls as strong US dollar pressures bullion",1)===-1,"direct bearish gold headline");
+  req(eventImpactSign("XAU/USD","Gold surges as dollar weakens",-1)===1,"direct bullish gold headline");
+  const _sellSupport=directionalEventProfile([{title:"Gold falls as strong US dollar pressures bullion",severity:4.6,fresh:.95,score:1,source:"Reuters"}],"XAU/USD","SELL");
+  req(!_sellSupport.hostileDominant&&!_sellSupport.block,"SELL cannot be blocked by supportive bearish gold event");
+  const _sellHostile=directionalEventProfile([{title:"Gold surges as dollar weakens",severity:4.6,fresh:.95,score:-1,source:"Reuters"}],"XAU/USD","SELL");
+  req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("10.3"),"page version/title consistency");
+  req(document.title.includes("APEX PREDATOR 1.0"),"page version/title consistency");
  }catch(e){failures.push(e.message||String(e))}
- window.TITAN_SELF_TEST={passed:failures.length===0,failures,version:"10.3"};
- if(failures.length)console.error("TITAN CORE SELF-TEST FAIL",failures);else console.info("TITAN CORE SELF-TEST PASS 10.3");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"1.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 1.0");
 })();
 
 (function titanIntegrityCheck(){
@@ -1776,18 +1800,18 @@ renderJournal();
    if(missing.length){box.className="warn";box.textContent="UI integrity FAIL: "+missing.join(", ");}
    else{box.className="good";box.textContent="UI integrity PASS ✓ All critical screen elements loaded.";}
  }
- if(missing.length) console.error("TITAN UI integrity missing IDs:",missing);
+ if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"TITAN-GOD-10.3",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-PREDATOR-1.0",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
 must("importTitan").onclick=()=>{
  try{
   const p=JSON.parse(must("importTitanText").value.trim());
-  if(!p||!Array.isArray(p.journal)||typeof p.state!=="object")throw new Error("Invalid TITAN backup");
+  if(!p||!Array.isArray(p.journal)||typeof p.state!=="object")throw new Error("Invalid APEX backup");
   p.journal=pruneJournalSmart(p.journal);persistJSON("titan_journal_v2",p.journal);persistJSON("titan_state_v2",p.state);persistJSON(TITAN_SIGNAL_LOCK_KEY,p.activeSignals||{});removeStored("titan_active_signals_v1");
   titanJournal=p.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,p.state);titanActiveSignals=p.activeSignals||{};renderJournal();
   titanAutoMemorySave();must("backupMsg").textContent=`Restore complete: ${p.journal.length} signals loaded and auto-saved.`;

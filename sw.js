@@ -1,4 +1,4 @@
-const CACHE="titan-god-10-3-verified-stability-core";
+const CACHE="apex-predator-1-0-verified-core";
 const STATIC=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png"];
 self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting()});
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));self.skipWaiting()});
