@@ -1,0 +1,49 @@
+APEX SCALP GOD 6.5 — OPPORTUNITY DUEL FORTRESS
+
+{
+  "version": "APEX SCALP GOD 6.5 \u2014 OPPORTUNITY DUEL FORTRESS",
+  "changes": [
+    "Parent thesis is optional context; WAIT no longer disables scalp opportunity detection.",
+    "Continuation, reversal, and parent-counter candidates compete every scan.",
+    "FIRE NOW requires structural score, fresh trigger, asymmetric R:R, known/passing spread cost, and no candidate veto.",
+    "Unknown spread cannot FIRE NOW.",
+    "Parentless opportunity snapshots are persisted and resolved at 5/10/15/30m to build mode-specific memory.",
+    "Fortress HARD BLOCK is reserved for integrity failures rather than ordinary lack of edge.",
+    "Hydra toxicity/fragility remains a final execution veto.",
+    "Alpha retirement remains MONITORING until enough resolved mode evidence exists."
+  ],
+  "static": {
+    "dom_ids": 289,
+    "js_dom_refs": 242,
+    "duplicate_ids": [],
+    "missing_refs": [],
+    "javascript_syntax": "PASS",
+    "service_worker_syntax": "PASS",
+    "manifest_json": "PASS",
+    "targeted_runtime_tests": "PASS"
+  },
+  "fuzz": {
+    "version": "APEX SCALP GOD 6.5 \u2014 OPPORTUNITY DUEL FORTRESS",
+    "cases": 10000000,
+    "seed": 6502026,
+    "elapsed_seconds": 1.475,
+    "invariant_failures": 0,
+    "checks": {
+      "fire_requires_score_ge_0_74": 0,
+      "fire_requires_triggered": 0,
+      "fire_requires_known_passing_cost": 0,
+      "fire_requires_rr_ge_1_20": 0,
+      "fire_requires_history_or_exceptional_structural_score": 0,
+      "veto_blocks_fire": 0,
+      "unknown_spread_blocks_fire": 0,
+      "kernel_hard_block_only_on_integrity_fail": 0,
+      "parent_wait_does_not_forbid_candidate": 0
+    },
+    "result": "PASS"
+  },
+  "limitations": [
+    "Randomized invariant tests validate logic constraints, not future profitability.",
+    "FIRE NOW is a timing state, not permission to risk the full account.",
+    "OHLC/tick-volume flow fields are proxies, not full exchange L2 order-book depth."
+  ]
+}
