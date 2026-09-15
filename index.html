@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 3.1 • OPPORTUNITY CAPTURE ENGINE</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 3.2 • UNIFIED TRUTH ENGINE</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -1440,13 +1440,32 @@ function renderEnsemble(r,events){
  $("ensNarrative").textContent=`Adaptive fused evidence ${(a.fused*100).toFixed(0)}. Learning is shrinkage-limited so a small sample cannot wildly rewrite the model.`;
  return a
 }
+function masterTruth(r,events){
+ const c=r.consensus||decisionConsensus(r,events),dir=c.rawDir||actionableDirection(c.finalVerdict||r.v),sg=dir==="BUY"?1:dir==="SELL"?-1:0;
+ const active=c.gate==="PASS"&&!!dir;
+ const strength=clamp(c.directionScore||0,0,1),uncertainty=clamp(c.uncertainty||0,0,1);
+ const hostile=!!(c.eventShock?.directCriticalOverride&&c.eventShock?.hostileDominant);
+ const support=Number(c.support||0),oppose=Number(c.oppose||0);
+ return{c,dir,sg,active,strength,uncertainty,hostile,support,oppose,verdict:c.finalVerdict||"WAIT"}
+}
 function scenarioTree(r,events,adaptive){
- const e=adaptive.e,shock=Math.min(.25,e.eventRisk*.18),u=renderlessUncertainty(e);
- const center=clamp(.5+adaptive.fused*.28,.08,.92);
- let bull=clamp(center-shock*.25,.03,.94),bear=clamp(1-center+shock*.25,.03,.94);
- let base=clamp(.28+u*.38+shock,.08,.70);
+ const e=adaptive.e,t=masterTruth(r,events),shock=Math.min(.22,e.eventRisk*.16),u=renderlessUncertainty(e);
+ // Scenario tree is descriptive, but it must remain coherent with the master decision.
+ // A passed directional thesis receives a directional anchor; uncertainty is expressed as BASE weight, not an opposing action.
+ const fusedDir=t.sg?adaptive.fused*t.sg:0;
+ const anchor=t.active?clamp(.18+.34*t.strength+.12*Math.max(0,fusedDir),.18,.58):0;
+ let bull=.22,bear=.22,base=.56;
+ if(t.sg){
+   const directional=clamp(.36+anchor-shock*(t.hostile?1:.15),.30,.82);
+   const opposite=clamp(.10+(1-t.strength)*.15+u*.08,.06,.28);
+   base=clamp(1-directional-opposite,.12,.54);
+   if(t.sg>0){bull=directional;bear=opposite}else{bear=directional;bull=opposite}
+ }else{
+   const center=clamp(.5+adaptive.fused*.22,.18,.82);
+   bull=clamp(.18+center*.24,.10,.42);bear=clamp(.18+(1-center)*.24,.10,.42);base=clamp(.64-u*.18,.34,.66);
+ }
  const sum=bull+bear+base;bull/=sum;bear/=sum;base/=sum;
- return{bull,bear,base}
+ return{bull,bear,base,master:t}
 }
 function renderlessUncertainty(e){
  const cf=conflictMatrix(e);
@@ -1456,8 +1475,9 @@ function renderScenario(r,events,adaptive){
  const s=scenarioTree(r,events,adaptive);
  $("scBull").textContent=Math.round(s.bull*100)+"%";$("scBase").textContent=Math.round(s.base*100)+"%";$("scBear").textContent=Math.round(s.bear*100)+"%";
  const dom=[["BULL",s.bull],["BASE",s.base],["BEAR",s.bear]].sort((a,b)=>b[1]-a[1])[0];
- $("scenarioBadge").textContent=dom[0];
- $("scenarioNarrative").textContent=`Scenario distribution is a relative model view, not a calibrated probability forecast. Dominant scenario: ${dom[0]} (${Math.round(dom[1]*100)}%).`;
+ const t=s.master;
+ $("scenarioBadge").textContent=t.active?(t.dir==="BUY"?"BULL THESIS":"BEAR THESIS"):dom[0];
+ $("scenarioNarrative").textContent=t.active?`Unified with master decision: ${t.verdict}. Relative scenarios express uncertainty around the active ${t.dir} thesis; they do not issue a competing action. ${t.dir==="BUY"?"Bull":"Bear"} case ${Math.round((t.dir==="BUY"?s.bull:s.bear)*100)}%, base ${Math.round(s.base*100)}%.`:`Scenario distribution is a relative model view, not a calibrated probability forecast. Dominant scenario: ${dom[0]} (${Math.round(dom[1]*100)}%).`;
  return s
 }
 function edgeStats(sym=null){
@@ -1660,7 +1680,7 @@ function renderMemoryAndGate(r,events,b,meta){
  return{dna,mem,gate}
 }
 function renderMeta(r,events){
- const v=evidenceVector(r,events),cf=conflictMatrix(v),hz=horizonScores(r,events),cal=adaptiveCalibration();
+ const v=evidenceVector(r,events),cf=conflictMatrix(v),hz=horizonScores(r,events),cal=adaptiveCalibration(),t=masterTruth(r,events);
  const uncertainty=clamp(.45*cf.ratio+.25*entropyLike([v.tech,v.news,v.causal,v.tf])+.20*(1-v.trust)+.10*(1-v.freshness),0,1);
  $("metaUnc").textContent=Math.round(uncertainty*100)+"%";
  $("metaRegime").textContent=hz.regime.regime;
@@ -1669,12 +1689,18 @@ function renderMeta(r,events){
  $("hzScalp").textContent=hz.scalp.label;
  $("hzDay").textContent=hz.day.label;
  $("hzSwing").textContent=hz.swing.label;
- const labels=[hz.scalp.label,hz.day.label,hz.swing.label],cons=labels.every(x=>x===labels[0])?labels[0]:"MIXED";
+ const labels=[hz.scalp.label,hz.day.label,hz.swing.label],rawCons=labels.every(x=>x===labels[0])?labels[0]:"MIXED";
+ const cons=t.active?t.dir:rawCons;
  $("hzConsensus").textContent=cons;
- $("metaBadge").textContent=uncertainty>.6?"HIGH UNCERTAINTY":cf.ratio>.45?"CONFLICT":"EVIDENCE FUSED";
- const caution=uncertainty>.6||cf.ratio>.45;
- $("metaNarrative").textContent=`Evidence fusion: technical ${(v.tech*100).toFixed(0)}, news ${(v.news*100).toFixed(0)}, causal ${(v.causal*100).toFixed(0)}, TF ${(v.tf*100).toFixed(0)}. ${caution?"APEX sees too much uncertainty/conflict — WAIT is safer than forcing a trade.":"Evidence is reasonably coherent across layers."}`;
- return {uncertainty,cf,hz,cal}
+ const elevated=uncertainty>.6||cf.ratio>.45;
+ $("metaBadge").textContent=t.active?(elevated?`ALIGNED • ${t.dir} • CAUTION`:`ALIGNED • ${t.dir}`):(uncertainty>.6?"HIGH UNCERTAINTY":cf.ratio>.45?"CONFLICT":"EVIDENCE FUSED");
+ const evidence=`Evidence fusion: technical ${(v.tech*100).toFixed(0)}, news ${(v.news*100).toFixed(0)}, causal ${(v.causal*100).toFixed(0)}, TF ${(v.tf*100).toFixed(0)}.`;
+ if(t.active){
+   $("metaNarrative").textContent=`${evidence} Master authority is ${t.verdict}; uncertainty/conflict adjusts conviction only and does not issue a contradictory WAIT. ${elevated?"Caution remains elevated, so execution quality and risk discipline matter more.":"Evidence is coherent enough for the active thesis."}`;
+ }else{
+   $("metaNarrative").textContent=`${evidence} ${elevated?"The master gate has not promoted a trade; uncertainty/conflict remains material.":"Evidence is reasonably coherent, but the master gate still controls promotion."}`;
+ }
+ return {uncertainty,cf,hz,cal,master:t}
 }
 function buildBrain(r,events){
  const rel=r.news.items||[],causal=causalBias(r.sym,rel.length?rel:events);
@@ -1695,20 +1721,20 @@ function triggerReadiness(r,events,meta){
  const alignNeed=c.alignNeed||Math.max(2,Math.ceil(r.valid*.5));
  const gates=[
   {k:"DIRECTION",pass:!!dir,block:false,detail:dir?`${dir} • score ${Math.round((c.directionScore||0)*100)}%`:"none"},
-  {k:"STRUCTURE",pass:structure>=structureNeed,block:false,detail:`${structure.toFixed(2)} / ${structureNeed.toFixed(2)}`},
-  {k:"TIMEFRAMES",pass:r.align>=alignNeed,block:false,detail:`${r.align}/${r.valid} aligned • need ${alignNeed}`},
-  {k:"LIQUIDITY PRESSURE",pass:!!c.flowSupport,block:false,detail:`${Math.round((c.flow||0)*100)} proxy • ${c.flowSupport?"supports":"not confirmed"}`},
-  {k:"FUSION",pass:c.fusionPass,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} fused`},
+  {k:"STRUCTURE",pass:structure>=structureNeed,advisory:true,block:false,detail:`${structure.toFixed(2)} / ${structureNeed.toFixed(2)}`},
+  {k:"TIMEFRAMES",pass:r.align>=alignNeed,advisory:true,block:false,detail:`${r.align}/${r.valid} aligned • guide ${alignNeed}`},
+  {k:"LIQUIDITY PRESSURE",pass:!!c.flowSupport,advisory:true,block:false,detail:`${Math.round((c.flow||0)*100)} proxy • ${c.flowSupport?"supports":"confirmation absent"}`},
+  {k:"FUSION",pass:c.fusionPass,advisory:true,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} fused`},
   {k:"EVENT RISK",pass:!(shock.directCriticalOverride&&shock.hostileDominant),block:(shock.directCriticalOverride&&shock.hostileDominant),detail:`${shock.score.toFixed(2)} risk • ${shock.material} clusters • ${shock.state}${shock.supportiveDominant?" • supports bias":shock.hostileDominant?" • opposes bias":""}`}
  ];
  if(es.n>=30)gates.push({k:"EXPECTANCY",pass:es.exp>-.12,block:es.exp<=-.12,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
  if(dr.state!=="LEARNING")gates.push({k:"DRIFT",pass:dr.state!=="NEGATIVE DRIFT"||(c.directionScore||0)>=.66,block:false,detail:dr.state});
- const pass=gates.filter(g=>g.pass).length,hard=gates.find(g=>g.block&&!g.pass),first=gates.find(g=>!g.pass);
- let pct=Math.round(clamp((c.directionScore||0)*100*.70+(pass/gates.length)*30,0,99));
+ const required=gates.filter(g=>!g.advisory),pass=gates.filter(g=>g.pass).length,requiredPass=required.filter(g=>g.pass).length,hard=gates.find(g=>g.block&&!g.pass),firstRequired=required.find(g=>!g.pass);
+ let pct=Math.round(clamp((c.directionScore||0)*100*.74+(pass/Math.max(1,gates.length))*26,0,99));
  if(c.gate==="PASS")pct=Math.max(pct,76);
  let stage=c.gate==="PASS"?(pct>=90?"ARMED":"ACTIVE EDGE"):pct>=72?"NEAR TRIGGER":pct>=50?"BUILDING":"EARLY";
  if(hard)stage="BLOCKED";
- const blocker=hard||(c.gate==="PASS"?null:first);
+ const blocker=hard||(c.gate==="PASS"?null:(firstRequired||{k:"MASTER CONSENSUS",detail:c.reason||"promotion threshold not met"}));
  return{dir,pct,stage,blocker,gates,severe,adaptive,horizon:c.hz||horizonScores(r,events),shock};
 }
 function renderTriggerRadar(r,events,meta){
@@ -1716,9 +1742,10 @@ function renderTriggerRadar(r,events,meta){
  $("triggerBias").textContent=t.dir||"NEUTRAL";$("triggerReady").textContent=t.pct+"%";$("triggerStage").textContent=t.stage;
  $("triggerBlocker").textContent=t.blocker?t.blocker.k:"NONE";$("triggerMeter").style.width=t.pct+"%";
  $("triggerBadge").textContent=t.stage+(t.dir?` • ${t.dir} BIAS`:"");
- $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":"gateFail"}">${g.pass?"PASS":g.block?"BLOCK":"WAIT"}</b></div>`).join("");
+ $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":""}">${g.pass?"PASS":g.block?"BLOCK":g.advisory?"WEAK":"WAIT"}</b></div>`).join("");
  const m=t.blocker;
- $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but APEX GOD has a directional thesis but has not promoted it yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"APEX GOD compares event direction to the actual trade direction and only hard-blocks verified direct hostile shocks. ":""}When the failing gate improves on a fresh verified scan, APEX can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
+ const advisoryMiss=t.gates.filter(g=>g.advisory&&!g.pass).map(g=>g.k);
+ $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but the master authority has not promoted it yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"APEX GOD compares event direction to the actual trade direction and only hard-blocks verified direct hostile shocks. ":""}Advisory evidence can strengthen conviction, but only the unified master authority decides promotion.`:`Unified master authority is ACTIVE. No hard blocker is present.${advisoryMiss.length?` Weaker advisory confirmation: ${advisoryMiss.join(", ")}; these reduce conviction but do not contradict the active thesis.`:""} Event risk is cluster-normalized; final execution still obeys signal lock, proof and live-data validation.`;
  r.trigger=t;return t;
 }
 
@@ -1925,7 +1952,7 @@ renderJournal();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX PREDATOR GOD 3.1 integrity PASS ✓ Opportunity Capture, World Brain sync, directional event arbitration, liquidity-pressure proxy, memory preservation and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX PREDATOR GOD 3.2 integrity PASS ✓ Unified Truth Engine, World Brain/Best Now sync, scenario coherence, directional event arbitration, liquidity proxy, memory preservation and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);

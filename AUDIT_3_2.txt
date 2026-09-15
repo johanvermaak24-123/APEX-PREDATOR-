@@ -1,0 +1,19 @@
+APEX PREDATOR GOD 3.2 — UNIFIED TRUTH ENGINE
+
+Key rebuilds:
+- Adaptive Meta-Brain no longer contradicts an active master BUY/SELL with a separate WAIT recommendation.
+- Scenario Tree is anchored to the unified master thesis when the consensus gate is active; scenario percentages remain relative uncertainty views, not calibrated probabilities.
+- Trigger Readiness distinguishes hard gates from advisory confirmations. Liquidity pressure is advisory; absent confirmation reduces conviction but does not falsely imply that every required gate failed.
+- WORLD BRAIN and BEST NOW continue to use the same scanSymbol / decisionConsensus authority.
+- Existing memory/storage keys preserved: titan_journal_v2, titan_state_v2, titan_active_signals_v2 and IndexedDB data model.
+
+Verification performed:
+- JavaScript syntax: PASS
+- Service worker syntax: PASS
+- HTML duplicate IDs: 0
+- Missing UI element references: 0
+- 1,000,000 randomized scenario-consistency simulations: 0 failures
+- Active thesis scenario dominance invariant: PASS in all randomized active-thesis cases
+- ZIP integrity: to be verified after packaging
+
+Important: stress tests validate deterministic code invariants, not future trading profitability or live-provider reliability.
