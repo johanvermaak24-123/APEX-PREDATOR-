@@ -1,0 +1,17 @@
+APEX PREDATOR GOD 4.1 — DUAL CLOCK PATH MONSTER
+AUDIT TARGET
+- Preserve 3.3/4.0 memory, locks, journal, news/event logic and live scan authority.
+- Separate FAST CLOCK (0–30m) counter-path from SLOW CLOCK (30–180m) thesis recovery.
+- Never blindly invert the medium-term bias.
+- Counter promotion requires sample, probability, 30m persistence, adverse excursion, event veto, recovery and transaction-cost gates.
+- Existing apex_path_ledger_v4 key is intentionally preserved for backward compatibility.
+
+STATIC QA
+- JS syntax check required.
+- DOM id reference audit required.
+- ZIP integrity required.
+- PWA manifest/service-worker references required.
+- 1,000,000 randomized path-engine invariant cases required.
+
+IMPORTANT
+No static or randomized test can prove live profitability, broker execution, future market behavior, or eliminate all defects. Live/paper validation remains required.

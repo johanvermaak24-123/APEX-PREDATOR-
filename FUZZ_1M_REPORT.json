@@ -1,0 +1,11 @@
+{
+  "cases": 1000000,
+  "elapsed_ms": 327,
+  "pass": true,
+  "states": {
+    "NO COUNTER EDGE": 580157,
+    "COUNTER WATCH": 322183,
+    "LEARNING PATHS": 66643,
+    "COUNTER ACTIVE": 31017
+  }
+}

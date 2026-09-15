@@ -1,0 +1,29 @@
+APEX PREDATOR GOD 4.0 — STATIC FORENSIC AUDIT
+
+DESIGN CONTROLS
+PASS — GOD 3.3 core retained; existing titan_journal_v2 / titan_state_v2 / titan_active_signals_v2 keys unchanged.
+PASS — New path learning uses a new key: apex_path_ledger_v4.
+PASS — Path records require a real prior signal timestamp and later 5-minute bars; no future data is inserted at decision time.
+PASS — 5m/10m/15m/30m/60m path outcomes are measured only from bars after the signal bar.
+PASS — Maximum adverse/favorable excursion normalized by signal ATR percentage.
+PASS — Counter probability uses close-DNA resolved path records and Beta(2,2) shrinkage.
+PASS — Small samples cannot promote COUNTER ACTIVE: minimum 8 matched resolved paths.
+PASS — COUNTER ACTIVE threshold requires >=61% estimated opposite-first probability.
+PASS — Expected adverse excursion must be >=0.24 ATR.
+PASS — Direct critical hostile event shock blocks counter promotion.
+PASS — Weak 60m thesis recovery raises continuation risk and blocks active counter promotion.
+PASS — When bid/ask are available, live spread must be <=18% of the proposed counter target.
+PASS — If transaction-cost evidence is unavailable, the engine can WATCH but will not call cost verification a PASS.
+PASS — Compact path ledger capped at 1,800 records.
+PASS — Path ledger added to backup/restore, auto-memory and Memory Vault recovery.
+PASS — Existing Unified Final Verdict / signal lock remains the larger-direction authority; GOD 4.0 does not blindly invert APEX.
+
+RESEARCH BASIS IMPLEMENTED AS GUARDRAILS, NOT GUARANTEES
+- Short-horizon reversal/mean-reversion can exist, especially after aggressive flow, but transaction costs can overwhelm small gross edges.
+- Order-flow imbalance / liquidity pressure can matter at short horizons, but stability must be validated out of sample.
+- Gold response to FOMC shocks can continue beyond the first 5 minutes, so event-driven continuation risk must block naive fading.
+
+LIMITATIONS
+- Current path engine uses 5-minute OHLC paths, so same-bar tick ordering is intentionally not inferred.
+- The OHLC+tick-volume liquidity-pressure feature is a proxy, not full exchange L2 order-book data.
+- Browser static QA cannot prove future profitability, broker fills, slippage, or regime stability.

@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX PREDATOR GOD 3.3 — STABILITY + MEMORY LOCK</title>
+<title>APEX PREDATOR GOD 4.1 — DUAL CLOCK PATH MONSTER</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 3.3 • STABILITY + MEMORY LOCK</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 4.1 • DUAL CLOCK PATH MONSTER</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -186,6 +186,24 @@ button.primary, #scan, #scanAll {
    <div class="triggerBar"><div id="triggerMeter"></div></div>
    <div id="triggerNarrative" class="small" style="margin-top:10px">Run a scan. APEX will show exactly what still has to happen before a directional bias can become an actionable trade.</div>
    <div id="triggerGates" style="margin-top:8px"></div>
+  </div>
+
+  <div class="card">
+   <div class="title"><h3>⚔️ DUAL CLOCK / COUNTER-SCALP ENGINE</h3><span id="pathBadge" class="badge">LEARNING PATHS</span></div>
+   <div class="grid4">
+    <div class="k"><span>Final bias</span><b id="pathFinal">—</b></div>
+    <div class="k"><span>Likely first path</span><b id="pathFirst">—</b></div>
+    <div class="k"><span>Counter probability</span><b id="pathCounterP">—</b></div>
+    <div class="k"><span>Matched paths</span><b id="pathSamples">0</b></div>
+   </div>
+   <div class="grid4" style="margin-top:8px">
+    <div class="k"><span>Expected adverse excursion</span><b id="pathAdverse">—</b></div>
+    <div class="k"><span>Counter capture target</span><b id="pathCapture">—</b></div>
+    <div class="k"><span>180m thesis recovery</span><b id="pathRecovery">—</b></div>
+    <div class="k"><span>0–30m counter window</span><b id="pathWindow">—</b></div>
+   </div>
+   <div class="grid4" style="margin-top:8px"><div class="k"><span>30m opposite-first</span><b id="path30Opp">—</b></div><div class="k"><span>Activation estimate</span><b id="pathActivation">—</b></div><div class="k"><span>Continuation risk</span><b id="pathContinue">—</b></div><div class="k"><span>Cost gate</span><b id="pathCost">—</b></div></div><div id="pathTradeBox" class="item" style="margin-top:10px"><p>Run a scan. FAST CLOCK models the first 0–30 minutes; SLOW CLOCK models whether the larger thesis recovers over 30–180 minutes.</p></div>
+   <div id="pathNarrative" class="small" style="margin-top:9px">Losses and adverse first moves are retained as path intelligence. A counter scalp is only promoted when similar resolved paths support it and event/transaction-cost risk does not invalidate the idea.</div>
   </div>
 
   <div class="card">
@@ -428,7 +446,7 @@ button.primary, #scan, #scanAll {
      <div class="k"><span>Last vault save</span><b id="vaultLast">—</b></div>
      <div class="k"><span>Storage health</span><b id="vaultHealth">CHECKING</b></div>
     </div>
-    <div id="vaultNarrative" class="small" style="margin-top:9px">3.3 validates browser memory before accepting an empty state and keeps rolling versioned snapshots.</div>
+    <div id="vaultNarrative" class="small" style="margin-top:9px">4.0 preserves the 3.3 memory lock and adds a compact path ledger so losing/adverse moves become reusable first-path intelligence.</div>
    </div>
    <div class="card" style="margin-top:14px;padding:14px">
     <div class="title"><h3>💾 APEX BACKUP</h3><span class="badge">MEMORY SAFE</span></div>
@@ -450,22 +468,23 @@ function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(valu
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
-const APEX_APP_VERSION="APEX-PREDATOR-GOD-3.3";
-const APEX_VAULT_KEY="apex_memory_vault_v3_3";
+const APEX_APP_VERSION="APEX-PREDATOR-GOD-4.0";
+const APEX_VAULT_KEY="apex_memory_vault_v4_0";
 const APEX_VAULT_MAX=4;
 const APEX_VAULT_CLEAR_KEY="apex_memory_vault_intentional_clear_ms";
-function memoryDigest(journal,state,locks){
- const j=Array.isArray(journal)?journal:[],s=state&&typeof state==="object"?state:{},a=locks&&typeof locks==="object"?locks:{};
+const APEX_PATH_KEY="apex_path_ledger_v4";
+function memoryDigest(journal,state,locks,pathLedger=[]){
+ const j=Array.isArray(journal)?journal:[],s=state&&typeof state==="object"?state:{},a=locks&&typeof locks==="object"?locks:{},p=Array.isArray(pathLedger)?pathLedger:[];
  const resolved=j.filter(x=>x?.firstHit?.resolved||x?.outcome?.snapshots?.["2h"]||x?.shadowFirstHit?.resolved).length;
- const newest=j.reduce((m,x)=>Math.max(m,Number(x?.t)||0),0);
- return{journal:j.length,resolved,state:Object.keys(s).length,locks:Object.keys(a).length,newest};
+ const newest=Math.max(j.reduce((m,x)=>Math.max(m,Number(x?.t)||0),0),p.reduce((m,x)=>Math.max(m,Number(x?.t)||0),0));
+ return{journal:j.length,resolved,path:p.length,state:Object.keys(s).length,locks:Object.keys(a).length,newest};
 }
 function vaultRead(){
  try{const v=safeJSON(localStorage.getItem(APEX_VAULT_KEY),null);return v&&Array.isArray(v.snapshots)?v:{schema:1,snapshots:[]}}catch(_e){return{schema:1,snapshots:[]}}
 }
 function vaultSnapshot(reason="AUTO"){
- const journal=readStoredJSON("titan_journal_v2",[]),state=readStoredJSON("titan_state_v2",{}),activeSignals=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1");
- return{schema:1,appVersion:APEX_APP_VERSION,savedAt:Date.now(),reason,journal,state,activeSignals,digest:memoryDigest(journal,state,activeSignals)};
+ const journal=readStoredJSON("titan_journal_v2",[]),state=readStoredJSON("titan_state_v2",{}),activeSignals=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),pathLedger=readStoredJSON(APEX_PATH_KEY,[]);
+ return{schema:2,appVersion:APEX_APP_VERSION,savedAt:Date.now(),reason,journal,state,activeSignals,pathLedger,digest:memoryDigest(journal,state,activeSignals,pathLedger)};
 }
 function vaultSave(reason="AUTO"){
  try{
@@ -475,7 +494,7 @@ function vaultSave(reason="AUTO"){
   v.schema=1;v.snapshots=v.snapshots.slice(0,APEX_VAULT_MAX);localStorage.setItem(APEX_VAULT_KEY,JSON.stringify(v));renderVaultStatus();return true;
  }catch(e){console.warn("APEX Memory Vault save failed",e);renderVaultStatus("WARNING");return false}
 }
-function snapshotStrength(s){const d=s?.digest||memoryDigest(s?.journal,s?.state,s?.activeSignals);return (d.journal||0)*100+(d.resolved||0)*20+(d.state||0)*3+(d.locks||0)*5+(d.newest?1:0)}
+function snapshotStrength(s){const d=s?.digest||memoryDigest(s?.journal,s?.state,s?.activeSignals,s?.pathLedger);return (d.journal||0)*100+(d.resolved||0)*20+(d.path||0)*35+(d.state||0)*3+(d.locks||0)*5+(d.newest?1:0)}
 function bestRecoverySnapshot(){
  const c=[];const v=vaultRead();for(const x of v.snapshots||[])if(x)c.push(x);
  for(const key of ["apex_upgrade_god_3_0_snapshot","apex_upgrade_2_0_snapshot"]){try{const x=safeJSON(localStorage.getItem(key),null);if(x)c.push(x)}catch(_e){}}
@@ -487,21 +506,22 @@ function mergeJournalSafe(a,b){
 }
 function vaultRecoverIfSafer(){
  try{
-  const current={journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1")};current.digest=memoryDigest(current.journal,current.state,current.activeSignals);
-  const best=bestRecoverySnapshot();if(!best)return false;const bd=best.digest||memoryDigest(best.journal,best.state,best.activeSignals);
+  const current={journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),pathLedger:readStoredJSON(APEX_PATH_KEY,[])};current.digest=memoryDigest(current.journal,current.state,current.activeSignals,current.pathLedger);
+  const best=bestRecoverySnapshot();if(!best)return false;const bd=best.digest||memoryDigest(best.journal,best.state,best.activeSignals,best.pathLedger);
   const clearAt=Number(readStoredText(APEX_VAULT_CLEAR_KEY,"0"))||0;
   const intentionalEmpty=clearAt&&current.digest.journal===0&&clearAt>=Number(best.savedAt||0);
   if(intentionalEmpty)return false;
-  const suspiciousLoss=(bd.journal>current.digest.journal+1)||(bd.resolved>current.digest.resolved)||(bd.state>current.digest.state+2)||(bd.locks>current.digest.locks&&current.digest.locks===0);
+  const suspiciousLoss=(bd.journal>current.digest.journal+1)||(bd.resolved>current.digest.resolved)||(bd.path>current.digest.path+2)||(bd.state>current.digest.state+2)||(bd.locks>current.digest.locks&&current.digest.locks===0);
   if(!suspiciousLoss)return false;
   const merged=mergeJournalSafe(best.journal,current.journal),nextState={...(best.state||{}),...(current.state||{})},nextLocks={...(best.activeSignals||{}),...(current.activeSignals||{})};
-  persistJSON("titan_journal_v2",merged);persistJSON("titan_state_v2",nextState);persistJSON("titan_active_signals_v2",nextLocks);vaultSave("AUTO-RECOVERY");return true;
+  const pathMap=new Map();for(const x of [...(best.pathLedger||[]),...(current.pathLedger||[])])if(x?.id)pathMap.set(x.id,x);const nextPaths=[...pathMap.values()].sort((a,b)=>(b.t||0)-(a.t||0)).slice(0,1800);
+  persistJSON("titan_journal_v2",merged);persistJSON("titan_state_v2",nextState);persistJSON("titan_active_signals_v2",nextLocks);persistJSON(APEX_PATH_KEY,nextPaths);vaultSave("AUTO-RECOVERY");return true;
  }catch(e){console.warn("APEX Memory Vault recovery failed",e);return false}
 }
 function renderVaultStatus(force=null){
- const v=vaultRead(),j=readStoredJSON("titan_journal_v2",[]),st=readStoredJSON("titan_state_v2",{}),lk=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),d=memoryDigest(j,st,lk),last=v.snapshots?.[0];
+ const v=vaultRead(),j=readStoredJSON("titan_journal_v2",[]),st=readStoredJSON("titan_state_v2",{}),lk=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),pl=readStoredJSON(APEX_PATH_KEY,[]),d=memoryDigest(j,st,lk,pl),last=v.snapshots?.[0];
  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};set("vaultJournal",d.journal);set("vaultResolved",d.resolved);set("vaultLocks",d.locks);set("vaultSnapshots",v.snapshots?.length||0);set("vaultLast",last?.savedAt?new Date(last.savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—");set("vaultHealth",force||"OK");set("vaultBadge",force==="WARNING"?"SAVE WARNING":"LOCKED + VERSIONED");
- const n=document.getElementById("vaultNarrative");if(n)n.textContent=`Memory Vault sees ${d.journal} journal records, ${d.resolved} resolved outcomes, ${d.locks} active locks and ${v.snapshots?.length||0} rolling snapshots. Empty/newer-looking storage cannot silently overwrite a stronger historical snapshot.`;
+ const n=document.getElementById("vaultNarrative");if(n)n.textContent=`Memory Vault sees ${d.journal} journal records, ${d.resolved} resolved outcomes, ${d.path} compact path records, ${d.locks} active locks and ${v.snapshots?.length||0} rolling snapshots. Empty/newer-looking storage cannot silently overwrite a stronger historical snapshot.`;
 }
 function captureUpgradeSafetySnapshot(){
  try{
@@ -533,7 +553,7 @@ function recoverUpgradeSafetySnapshotIfNeeded(){
 }
 recoverUpgradeSafetySnapshotIfNeeded();
 vaultRecoverIfSafer();
-vaultSave("STARTUP-3.3");
+vaultSave("STARTUP-4.0");
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
 $("tdKey").value="FREE";$("hours").value=readStoredText("titan_hours","24");$("minConf").value=readStoredText("titan_min","72");$("newsMode").value=readStoredText("titan_news_mode","turbo");
 $("save").onclick=()=>{removeStored("titan_td");persistText("titan_hours",$("hours").value);persistText("titan_min",$("minConf").value);persistText("titan_news_mode",$("newsMode").value);$("connMsg").textContent="Saved."};
@@ -610,7 +630,7 @@ async function td(symbol,tf){
    secondary=await goldSecondary();
    if(secondary){devPct=Math.abs(mid-secondary.px)/mid*100;if(devPct>0.40)throw new Error(`XAU PRICE MISMATCH ${devPct.toFixed(2)}% — NO TRADE`);verification=`MT5 + ${secondary.source} VERIFIED`;}
  }
- const meta={source:`${tick.source||'MT5'} • ${verification}`,spot:mid,updated_at:tick.timestamp||new Date().toISOString(),data_state:{status:'verified',age_seconds:Number(tick.quoteAgeSeconds||0),deviation_pct:devPct,market_state:tick.marketState||'unknown'}};
+ const bid=Number(tick.bid),ask=Number(tick.ask),spread=(Number.isFinite(bid)&&Number.isFinite(ask)&&ask>=bid)?ask-bid:null;const meta={source:`${tick.source||'MT5'} • ${verification}`,spot:mid,bid:Number.isFinite(bid)?bid:null,ask:Number.isFinite(ask)?ask:null,spread,updated_at:tick.timestamp||new Date().toISOString(),data_state:{status:'verified',age_seconds:Number(tick.quoteAgeSeconds||0),deviation_pct:devPct,market_state:tick.marketState||'unknown'}};
  marketMeta.set(ck,meta);tdCache.set(ck,{t:now,v:values});return values
 }
 $("testData").onclick=async()=>{try{$("connMsg").textContent="Testing direct MT5 feed...";let x=await td("BTC/USD","30min");$("connMsg").textContent=`DIRECT MT5 FEED CONNECTED ✓ ${x.length} BTC/USD candles returned.`}catch(e){$("connMsg").textContent="FEED ERROR: "+e.message}}
@@ -1641,6 +1661,93 @@ function gradeFromBars(r){
  if(changed)persistJSON("titan_journal_v2",titanJournal)
 }
 
+// GOD 4.1 DUAL CLOCK PATH ENGINE -------------------------------------------------
+let apexPathLedger=readStoredJSON(APEX_PATH_KEY,[]);
+function persistPathLedger(){
+ apexPathLedger=(Array.isArray(apexPathLedger)?apexPathLedger:[]).sort((a,b)=>(b.t||0)-(a.t||0)).slice(0,1800);
+ persistJSON(APEX_PATH_KEY,apexPathLedger);setTimeout(()=>vaultSave("PATH-LEDGER"),0);
+}
+function compactDNA(d={}){
+ return{regime:d.regime||"?",session:d.session||"?",rsi:+d.rsi||50,atrPct:+d.atrPct||0,rv:+d.rv||0,breakout:+d.breakout||0,slope9:+d.slope9||0,tech:+d.tech||0,news:+d.news||0,causal:+d.causal||0,tf:+d.tf||0,quality:+d.quality||0};
+}
+function pathRecordFromSignal(x,rows){
+ if(!x?.id||!x?.barTime||!x?.entry||!dirSign(x.v)||!x?.dna)return null;
+ const st=parseBarTime(x.barTime),after=rows.filter(z=>parseBarTime(z.datetime)>st).sort((a,b)=>parseBarTime(a.datetime)-parseBarTime(b.datetime));
+ if(!after.length)return null;
+ const dir=dirSign(x.v),entry=+x.entry,atrPx=Math.max(entry*(Math.max(.00001,+x.dna.atrPct)/100),1e-9);
+ const hs={};for(const [bars,key] of [[1,"5m"],[2,"10m"],[3,"15m"],[6,"30m"],[12,"60m"],[24,"120m"],[36,"180m"]])if(after.length>=bars){const z=after[bars-1],ret=(+z.close-entry)/entry;hs[key]={ret,dirRet:dir*ret};}
+ const scan30=after.slice(0,Math.min(after.length,6)),scan180=after.slice(0,Math.min(after.length,36));let maxAdv30=0,maxFav30=0,maxAdv180=0,maxFav180=0;
+ for(const z of scan30){const h=+z.high,l=+z.low;const fav=dir>0?h-entry:entry-l,adv=dir>0?entry-l:h-entry;maxFav30=Math.max(maxFav30,fav);maxAdv30=Math.max(maxAdv30,adv)}
+ for(const z of scan180){const h=+z.high,l=+z.low;const fav=dir>0?h-entry:entry-l,adv=dir>0?entry-l:h-entry;maxFav180=Math.max(maxFav180,fav);maxAdv180=Math.max(maxAdv180,adv)}
+ const first5=hs["5m"]?.dirRet??null,first15=hs["15m"]?.dirRet??null,first30=hs["30m"]?.dirRet??null,recovery60=hs["60m"]?.dirRet??null,recovery120=hs["120m"]?.dirRet??null,recovery180=hs["180m"]?.dirRet??null;
+ // Thesis activation = first completed 5m bar after the counter window where directional close is positive and the next bar does not immediately negate it.
+ let activationMin=null;for(let i=1;i<Math.min(after.length,36);i++){const a=dir*((+after[i-1].close-entry)/entry),b=dir*((+after[i].close-entry)/entry);if(a>0&&b>=a*.35){activationMin=(i+1)*5;break}}
+ return{id:x.id,t:x.t||Date.now(),sym:x.sym,dir,verdict:x.v,dna:compactDNA(x.dna),first5,first15,first30,recovery60,recovery120,recovery180,maxAdvATR:maxAdv180/atrPx,maxFavATR:maxFav180/atrPx,maxAdv30ATR:maxAdv30/atrPx,maxFav30ATR:maxFav30/atrPx,activationMin,h:hs,resolved60:after.length>=12,resolved180:after.length>=36,resolved:after.length>=12};
+}
+function gradePathLearning(r){
+ if(!r.raw5?.length)return;
+ let changed=false;const existing=new Map(apexPathLedger.map(x=>[x.id,x]));
+ for(const x of titanJournal){
+  if(x.sym!==r.sym||!dirSign(x.v)||!x.dna||!x.barTime)continue;
+  const rec=pathRecordFromSignal(x,r.raw5);if(!rec||!rec.resolved60)continue;
+  const old=existing.get(rec.id);if(!old||JSON.stringify(old)!==JSON.stringify(rec)){existing.set(rec.id,rec);changed=true}
+  if(!x.pathProfile?.resolved){x.pathProfile={resolved:true,resolved180:rec.resolved180,first5:rec.first5,first15:rec.first15,first30:rec.first30,recovery60:rec.recovery60,recovery120:rec.recovery120,recovery180:rec.recovery180,maxAdv30ATR:rec.maxAdv30ATR,maxFav30ATR:rec.maxFav30ATR,maxAdvATR:rec.maxAdvATR,maxFavATR:rec.maxFavATR,activationMin:rec.activationMin};changed=true}
+ }
+ if(changed){apexPathLedger=[...existing.values()];persistPathLedger();persistJSON("titan_journal_v2",titanJournal)}
+}
+function pathMemory(sym,dir,dna){
+ const pool=apexPathLedger.filter(x=>x.sym===sym&&x.dir===dir&&(x.resolved60||x.resolved)&&x.dna).map(x=>({x,d:dnaDistance(dna,x.dna)})).sort((a,b)=>a.d-b.d).filter(z=>z.d<=.95).slice(0,50);
+ if(!pool.length)return{n:0,n180:0,pOpp:null,pOpp15:null,pOpp30:null,advATR:null,adv30ATR:null,recovery:null,recovery60:null,recovery120:null,activationMin:null,distance:null};
+ let opp=0,opp15=0,opp30=0,adv=0,adv30=0,rec60=0,rec120=0,rec180=0,ws=0,ws30=0,ws120=0,ws180=0,act=0,actW=0,n180=0;
+ for(const z of pool){const wt=1/Math.max(.14,z.d),x=z.x;opp+=(x.first5<0?1:0)*wt;opp15+=(x.first15<0?1:0)*wt;if(x.first30!=null){opp30+=(x.first30<0?1:0)*wt;ws30+=wt}adv+=(x.maxAdvATR||0)*wt;adv30+=(x.maxAdv30ATR??x.maxAdvATR??0)*wt;rec60+=(x.recovery60>0?1:0)*wt;if(x.recovery120!=null){rec120+=(x.recovery120>0?1:0)*wt;ws120+=wt}ws+=wt;if(x.resolved180&&x.recovery180!=null){rec180+=(x.recovery180>0?1:0)*wt;ws180+=wt;n180++}if(Number.isFinite(x.activationMin)){act+=x.activationMin*wt;actW+=wt}}
+ const pseudo=4,pOpp=(opp+2)/(ws+pseudo),pOpp15=(opp15+2)/(ws+pseudo),pOpp30=ws30?(opp30+2)/(ws30+pseudo):null,recovery60=(rec60+2)/(ws+pseudo),recovery120=ws120?(rec120+2)/(ws120+pseudo):recovery60,recovery=ws180?(rec180+2)/(ws180+pseudo):recovery120;
+ return{n:pool.length,n180,pOpp,pOpp15,pOpp30,advATR:adv/ws,adv30ATR:adv30/ws,recovery,recovery60,recovery120,activationMin:actW?act/actW:null,distance:avg(pool.map(z=>z.d)),rows:pool};
+}
+function pathResearchPrior(r,dir){
+ const m=r.main||{},flow=(m.flowPressure||0)*dir,rsi=m.rsi||50;let p=.50;
+ // Only modest priors. Empirical resolved path memory remains the authority.
+ if(flow<-.35)p+=.06;if(flow>.55)p-=.05;
+ if(dir>0&&rsi>=68)p+=.04;if(dir<0&&rsi<=32)p+=.04;
+ if(dir>0&&rsi<=30)p-=.04;if(dir<0&&rsi>=70)p-=.04;
+ if((m.bodyFrac||0)>.72&&Math.sign(m.closeLoc||0)===-dir)p+=.04;
+ return clamp(p,.36,.64);
+}
+function counterPathEngine(r,events,b,dna){
+ const finalDir=dirSign(r.v)||waitAuditDirection({bias:r.consensus?.biasLabel||r.rawV}),m=r.main||{};
+ if(!finalDir||!dna||!Number.isFinite(+m.price)||!Number.isFinite(+m.atr)||+m.atr<=0)return{state:"NO DIRECTION",finalDir:0};
+ const mem=pathMemory(r.sym,finalDir,dna),prior=pathResearchPrior(r,finalDir),n=mem.n||0;
+ const learnWeight=clamp(n/18,0,.82),counterP=mem.pOpp==null?prior:(1-learnWeight)*prior+learnWeight*mem.pOpp;
+ const firstDir=counterP>=.56?-finalDir:finalDir,counterDir=-finalDir;
+ const shock=directionalEventProfile(events,r.sym,actionableDirection(r.v)||actionableDirection(r.consensus?.biasLabel||""));
+ let continuationRisk=mem.recovery==null?.50:1-mem.recovery;
+ if(shock.hostileDominant)continuationRisk+=.14;if(shock.directCriticalOverride&&shock.hostileDominant)continuationRisk+=.22;if(shock.supportiveDominant)continuationRisk-=.08;
+ continuationRisk=clamp(continuationRisk,.05,.95);
+ const expectedAdvATR=mem.adv30ATR==null?.35:clamp(mem.adv30ATR,.05,3.5),targetATR=clamp(expectedAdvATR*.42,.16,.72),targetDist=targetATR*m.atr;
+ const meta=r.feedMeta||{},spread=Number(meta.spread),costKnown=Number.isFinite(spread)&&spread>=0,costRatio=costKnown?spread/Math.max(targetDist,1e-9):null,costPass=costKnown?costRatio<=.18:null;
+ const sampleOK=n>=8,probOK=counterP>=.61,first30OK=(mem.pOpp30==null||mem.pOpp30>=.55),excursionOK=expectedAdvATR>=.24,eventOK=!(shock.directCriticalOverride&&shock.hostileDominant),recoveryOK=continuationRisk<=.56;
+ let state="NO COUNTER EDGE";
+ if(sampleOK&&probOK&&first30OK&&excursionOK&&eventOK&&recoveryOK&&costPass!==false)state=costPass===null?"COUNTER WATCH":"COUNTER ACTIVE";
+ else if(n>=4&&counterP>=.57&&eventOK)state="COUNTER WATCH";
+ else if(n<4)state="LEARNING PATHS";
+ const price=+m.price,tp=price+counterDir*targetDist,invalid=price-counterDir*Math.max(m.atr*.48,targetDist*1.15);
+ const activationMin=Number.isFinite(mem.activationMin)?clamp(Math.round(mem.activationMin/5)*5,5,180):null;return{state,finalDir,counterDir,firstDir,counterP,mem,prior,expectedAdvATR,targetATR,targetDist,tp,invalid,continuationRisk,shock,costKnown,costPass,costRatio,spread,recovery:mem.recovery,sampleOK,probOK,first30OK,excursionOK,eventOK,recoveryOK,activationMin};
+}
+function renderPathEngine(r,events,b,dna){
+ gradePathLearning(r);const p=counterPathEngine(r,events,b,dna);r.pathEngine=p;
+ const dirText=d=>d>0?"BUY":d<0?"SELL":"WAIT";
+ $("pathFinal").textContent=dirText(p.finalDir);$("pathFirst").textContent=p.finalDir?dirText(p.firstDir):"—";$("pathCounterP").textContent=Number.isFinite(p.counterP)?Math.round(p.counterP*100)+"%":"—";$("pathSamples").textContent=String(p.mem?.n||0);
+ $("pathAdverse").textContent=Number.isFinite(p.expectedAdvATR)?p.expectedAdvATR.toFixed(2)+" ATR":"—";$("pathCapture").textContent=Number.isFinite(p.targetATR)?p.targetATR.toFixed(2)+" ATR":"—";$("pathRecovery").textContent=Number.isFinite(p.recovery)?Math.round(p.recovery*100)+"%":"—";$("pathContinue").textContent=Number.isFinite(p.continuationRisk)?Math.round(p.continuationRisk*100)+"%":"—";$("pathWindow").textContent=(p.finalDir&&p.counterP>=.56)?"0–30m":"NO EDGE";$("path30Opp").textContent=Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"—";$("pathActivation").textContent=Number.isFinite(p.activationMin)?`~${p.activationMin}m`:"LEARNING";$("pathCost").textContent=p.costKnown?(p.costPass?"PASS":"FAIL"):"UNVERIFIED";
+ $("pathBadge").textContent=p.state;
+ if(p.state==="COUNTER ACTIVE"||p.state==="COUNTER WATCH"){
+  const cost=p.costKnown?`spread/target ${Math.round((p.costRatio||0)*100)}% ${p.costPass?"PASS":"FAIL"}`:"live spread unavailable — cost gate unverified";
+  $("pathTradeBox").innerHTML=`<b>${p.state}: ${dirText(p.counterDir)} first → ${dirText(p.finalDir)} thesis</b><p>Counter reference ${fmt(r.main.price)} • target ${fmt(p.tp)} • invalidation ${fmt(p.invalid)} • expected counter capture ${p.targetATR.toFixed(2)} ATR • FAST CLOCK 0–30m • SLOW thesis activation ${Number.isFinite(p.activationMin)?`~${p.activationMin}m`:"learning"} • ${cost}.</p>`;
+ }else $("pathTradeBox").innerHTML=`<b>${esc(p.state||"NO COUNTER EDGE")}</b><p>${p.finalDir?`Current larger thesis ${dirText(p.finalDir)}. APEX will not reverse it blindly.`:"No actionable larger-direction thesis yet."}</p>`;
+ const n=p.mem?.n||0,why=[];if(n<8)why.push(`need more matched resolved paths (${n}/8)`);if(Number.isFinite(p.counterP)&&p.counterP<.61)why.push(`counter probability ${Math.round(p.counterP*100)}% below active threshold`);if(Number.isFinite(p.expectedAdvATR)&&p.expectedAdvATR<.24)why.push("historical adverse excursion too small");if(p.shock?.directCriticalOverride&&p.shock?.hostileDominant)why.push("direct hostile event shock can turn a scalp into continuation");if(p.costPass===false)why.push("spread consumes too much of target");if(p.first30OK===false)why.push("30m path does not confirm the opposite-first move");if(Number.isFinite(p.continuationRisk)&&p.continuationRisk>.56)why.push("30–180m thesis recovery too weak");
+ $("pathNarrative").textContent=`GOD 4.1 separates two clocks: FAST CLOCK 0–30m seeks a statistically repeatable adverse/counter excursion; SLOW CLOCK 30–180m tests whether the original thesis recovers. ${n?`${n} close DNA paths matched; weighted 5m opposite-first probability ${Math.round(p.counterP*100)}%, 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}, expected 0–30m adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR, 180m thesis recovery ${Number.isFinite(p.recovery)?Math.round(p.recovery*100)+"%":"learning"}.`:`No mature matching path sample yet; only a restrained research prior is visible.`} ${why.length?`Not fully promoted because: ${why.join("; ")}.`:"Counter setup passed sample, path, event and cost checks."}`;
+ return p;
+}
+// --------------------------------------------------------------------------
+
 function waitAuditDirection(x){
  const b=String(x.bias||x.rawV||"").toUpperCase();
  if(b.includes("BUY")||b.includes("BULL"))return 1;
@@ -1841,7 +1948,7 @@ function renderBrain(r,events){
   $("changedBox").innerHTML=changes.length?changes.map(x=>`<p>⚡ ${esc(x)}</p>`).join(""):"<p>No material state change since the previous scan.</p>";
  }
  titanState[r.sym]=now;persistJSON("titan_state_v2",titanState);setTimeout(()=>vaultSave("STATE"),0);
- const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); recordJournal(r,b);renderJournal();
+ const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); renderPathEngine(r,events,b,mg.dna); recordJournal(r,b);renderJournal();
 }
 function waitStateFingerprint(r){
  const dna=r._dna||{},bias=String(r.consensus?.biasLabel||r.rawV||"WAIT").replace(/\s+/g," "),reason=r.consensus?.reason||"WAIT";
@@ -1867,7 +1974,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-GOD-3.3",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-GOD-4.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);setTimeout(()=>vaultSave("JOURNAL"),0);
 }
 
@@ -1931,7 +2038,7 @@ const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
 const TITAN_AUTO_MEMORY_STORE="brain";
 const TITAN_AUTO_MEMORY_KEY="latest";
 function titanMemorySnapshot(){
- return {schema:5,appVersion:"APEX-PREDATOR-GOD-3.3",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
+ return {schema:6,appVersion:"APEX-PREDATOR-GOD-4.0",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,pathLedger:apexPathLedger,learning:componentLearning()};
 }
 function titanMemoryOpen(){return new Promise((resolve,reject)=>{try{const q=indexedDB.open(TITAN_AUTO_MEMORY_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(TITAN_AUTO_MEMORY_STORE))db.createObjectStore(TITAN_AUTO_MEMORY_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)}catch(e){reject(e)}})}
 function renderAutoMemoryStatus(savedAt=null){
@@ -1939,7 +2046,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 3.3 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 4.1 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -1961,9 +2068,9 @@ async function titanAutoMemoryRecover(){
    for(const x of [...snap.journal,...localJ]){const k=x?.id||`${x?.sym||""}|${x?.t||0}|${x?.v||""}`;const prev=mergedMap.get(k);if(!prev||Number(x?.t||0)>=Number(prev?.t||0))mergedMap.set(k,x)}
    const mergedJ=pruneJournalSmart([...mergedMap.values()].sort((a,b)=>Number(b?.t||0)-Number(a?.t||0)));
    const useSnapState=!localHas||snapshotNewer;
-   const nextS=useSnapState?snap.state:localS,nextA=useSnapState?snap.activeSignals:localA;
-   persistJSON("titan_journal_v2",mergedJ);persistJSON("titan_state_v2",nextS);persistJSON(TITAN_SIGNAL_LOCK_KEY,nextA);
-   titanJournal=mergedJ;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,nextS);titanActiveSignals=nextA;renderJournal();
+   const nextS=useSnapState?snap.state:localS,nextA=useSnapState?snap.activeSignals:localA,nextP=(useSnapState&&Array.isArray(snap.pathLedger))?snap.pathLedger:readStoredJSON(APEX_PATH_KEY,[]);
+   persistJSON("titan_journal_v2",mergedJ);persistJSON("titan_state_v2",nextS);persistJSON(TITAN_SIGNAL_LOCK_KEY,nextA);persistJSON(APEX_PATH_KEY,nextP);
+   titanJournal=mergedJ;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,nextS);titanActiveSignals=nextA;apexPathLedger=nextP;renderJournal();
    const m=document.getElementById("backupMsg");if(m)m.textContent=`Auto-memory reconciled: ${mergedJ.length} signals retained.`;renderAutoMemoryStatus(snap.savedAt);
    return true;
   }
@@ -2006,14 +2113,15 @@ renderJournal();renderVaultStatus();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("APEX PREDATOR GOD 3.3"),"page version/title consistency");
+  req(document.title.includes("APEX PREDATOR GOD 4.1"),"page version/title consistency");
   req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
   req(unifiedFinalVerdict({finalVerdict:"STRONG SELL",confidence:83},{direction:"SELL",verdict:"STRONG SELL",modelScore:83}).verdict==="STRONG SELL","locked STRONG verdict preservation");
   req(typeof vaultSave==="function"&&typeof vaultRecoverIfSafer==="function","Memory Vault loaded");
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
+  req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","GOD 4.1 Dual Path Engine loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"GOD-3.3"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 3.3");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"GOD-4.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 4.1");
 })();
 
 (function titanIntegrityCheck(){
@@ -2023,6 +2131,7 @@ renderJournal();renderVaultStatus();
  "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","triggerBadge","triggerBias","triggerReady","triggerBlocker","triggerStage","triggerMeter","triggerNarrative","triggerGates","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
  "hzScalp","hzDay","hzSwing","hzConsensus","brainState","brainTech","brainNews","brainRisk","brainAgree",
  "changedBox","eventDNA","histNewsBadge","histNewsN","histNewsHit","histNewsMove","histNewsVote","histNewsList","newsLiveBadge","newsLiveCount","newsLiveBias","newsLiveHigh","newsLiveTime","newsLiveList","origEntry","entry","entryState","planUpdated","sl","tp1","tp2","tp3","grade","scores","why","impactMap",
+ "pathBadge","pathFinal","pathFirst","pathCounterP","pathSamples","pathAdverse","pathCapture","pathRecovery","pathContinue","pathTradeBox","pathNarrative",
  "jCount","jBuy","jSell","jWait","journalList","clearJournal","vaultBadge","vaultJournal","vaultResolved","vaultLocks","vaultSnapshots","vaultLast","vaultHealth","vaultNarrative","autoMemBadge","autoMemStatus","autoMemLast","autoMemRecords","autoLearnN","autoMemNarrative","exportTitan","importTitan","importTitanText","backupMsg"];
  const missing=required.filter(id=>!document.getElementById(id));
  const box=document.getElementById("integrityBox");
@@ -2033,14 +2142,14 @@ renderJournal();renderVaultStatus();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX PREDATOR GOD 3.3 integrity PASS ✓ Unified Final Verdict, Memory Vault, scenario coherence, directional event arbitration, liquidity proxy and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX PREDATOR GOD 4.1 integrity PASS ✓ Dual Path Engine, compact loss/path ledger, Unified Final Verdict, Memory Vault, event arbitration and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"APEX-PREDATOR-GOD-3.3",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-PREDATOR-GOD-4.1",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),pathLedger:readStoredJSON(APEX_PATH_KEY,[]),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
@@ -2048,8 +2157,8 @@ must("importTitan").onclick=()=>{
  try{
   const p=JSON.parse(must("importTitanText").value.trim());
   if(!p||!Array.isArray(p.journal)||typeof p.state!=="object")throw new Error("Invalid APEX backup");
-  p.journal=pruneJournalSmart(p.journal);persistJSON("titan_journal_v2",p.journal);persistJSON("titan_state_v2",p.state);persistJSON(TITAN_SIGNAL_LOCK_KEY,p.activeSignals||{});removeStored("titan_active_signals_v1");
-  titanJournal=p.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,p.state);titanActiveSignals=p.activeSignals||{};renderJournal();
+  p.journal=pruneJournalSmart(p.journal);persistJSON("titan_journal_v2",p.journal);persistJSON("titan_state_v2",p.state);persistJSON(TITAN_SIGNAL_LOCK_KEY,p.activeSignals||{});if(Array.isArray(p.pathLedger))persistJSON(APEX_PATH_KEY,p.pathLedger.slice(0,1800));removeStored("titan_active_signals_v1");
+  titanJournal=p.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,p.state);titanActiveSignals=p.activeSignals||{};if(Array.isArray(p.pathLedger))apexPathLedger=p.pathLedger.slice(0,1800);renderJournal();
   titanAutoMemorySave();vaultSave("MANUAL-RESTORE");must("backupMsg").textContent=`Restore complete: ${p.journal.length} signals loaded and auto-saved.`;
  }catch(e){must("backupMsg").textContent="Restore failed: "+e.message}
 };

@@ -1,14 +1,21 @@
-APEX PREDATOR GOD 3.3 — STABILITY + MEMORY LOCK
+APEX PREDATOR GOD 4.1 — DUAL CLOCK PATH MONSTER
 
-Deploy these files over the SAME existing GitHub/Netlify site/domain.
-Do NOT create a new domain if you want browser-local learning/memory to remain available.
+Deploy these files OVER the same existing GitHub/Netlify site/domain.
+Do not create a new domain if you want existing browser-local learning/memory retained.
 
-3.3 changes:
-- BEST NOW and WORLD BRAIN use one Unified Final Verdict helper, including STRONG BUY/STRONG SELL labels and lock-adjusted confidence.
-- Added Memory Vault with rolling versioned snapshots.
-- Startup checks stronger historical snapshots before accepting suspiciously empty browser state.
-- Existing titan_journal_v2, titan_state_v2, titan_active_signals_v2 and IndexedDB auto-memory are retained.
-- Manual clear is respected and will not be silently undone by auto-recovery.
-- Existing 3.2 decision logic, USD/Gold cross-market confirmation, event arbitration and scenario logic are preserved.
+GOD 4.1 keeps all GOD 3.3 decision logic, signal locks, Unified Final Verdict, news/event arbitration,
+World Brain, journal, IndexedDB auto-memory and Memory Vault.
 
-No paid API key is required for the core scanner.
+NEW DUAL CLOCK PATH ENGINE
+- Learns the market path after every actionable signal, including losing/adverse first moves.
+- Stores compact 5m / 10m / 15m / 30m / 60m path outcomes in apex_path_ledger_v4.
+- Measures maximum adverse and favorable excursion in ATR units.
+- Uses close-DNA historical paths to estimate whether the FIRST 5–15m path is likely to move opposite the larger thesis.
+- Separates FINAL BIAS from LIKELY FIRST PATH.
+- Promotes COUNTER ACTIVE only after enough matched resolved paths, sufficient adverse excursion, acceptable 60m thesis recovery, no direct hostile critical shock, and acceptable live spread/target ratio when spread is available.
+- Uses Beta shrinkage and a restrained research prior so small samples cannot create fake 90% probabilities.
+- Preserves losses as reusable path intelligence even after normal journal pruning.
+- Backup/restore and Memory Vault now include the compact path ledger.
+
+IMPORTANT
+This is a decision-support / research scanner, not a guarantee of profit. Short-horizon statistical patterns can disappear after spread, slippage and changing regimes. GOD 4.1 therefore refuses to blindly reverse every APEX signal.

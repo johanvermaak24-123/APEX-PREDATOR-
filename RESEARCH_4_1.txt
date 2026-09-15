@@ -1,0 +1,11 @@
+DESIGN PRINCIPLE
+APEX medium-term direction and immediate entry path are separate questions.
+FAST CLOCK: first 0–30 minutes. Learn whether adverse excursion is repeatable and economically capturable after costs.
+SLOW CLOCK: 30–180 minutes. Learn whether the original thesis recovers and approximately when directional activation tends to occur.
+
+LOSS-TO-EDGE LEARNING
+A losing/adverse first move is retained as path evidence: first 5/15/30m direction, 0–30m MAE/MFE in ATR, 60/120/180m recovery and approximate activation time.
+Counter scalps are never promoted from a single loss or a small sample.
+
+SAFETY AGAINST FALSE MEAN REVERSION
+Direct hostile event shocks veto counter promotion. Spread/target ratio can veto activation. Small samples are probability-shrunk. Thesis recovery must remain adequate.

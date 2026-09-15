@@ -1,0 +1,30 @@
+APEX PREDATOR GOD 4.0 — DUAL PATH RESEARCH BASIS
+
+1) Short-horizon crypto mean reversion (2026)
+Kitron & Wengrowicz, “Short-horizon mean reversion in cryptocurrency markets: a matched cross-market measurement”, arXiv:2608.21888.
+Key design takeaway: directional reversal can be statistically real at 15-minute horizons, especially after aggressive taker flow, but reported gross edge can be smaller than benchmark round-trip trading costs. GOD 4.0 therefore separates path probability from cost validation and does not auto-reverse every signal.
+https://arxiv.org/abs/2608.21888
+
+2) Order-flow imbalance and short-horizon crypto returns (2026)
+Vafin, “Order-Flow Imbalance and Short-Horizon Return Predictability in Cryptocurrency Markets”, SSRN 6938742.
+Key design takeaway: buy/sell pressure is useful short-horizon context, but should be evaluated as predictive information rather than merely same-interval mechanical price impact. GOD 4.0 keeps OHLC+tick-volume flow only as a proxy and gives empirical path memory authority.
+https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6938742
+
+3) BTC short-term alpha and transaction costs (2026)
+Rustin, “Testing for Tradable Alpha in Short-Term Bitcoin Market Data”, SSRN 6444920.
+Key design takeaway: weak short-horizon predictive features may fail after costs, while lower-frequency mean reversion can be more robust. GOD 4.0 uses a live spread/target ratio when bid/ask are available.
+https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6444920
+
+4) Gold response to monetary-policy shocks (2024)
+Awartani, Hussain & Virk, “How do the gold intra-day returns and volatility react to monetary policy shocks?”, International Review of Financial Analysis 95 (2024), 103486.
+Key design takeaway: gold price/volatility adjustment can continue beyond the first five minutes after FOMC shocks. GOD 4.0 blocks naive fading when direct hostile event-shock evidence indicates continuation risk.
+DOI: 10.1016/j.irfa.2024.103486
+https://www.sciencedirect.com/science/article/pii/S1057521924004186
+
+5) Crypto liquidity-provision premium / reversal
+Bianchi, Dickerson & Babiak, “Trading volume and liquidity provision in cryptocurrency markets”, SSRN 3239670.
+Farag, Luo, Yarovaya & Zieba, “Returns from Liquidity Provision in Cryptocurrency Markets”, SSRN 4057510.
+Key design takeaway: reversal/liquidity-provision returns vary with liquidity, volatility and activity. GOD 4.0 therefore learns by symbol + DNA regime/session rather than assuming one universal reversal rule.
+
+IMPLEMENTATION PHILOSOPHY
+Research is used as a conservative prior and guardrail. The app must earn promotion from its own resolved, no-look-ahead path data. It is explicitly not coded to promise market-beating performance.
