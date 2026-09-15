@@ -1,4 +1,4 @@
-const CACHE="apex-scalp-god-6.7-truth-engine";
+const CACHE="apex-scalp-god-6.7.1-measurement-truth";
 const STATIC=["./","./index.html","./manifest.webmanifest","./apple-touch-icon.png","./icon-192.png","./icon-512.png"];
 self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting()});
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));self.skipWaiting()});

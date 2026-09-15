@@ -1,0 +1,12 @@
+{
+  "version": "APEX 6.7.1",
+  "dom_ids": 306,
+  "unique_dom_ids": 306,
+  "duplicate_dom_ids": [],
+  "js_dollar_refs": 259,
+  "missing_dom_refs": [],
+  "duplicate_function_declarations": [],
+  "manifest_json": "PASS",
+  "js_syntax": "PASS",
+  "service_worker_syntax": "PASS"
+}

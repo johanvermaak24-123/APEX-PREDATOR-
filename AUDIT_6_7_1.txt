@@ -1,0 +1,31 @@
+APEX 6.7.1 — BUILD AUDIT
+
+STATIC
+- Inline JavaScript syntax: PASS
+- Service worker syntax: PASS
+- Manifest JSON: PASS
+- DOM IDs: 306 / unique 306
+- Duplicate DOM IDs: 0
+- Missing $() DOM references: 0
+- Duplicate named function declarations: 0
+
+MEASUREMENT REPAIRS VERIFIED IN SOURCE
+- Explicit OPEN-only market-state gate.
+- Quote age required and <=120s.
+- Zero/invalid spread rejected.
+- M1 resolver starts after live entry minute; no pre-entry enclosing-bar grading.
+- M1 TP+SL same-bar case is AMBIGUOUS, not forced to SL.
+- Record predicate matches pre-FIRE authorization class.
+- FIRE requires n>=20 + positive bootstrap expectancy floor + positive chronological holdout + FDR PASS.
+- FIRE requires verified broker costs and net R:R >=1.20.
+- Per-bucket truth-ledger retention + IndexedDB mirror.
+- Circuit breaker gates daily modeled loss, consecutive losses and max FIRE authorities/day.
+- Lot sizing never promotes beyond bounded normal risk.
+
+RANDOMIZED SOFTWARE REGRESSION
+- 1,000,000 randomized cases
+- 0 invariant failures
+- See REGRESSION_1M_6_7_1.json
+
+LIMITATION
+This audit checks implementation consistency and specific repaired failure modes. It does not establish trading profitability, calibration, future win rate or live execution quality.

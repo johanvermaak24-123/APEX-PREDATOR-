@@ -1,0 +1,24 @@
+{
+  "version": "APEX 6.7.1",
+  "test": "software invariant regression",
+  "seed": 6712026,
+  "cases": 1000000,
+  "failures": 0,
+  "checks": {
+    "fire_n_ge_20": 0,
+    "fire_bootstrap_lower_positive": 0,
+    "fire_holdout_positive": 0,
+    "fire_fdr_pass": 0,
+    "fire_triggered": 0,
+    "fire_cost_pass": 0,
+    "fire_cost_verified": 0,
+    "fire_netrr_ge_1_20": 0,
+    "fire_no_veto": 0,
+    "circuit_blocks_fire": 0,
+    "unknown_state_never_passes": 0,
+    "closed_state_never_passes": 0,
+    "unknown_age_never_fresh": 0,
+    "zero_or_negative_spread_never_quote_pass": 0
+  },
+  "note": "Randomized regression validates code-level gate relationships only. It does not validate profitability or market predictiveness."
+}

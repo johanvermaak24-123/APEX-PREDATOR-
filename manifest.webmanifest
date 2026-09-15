@@ -1,6 +1,6 @@
 {
   "name": "APEX SCALP GOD 6.7 \u2014 TRUTH ENGINE",
-  "short_name": "APEX 6.7",
+  "short_name": "APEX 6.7.1",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -20,5 +20,5 @@
       "purpose": "any maskable"
     }
   ],
-  "description": "APEX SCALP GOD 6.7 Truth Engine: closed-M5 execution, exact first-hit evidence, net cost geometry, fail-closed integrity and bounded lot authority."
+  "description": "APEX SCALP GOD 6.7.1 Measurement Truth: closed-M5 execution, exact first-hit evidence, net cost geometry, fail-closed integrity and bounded lot authority."
 }
