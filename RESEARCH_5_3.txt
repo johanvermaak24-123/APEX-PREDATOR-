@@ -1,0 +1,26 @@
+APEX SCALP GOD 5.3 — DEEP MARKET RESEARCH NOTES
+
+PUBLIC RESEARCH BASIS
+1. Order-flow imbalance / market depth: Cont, Kukanov & Stoikov show short-horizon price changes are closely linked to order-flow imbalance, with impact depending on depth. 5.3 therefore treats persistent one-way pressure as a continuation warning rather than blindly fading it.
+2. Crypto reversal is state-dependent: literature finds short-term reversal/liquidity-provision effects, but the most liquid major coins can display momentum and transaction costs can erase a gross edge. 5.3 therefore keeps explicit cost and spread-stress gates.
+3. Bitcoin intraday structure matters: high-frequency work documents intraday variation in volume, volatility and liquidity. 5.3 records a compact live micro-tape and evaluates current spread against the symbol's recent spread distribution.
+4. Liquidation cascades: 2026 studies of perpetual-futures stress events show sharp futures-led cascades, extreme spread expansion, hidden liquidity and execution-risk distortions. 5.3 adds a CASCADE / NEWS IMPULSE state and blocks inverse fades while persistent impact is active.
+5. Gold is news-state dependent: high-frequency gold research finds FOMC and macro surprises can drive price/volatility adjustment for more than five minutes; US futures and the London/New York overlap are central to price discovery. 5.3 treats critical news + persistent impulse as a continuation regime.
+6. USDJPY and macro news: high-frequency research finds Japanese and US macro announcements can materially change USD/JPY trading intensity and volatility, with many effects concentrated in the first 30 minutes. This supports event-state-aware rather than static inverse rules.
+7. Jumps matter: macro-related intraday jumps are larger, more persistent and have stronger microstructure effects than ordinary moves. 5.3 computes a robust OHLC jump proxy and volatility-burst proxy to distinguish ordinary exhaustion from information shocks.
+8. Backtest overfitting: research on PBO/Deflated Sharpe and newer comparisons of validation schemes warns that ordinary walk-forward testing can still select false edges under non-stationarity. 5.3 adds chronological holdout, effective-sample adjustment and a block-dependence expectancy floor before promotion.
+
+IMPORTANT IMPLEMENTATION LIMITS
+- The browser feed supplies OHLC/tick volume and bid/ask, not full exchange L2. Therefore 'microstructure' features in 5.3 are PROXIES and are labelled as such.
+- Public academic/web research was used. No dark-web, private, stolen, paywalled-bypassed or illegally obtained information was accessed.
+- Research and synthetic fuzzing do not prove profitability. Live/Pepperstone execution, slippage, commissions, latency and regime change must be measured.
+
+5.3 STRUCTURAL UPGRADES
+- Market Microstructure Court: BALANCED / CHOP-MEAN-REVERSION / EXHAUSTION-REVERSAL / PERSISTENT-IMPULSE / CASCADE-NEWS-IMPULSE.
+- Cascade and persistence fade vetoes.
+- Dynamic scalp horizon and target multiplier by market state.
+- Live micro-tape (apex_micro_tape_v53) for spread distribution and stress percentile.
+- Block-dependence lower bound on benchmark expectancy.
+- Effective sample size penalty for autocorrelated outcomes.
+- GOD/CONFIRMED promotion requires positive block floor and minimum effective N.
+- Existing journal, active-signal memory, path ledger and vault architecture preserved.

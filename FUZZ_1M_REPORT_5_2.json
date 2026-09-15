@@ -1,0 +1,17 @@
+{
+  "version": "5.2",
+  "randomized_tests": 1000000,
+  "failures": [],
+  "tier_counts": {
+    "research": 944255,
+    "scout": 55002,
+    "confirmed": 723,
+    "god": 20,
+    "firewall": 640100
+  },
+  "dom_ids": 207,
+  "js_id_refs": 174,
+  "missing_js_refs": [],
+  "duplicate_ids": [],
+  "pass": true
+}

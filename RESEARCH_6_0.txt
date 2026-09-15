@@ -1,0 +1,18 @@
+APEX SCALP GOD 6.0 — NET EDGE HARVESTER
+
+RESEARCH BASIS
+
+1) Short-horizon crypto reversal can be measurable but gross edge may be smaller than realistic round-trip costs. 2026 matched cross-market work reports pervasive 15-minute reversal in crypto, strongest after aggressive taker-flow moves, but gross edge around 1.3 bp versus a 5 bp benchmark cost. Design implication: never promote a scalp on direction alone; require cost-adjusted expected value.
+
+2) Gold reacts asymmetrically to monetary-policy shocks and the adjustment can continue beyond five minutes. High-frequency FOMC research shows price and volatility adjustment persisting beyond the first 5-minute bar. Design implication: direct macro shock / persistent impulse is a fade veto.
+
+3) Gold price discovery is session- and news-dependent. Research on global gold price discovery finds New York futures and the New York/London overlap carry a large share of information, with US macro surprises having strong state-dependent effects. Design implication: treat session/news state as context, not a universal mean-reversion assumption.
+
+4) Gold jumps are associated with macro news, order imbalance, transaction cost and trading activity. 2025 high-frequency research finds FOMC is a dominant predictor among US macro events. Design implication: jump/cascade states must be separated from exhaustion states.
+
+5) Backtest overfitting is a primary failure mode. Deflated Sharpe Ratio corrects for multiple testing/selection bias; newer controlled research finds Combinatorial Purged Cross-Validation more resistant to false discoveries than ordinary walk-forward in non-stationary financial data. Design implication: promotion requires conservative out-of-sample, multi-regime, recency and effective-sample checks.
+
+6) NEW IN 6.0: payoff-implied break-even probability. For a scalp with target T, invalidation S and spread cost C (all normalized to ATR), break-even probability is (S+C)/(T+S). A model score below this threshold has negative modeled expectancy even if direction is more often right than wrong. GOD 6.0 therefore refuses promotion unless probability clears break-even by a safety margin and modeled EV remains positive after spread.
+
+ACCOUNT OBJECTIVE
+Starting balance default: $20. Preferred net harvest objective: $0.25 (=1.25% of account). This is an objective, not a forced TP. Exact dollar P&L cannot be inferred from price movement without broker contract size, tick value and chosen lot size. The app therefore keeps account objective and market price target separate.

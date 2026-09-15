@@ -1,0 +1,23 @@
+APEX SCALP GOD 6.0 — STATIC / ADVERSARIAL AUDIT
+
+Version: 6.0 NET EDGE HARVESTER
+DOM IDs: 237
+JS id references: 203
+Missing JS DOM references: 0
+Duplicate IDs: 0
+JavaScript syntax: PASS (node --check extracted inline script)
+Service worker syntax: PASS
+Manifest JSON: PASS
+10,000,000 randomized economic/promotion invariants: PASS, 0 failures
+
+NEW RELEASE-BLOCKING ECONOMIC GATES
+- payoff-implied break-even probability
+- positive modeled EV after live spread
+- probability surplus above break-even
+- tighter cost/target ceilings for CONFIRMED and GOD EDGE
+- existing cascade/news veto retained
+- existing loss firewall retained
+- existing holdout/effective-sample/multi-regime checks retained
+
+LIMITATION
+Static and randomized invariant testing does not prove profitability, broker execution, slippage, fill quality, or future market behavior. Exact $0.25 P&L mapping requires broker contract/tick value and lot size.

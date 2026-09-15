@@ -1,0 +1,23 @@
+APEX SCALP GOD 5.2 — ADVERSARY ROBUSTNESS MONSTER
+STATIC / LOGIC AUDIT
+
+PASS — JavaScript syntax (node --check)
+PASS — Service-worker syntax
+PASS — Manifest JSON parse
+PASS — 1,000,000 randomized promotion/invariant tests
+PASS — 0 randomized invariant failures
+PASS — 207 unique DOM ids checked
+PASS — 174 JavaScript DOM id references resolved
+PASS — 0 missing JavaScript DOM references
+PASS — 0 duplicate DOM ids
+PASS — loss-streak firewall cannot promote CONFIRMED/GOD EDGE
+PASS — chronological holdout failure cannot promote CONFIRMED/GOD EDGE
+PASS — CONFIRMED requires >=20 matched paths and >=15 benchmark outcomes
+PASS — GOD EDGE requires >=50 matched paths and >=40 benchmark outcomes
+PASS — multi-regime gates enforced
+PASS — tighter transaction-cost margins enforced
+PASS — SCOUT explicitly PAPER/SCOUT ONLY and not live-ready authority
+PASS — existing apex_path_ledger_v4 / journal / lock memory keys preserved
+
+IMPORTANT LIMITATION
+These tests validate code structure and stated invariants. They do NOT prove profitability, broker execution quality, future market predictability, or immunity to regime change. Live edge must be demonstrated prospectively after spread, slippage and fees.

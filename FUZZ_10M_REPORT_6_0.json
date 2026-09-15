@@ -1,0 +1,16 @@
+{
+  "version": "6.0",
+  "cases": 10000000,
+  "failures": 0,
+  "passed": 10000000,
+  "runtime_sec": 2.446,
+  "checks": [
+    "payoff-implied break-even probability",
+    "positive modeled EV after spread",
+    "confirmed probability surplus",
+    "GOD probability surplus",
+    "friction ceilings",
+    "loss firewall",
+    "micro/shock fast-safe veto"
+  ]
+}

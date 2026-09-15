@@ -1,0 +1,24 @@
+APEX SCALP GOD 5.1 — ADVERSARY EVIDENCE MONSTER AUDIT
+
+Static QA
+- HTML/JS DOM ids: 196 checked
+- Duplicate ids: 0
+- JS $() references missing ids: 0
+- Version tag 5.1: PASS
+- Parent thesis context-only invariant: PASS
+- Counter benchmark logger: PASS
+- Wilson conservative probability floor: PASS
+- Critical continuation-shock veto: PASS
+- Transaction-cost gate preserved: PASS
+- Tiered evidence authority RESEARCH/SCOUT/CONFIRMED/GOD EDGE: PASS
+- Existing path ledger key apex_path_ledger_v4 preserved: PASS
+- Existing journal/state/signal-lock keys preserved: PASS
+
+Randomized logic audit
+- Iterations: 1,000,000
+- Passed: 1,000,000
+- Failed: 0
+- Runtime: 3.574s
+
+Important limitation
+A million invariant tests verify internal gating consistency; they do NOT prove profitability, broker execution quality, or future market behavior. Promotion must come from resolved market outcomes and positive cost-adjusted expectancy.

@@ -1,0 +1,23 @@
+{
+  "version": "APEX-SCALP-GOD-5.1",
+  "iterations": 1000000,
+  "passes": 1000000,
+  "failures": 0,
+  "elapsed_seconds": 3.574,
+  "promotion_counts": {
+    "RESEARCH": 36938,
+    "WATCH": 141146,
+    "SCOUT": 227277,
+    "CONFIRMED": 50746,
+    "GOD_EDGE": 10029,
+    "BLOCKED": 533864
+  },
+  "invariants": [
+    "GOD EDGE requires n>=25, score>=65%, benchmark expectancy>=0.025 ATR, Wilson lower bound>=52%, >=2 regimes, cost/event safety",
+    "CONFIRMED requires n>=8, score>=61%, positive benchmark expectancy, Wilson lower bound>=38%, cost/event safety",
+    "SCOUT cannot bypass cost gate or critical continuation-shock veto",
+    "Parent thesis never directly promotes execution",
+    "Critical supportive continuation shock blocks inverse fade",
+    "Cost failure blocks promotion"
+  ]
+}

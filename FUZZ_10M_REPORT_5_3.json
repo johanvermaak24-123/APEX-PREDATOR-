@@ -1,0 +1,21 @@
+{
+  "version": "APEX-SCALP-GOD-5.3",
+  "randomized_cases": 10000000,
+  "failures": 0,
+  "invariants": {
+    "god_not_confirmed": 0,
+    "confirmed_firewall": 0,
+    "confirmed_veto": 0,
+    "confirmed_blockfloor": 0,
+    "confirmed_small_effectiveN": 0,
+    "confirmed_cost": 0,
+    "god_small_sample": 0,
+    "god_weak_lcb": 0,
+    "god_weak_expectancy": 0,
+    "god_cost": 0
+  },
+  "seed": 530053,
+  "runtime_seconds": 4.073,
+  "result": "PASS",
+  "note": "Synthetic invariant fuzzing validates promotion/veto logic properties; it does not prove profitability or market forecast accuracy."
+}

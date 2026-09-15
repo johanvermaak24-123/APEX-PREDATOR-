@@ -1,0 +1,18 @@
+APEX SCALP GOD 5.2 — RESEARCH BASIS
+
+DESIGN PRINCIPLES
+1. Short-horizon reversal can exist, but it is not universal and transaction costs can erase a gross edge. Therefore 5.2 requires an explicit friction margin before promotion.
+2. High-frequency gold can continue repricing for more than five minutes after FOMC shocks. Therefore direct critical continuation shocks veto inverse fades.
+3. Repeatedly testing many strategy variants creates backtest overfitting / selection bias. Therefore 5.2 adds chronological holdout consistency, recent-vs-older stability, sample thresholds and multi-regime promotion.
+4. A model score is not a win probability. Promotion is based on resolved benchmark outcomes and a conservative Wilson lower confidence bound.
+5. A loss or adverse excursion is retained as path evidence, but a 3-loss streak or sharply negative recent expectancy activates a firewall.
+
+RESEARCH REFERENCES
+- Bailey & Lopez de Prado, The Deflated Sharpe Ratio, Journal of Portfolio Management (2014).
+- Bailey et al., The Probability of Backtest Overfitting, Journal of Computational Finance (2016/2017).
+- Arian et al., Backtest overfitting in the machine learning era, Knowledge-Based Systems (2024).
+- Awartani, Hussain & Virk, How do gold intra-day returns and volatility react to monetary policy shocks?, International Review of Financial Analysis (2024).
+- Miwa, Short-Term Return Reversals and Intraday Transactions, Quarterly Journal of Finance (2019).
+
+IMPORTANT
+These papers support design safeguards and the plausibility of short-horizon effects; they do not prove that APEX will be profitable. Live performance must be established out of sample after real costs.

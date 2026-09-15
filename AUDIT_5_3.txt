@@ -1,0 +1,21 @@
+APEX SCALP GOD 5.3 — STATIC / ADVERSARIAL AUDIT
+
+PASS | version_5_3
+PASS | micro_court
+PASS | cascade_veto
+PASS | block_floor
+PASS | effective_sample
+PASS | spread_stress
+PASS | old_path_key_preserved
+PASS | journal_key_preserved
+PASS | signal_lock_preserved
+PASS | micro_key_added
+PASS | duplicate_ids_zero
+PASS | missing_dom_refs_zero
+
+DOM IDs: 222
+JS $() refs: 189
+Duplicate IDs: 0
+Missing refs: 0
+PASS | 10,000,000 randomized promotion/veto invariant tests (see FUZZ_10M_REPORT_5_3.json)
+LIMIT | Synthetic fuzzing proves logic invariants only; it does not prove profitability or live execution quality.
