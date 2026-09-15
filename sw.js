@@ -1,4 +1,4 @@
-const CACHE="apex-predator-v1.3-final-news-filter";
+const CACHE="apex-predator-v1.4-learning-bridge";
 const STATIC=["./","./index.html","./manifest.webmanifest","./apple-touch-icon.png","./icon-192.png","./icon-512.png"];
 self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting()});
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));self.skipWaiting()});

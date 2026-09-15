@@ -29,3 +29,14 @@ APEX 1.3 FINAL NEWS FILTER:
 - Generic “gold” now requires explicit bullion/price/macro market context before it can count as direct XAU evidence.
 - Added live regression tests for the exact false-positive examples observed in APEX 1.2.
 - Decision/event/learning architecture otherwise unchanged to preserve continuity and browser memory.
+
+
+APEX 1.4 LEARNING BRIDGE:
+- BEST NOW now consults the same resolved local memory BEFORE selecting the #1 market.
+- Raw rank score is converted into a bounded learned rank using adaptive ensemble evidence, close-DNA analogs, historical news analogs, resolved expectancy and drift.
+- Small samples are shrinkage-limited; no wild self-rewrite is allowed.
+- Positive learning may improve ranking/quality only. It can NEVER bypass World Brain safety gates.
+- Negative resolved evidence can veto/downgrade a candidate.
+- BEST NOW visibly shows raw score -> learned score, learning sample count, analog count, DNA count and LEARNING VETO when applicable.
+- No extra market/news API requests are used for the learning bridge; it reads the browser-local resolved memory.
+- Existing APEX 1.3 journal/state/active-signal storage keys are preserved so upgrades retain memory.
