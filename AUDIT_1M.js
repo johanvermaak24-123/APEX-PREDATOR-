@@ -9,7 +9,7 @@ vm.runInThisContext(sliceBetween('function plainCommandReason','function executi
 vm.runInThisContext(sliceBetween('function tradeManagementDecision','function renderManualTradeManager'));
 vm.runInThisContext(sliceBetween('function bestNowStateRank','async function authoritativeBestScan'));
 if(typeof executionCommandFromParts!=='function'||typeof bestNowRankLabel!=='function'||typeof tradeManagementDecision!=='function')throw new Error('Exact-source function extraction failed');
-let seed=0x7100cafe>>>0;
+let seed=0x7200cafe>>>0;
 function rnd(){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296}
 function pick(a){return a[Math.floor(rnd()*a.length)]}
 const N=1_000_000;
@@ -58,5 +58,10 @@ for(const stage of ['HARD BLOCK','EXECUTION VETO','HYDRA VETO','PROOF ONLY','RES
   if(/VETO|HYDRA|FORTRESS|PROOF|FDR|BOOTSTRAP|EXECUTION AUTHORITY/i.test(msg))throw new Error(`front-language jargon leak: ${stage} => ${msg}`);
   if(!/wait|do not enter|not ready|no trade/i.test(msg))throw new Error(`front-language action ambiguity: ${stage} => ${msg}`);
 }
-const report={version:'APEX-SCALP-GOD-7.1.0',sourceSha256:crypto.createHash('sha256').update(src).digest('hex'),scenarios:N,seed:'0x7100cafe',elapsedMs:Date.now()-started,passed:true,liveCount,waitCount,tradeHold,tradeExit,tradeSwitch,invariants:['ENTER iff final execution authority is complete','Every non-live new-trade command is WAIT — DO NOT ENTER','No entry/SL/TP levels leak while WAIT','BEST NOW cannot create ENTER independently','Open trade manager only emits HOLD / EXIT / SWITCH','Target, stop-loss and opposite live direction force EXIT']};
+// Consumer-mode contract: WAIT copy must never imply a trade is approved or expose internal authority jargon.
+for(const stage of ['HARD BLOCK','EXECUTION VETO','HYDRA VETO','PROOF ONLY','RESEARCH ARMED','WATCH','GEOMETRY BLOCK','WAIT']){
+ const msg=plainCommandReason(stage,'NONE');
+ if(/ENTER NOW|LIVE ENTRY|EXECUTION VETO|HYDRA|FORTRESS|FDR|BOOTSTRAP/i.test(msg))throw new Error(`consumer WAIT leak: ${stage} => ${msg}`);
+}
+const report={version:'APEX-SCALP-GOD-7.2.0',sourceSha256:crypto.createHash('sha256').update(src).digest('hex'),scenarios:N,seed:'0x7200cafe',elapsedMs:Date.now()-started,passed:true,liveCount,waitCount,tradeHold,tradeExit,tradeSwitch,invariants:['ENTER iff final execution authority is complete','Every non-live new-trade command is WAIT — DO NOT ENTER','No entry/SL/TP levels leak while WAIT','BEST NOW cannot create ENTER independently','Open trade manager only emits HOLD / EXIT / SWITCH','Target, stop-loss and opposite live direction force EXIT']};
 fs.writeFileSync('AUDIT_1M_REPORT.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

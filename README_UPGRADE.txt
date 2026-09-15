@@ -1,13 +1,11 @@
-APEX SCALP GOD 7.1.0 — SIMPLE ACTION HUD
-==========================================
+APEX SCALP GOD 7.2.0 — CONSUMER TEST HUD
+=============================================
 
-WHAT CHANGED
-------------
-The front screen is deliberately simple. A normal user should not need to understand
-Fortress, Hydra, proof gates, execution vetoes, FDR, bootstrap statistics or other
-research terminology to use the scanner.
+PURPOSE
+-------
+This build is cleaned up for real-user beta testing. The normal user does not need
+to understand the internal research engine. The front screen gives one instruction:
 
-TRADE NOW now speaks only in actions:
   • ENTER BUY NOW
   • ENTER SELL NOW
   • WAIT — DO NOT ENTER
@@ -15,46 +13,59 @@ TRADE NOW now speaks only in actions:
   • EXIT NOW
   • TAKE PROFIT NOW
 
-When APEX says ENTER it shows:
+CONSUMER MODE
+-------------
+Consumer/Simple Mode now starts ON on every page load. It does not inherit an old
+SHOW DETAILS preference from previous versions. Advanced details are session-only:
+if a tester opens them, refreshing the app returns to the clean consumer view.
+
+On WHAT DO I DO? the user sees only:
+  • market + timeframe
+  • SCAN button
+  • one large action
   • current price
-  • entry price
-  • stop loss / exit-if-wrong
-  • take profit / exit
+  • entry / stop loss / take profit only when an ENTER is truly authorized
+  • open-trade HOLD / EXIT guidance after tapping I ENTERED THIS TRADE
 
-When APEX says WAIT, entry/SL/TP remain blank so a research candidate cannot look
-like an authorized trade.
+If the result is WAIT, APEX deliberately does not show a tempting BUY/SELL candidate
+on the consumer card. Entry, stop loss and take profit remain blank.
 
-FIND A TRADE now scans the basket and returns one simple command. If no market has
-full live authority it says DO NOTHING — NO TRADE READY. The candidate ranking is
-hidden in Simple Mode and is available only under SHOW DETAILS.
+On FIND A TRADE, APEX either returns one ready trade with exact levels or says:
+  WAIT — NO TRADE READY
+The consumer summary does not show the closest unapproved candidate. Full basket
+rankings remain available only under SHOW ADVANCED DETAILS.
 
-The SHOW DETAILS button exposes the research panels for advanced review. Version
-7.1 uses a new display-preference key so Simple Mode starts ON after upgrading even
-if an older version had deep evidence open.
+WHAT STAYS IN THE BACKGROUND
+----------------------------
+The existing thesis engine, counter-path engine, news analysis, proof ledger, cost
+checks, robustness courts, learning, memory, signal locks and historical journal are
+not removed. This is a presentation cleanup, not a weakening of the entry rules.
 
-WHAT DID NOT CHANGE
--------------------
-Existing learning and memory storage is preserved. The journal, state, signal locks,
-path ledger, micro tape, proof epoch, historical outcomes and browser Memory Vault
-use the same keys as 7.0 / 6.8. Do not clear browser/site data when deploying.
+MEMORY / UPGRADE SAFETY
+-----------------------
+Existing local browser learning keys are preserved. Do not clear browser/site data
+when deploying over 7.1. The service-worker cache name changed so the new interface
+replaces the old cached shell.
 
-The underlying fail-closed decision logic remains strict. This upgrade does NOT
-weaken proof, cost, data-integrity, market-state or geometry checks merely to produce
-more ENTER signals.
+BETA / COMMERCIAL TESTING
+-------------------------
+This package is suitable for user-experience and paper/demo testing before any
+commercial release. It should not be advertised as guaranteed profit or near-100%
+accurate. Validate real broker costs, live execution behavior, data licensing, legal
+terms, privacy and support expectations before selling it to customers.
 
 AUDIT
 -----
-AUDIT_1M.js executes the exact source decision functions across 1,000,000 seeded
-randomized scenarios. It checks that ENTER can appear only with complete authority,
-WAIT never leaks entry/SL/TP levels, BEST NOW cannot invent an ENTER, and open-trade
-management emits HOLD/EXIT/SWITCH only. It also verifies that front-facing WAIT
-reasons do not leak internal jargon such as VETO, HYDRA, FORTRESS, PROOF or FDR.
+AUDIT_1M.js runs the exact source execution-decision functions through 1,000,000
+seeded randomized scenarios. It tests ENTER authority, WAIT level suppression,
+BEST NOW behavior and open-trade HOLD/EXIT handling. Static checks also verify that
+Consumer Mode starts on, advanced panels are hidden on the front, and WAIT summaries
+do not expose internal jargon.
 
-This is a software/invariant stress test, not 1,000,000 historical or live trades and
-not a guarantee of profitability or near-100% win rate.
+This is a software/invariant stress test. It is not 1,000,000 historical/live trades
+and does not prove profitability.
 
 DEPLOY
 ------
 Upload the contents of this ZIP over the current GitHub Pages repository files.
-Do not delete browser/site data. The new service-worker cache name forces the new
-7.1 interface to replace the 7.0 cached shell.
+Do not clear browser/site data.

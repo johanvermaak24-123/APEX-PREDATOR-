@@ -1,0 +1,48 @@
+APEX 7.2.0 — BETA USER TEST CHECKLIST
+======================================
+
+Run these tests before any commercial release.
+
+1. FRESH LOAD
+   Refresh the page. It must open in SIMPLE MODE and the button must say
+   SHOW ADVANCED DETAILS. Technical cards must not be visible.
+
+2. SINGLE MARKET — WAIT
+   Scan a market that returns WAIT. The main answer must say WAIT — DO NOT ENTER.
+   Entry, Stop Loss and Take Profit must remain blank. No large BUY/SELL thesis
+   should appear on the normal screen.
+
+3. SINGLE MARKET — ENTER
+   If/when a fully authorized signal appears, verify the big answer says exactly
+   ENTER BUY NOW or ENTER SELL NOW and that Entry, Stop Loss and Take Profit are
+   populated and directionally correct.
+
+4. OPEN TRADE MANAGEMENT
+   Tap I ENTERED THIS TRADE. On later scans the main trade line must say HOLD,
+   TAKE PROFIT NOW or EXIT NOW. It must never create a second ENTER instruction
+   for the already-open trade.
+
+5. FIND A TRADE — NOTHING READY
+   Scan all markets. If no market qualifies, the screen must say
+   WAIT — NO TRADE READY. It must not show a tempting closest BUY/SELL candidate.
+
+6. FIND A TRADE — READY
+   If a market qualifies, only one ready trade should be shown in Consumer Mode,
+   with exact market, Entry, Stop Loss and Take Profit.
+
+7. ADVANCED DETAILS
+   Tap SHOW ADVANCED DETAILS. Research panels may appear. Refresh the page and
+   confirm it returns to SIMPLE MODE automatically.
+
+8. STALE ANSWER
+   Leave an ENTER answer untouched for more than the command expiry period. It
+   must change to WAIT / SCAN AGAIN and remove live entry levels.
+
+9. MEMORY
+   Refresh/update the app without clearing site data. Confirm journal/learning
+   persists under Advanced Details / Settings.
+
+10. REAL-BROKER PILOT
+   Use demo or very small risk first. Record at least spread, slippage, entry fill,
+   stop/target behavior and every HOLD/EXIT instruction. Do not market win-rate
+   claims until there is enough independent forward evidence.

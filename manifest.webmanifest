@@ -1,13 +1,18 @@
 {
-  "name": "APEX SCALP GOD 7.1.0 — SIMPLE ACTION HUD",
-  "short_name": "APEX 7.1",
+  "name": "APEX SCALP GOD 7.2.0 \u2014 CONSUMER TEST HUD",
+  "short_name": "APEX 7.2",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#05080c",
   "theme_color": "#071018",
-  "description": "Precision-first market research scanner with a simple front screen: ENTER BUY, ENTER SELL, HOLD, EXIT or WAIT. Deep evidence stays hidden unless requested.",
+  "description": "Consumer-first market research scanner: one front-screen action \u2014 ENTER BUY, ENTER SELL, HOLD, EXIT or WAIT. Advanced evidence stays hidden unless explicitly opened.",
   "icons": [
-    {"src":"apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

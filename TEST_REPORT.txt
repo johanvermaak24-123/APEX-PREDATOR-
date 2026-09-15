@@ -1,26 +1,30 @@
-APEX SCALP GOD 7.1.0 — TEST REPORT
-===============================================
+APEX SCALP GOD 7.2.0 — CONSUMER TEST REPORT
+====================================================
 
 PASS — HTML parsed
 PASS — unique IDs
 PASS — literal DOM refs resolved
-PASS — simple mode default
-PASS — main command jargon-free
-PASS — basket summary jargon-free
+PASS — Consumer/Simple Mode is default
+PASS — Consumer/Simple Mode forced on every load
+PASS — Advanced display choice is session-only
+PASS — all technical brain cards hidden in simple mode
+PASS — basket ranking hidden in simple mode
+PASS — WAIT basket does not tease closest candidate
+PASS — WAIT main command does not tease BUY/SELL candidate
+PASS — WAIT hides entry levels
 PASS — main action labels present
-PASS — memory/proof architecture present
-PASS — 1M invariant audit passed
 PASS — version consistent
+PASS — service-worker cache bumped
+PASS — 1M invariant audit passed
 
 HTML IDs: 336 total / 336 unique
-Literal JS DOM references checked: 300
+Literal JS DOM references checked: 291
 Duplicate IDs: none
 Missing literal DOM refs: none
-Forbidden jargon in simple command: none
-Forbidden jargon in basket summary: none
-Critical memory/proof symbols missing: none
 1M scenarios: 1,000,000
 1M failures: 0
 1M result: PASS
 
-NOTE: This validates software invariants and UI clarity. It does not prove profitability, forecast accuracy, or a near-100% win rate.
+JS SHA256: e0b88131cabe733bf52348cb640dd15d01040b210dcde8f1b10cec14c7123221
+
+NOTE: This validates software invariants and consumer UI rules. It does not prove profitability, forecast accuracy, or a near-100% win rate.
