@@ -1,0 +1,21 @@
+{
+  "version": "APEX SCALP GOD 5.0",
+  "fuzz_cases": 1000000,
+  "passed": true,
+  "checks": {
+    "active_requires_parent": true,
+    "active_direction_is_opposite_parent": true,
+    "cost_fail_never_active": true,
+    "shock_block_never_active": true,
+    "zero_parent_never_active_or_watch": true,
+    "buy_counter_target_above_entry": true,
+    "sell_counter_target_below_entry": true,
+    "buy_counter_invalid_below_entry": true,
+    "sell_counter_invalid_above_entry": true,
+    "edge_bounded": true,
+    "no_primary_parent_execution": true
+  },
+  "active_cases": 311025,
+  "watch_cases": 39737,
+  "design_note": "Synthetic invariant fuzz validates decision safety properties, not market profitability."
+}

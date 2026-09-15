@@ -1,0 +1,19 @@
+APEX SCALP GOD 5.0 — STATIC + FUZZ AUDIT
+
+PASS | title_5_0
+PASS | scalp_command_center
+PASS | parent_context_only
+PASS | scalp_renderer
+PASS | scalp_decision
+PASS | best_now_uses_scalp
+PASS | legacy_path_memory_preserved
+PASS | journal_memory_preserved
+PASS | signal_lock_memory_preserved
+PASS | primary_execution_removed
+PASS | model_version_5_0
+PASS | dom_no_duplicate_ids
+PASS | dom_no_missing_refs
+PASS | manifest_json
+PASS | fuzz_1m_pass
+
+LIMITATION: Static checks and 1,000,000 synthetic invariant cases do not prove live profitability, future accuracy, broker execution quality, or absence of every possible runtime defect. Forward market evidence remains required.

@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX PREDATOR GOD 4.1 — DUAL CLOCK PATH MONSTER</title>
+<title>APEX SCALP GOD 5.0 — INVERSE FIRST-PATH MONSTER</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 4.1 • DUAL CLOCK PATH MONSTER</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 5.0 • INVERSE FIRST-PATH MONSTER</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -141,7 +141,7 @@ button.primary, #scan, #scanAll {
       <optgroup label="Forex"><option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>USD/CHF</option><option>AUD/USD</option><option>USD/CAD</option><option>NZD/USD</option><option>EUR/JPY</option><option>GBP/JPY</option></optgroup>
       <optgroup label="Stocks"><option>AAPL</option><option>MSFT</option><option>NVDA</option><option>TSLA</option><option>AMZN</option><option>META</option><option>GOOGL</option></optgroup>
     </select></div>
-    <div><label>ENTRY TIMEFRAME</label><select id="tf"><option value="5min">M5</option><option value="15min">M15</option><option value="30min" selected>M30</option><option value="1h">H1</option><option value="4h">H4</option></select></div>
+    <div><label>PARENT THESIS TIMEFRAME</label><select id="tf"><option value="5min">M5</option><option value="15min">M15</option><option value="30min" selected>M30</option><option value="1h">H1</option><option value="4h">H4</option></select></div>
    </div>
    <button id="scan">🔄 UPDATE / SCAN MARKET</button>
    <div class="small" style="margin-top:8px">Manual mode: APEX only pulls fresh market/news data when you press UPDATE / SCAN MARKET. The last signal stays on screen between scans. No paid market-data key is required.</div>
@@ -154,17 +154,37 @@ button.primary, #scan, #scanAll {
     <div class="lmMeta"><b id="liveSymbol">NO MARKET</b><span id="liveTf">—</span><span id="livePriceTime">NOT UPDATED</span><span id="liveSource">SOURCE —</span></div>
    </div>
    <div class="hero">
-    <div><div class="small">APEX DECISION</div><div id="signal" class="sig wait">WAIT</div><div id="status" class="small">Ready.</div></div>
+    <div><div class="small">PARENT THESIS • CONTEXT ONLY</div><div id="signal" class="sig wait">WAIT</div><div id="status" class="small">Ready.</div></div>
     <div class="conf"><span class="small">Model Score</span><br><strong id="conf">—</strong></div>
    </div>
    <div class="meter"><div id="meter"></div></div>
    <div id="riskBox" class="warn" style="margin-top:10px">World-event risk not scanned yet.</div>
   </div>
 
-
+  <div class="card" id="scalpCommandCard" style="border-color:#2b6b76;box-shadow:0 0 34px rgba(91,232,255,.07)">
+   <div class="title"><h3>⚡ SCALP COMMAND CENTER</h3><span id="scalpBadge" class="badge">WAITING</span></div>
+   <div class="hero">
+    <div><div class="small">0–30 MINUTE ACTION</div><div id="scalpAction" class="sig wait">NO TRADE</div><div id="scalpReason" class="small">Scan market. Parent thesis is context; this card is the execution layer.</div></div>
+    <div class="conf"><span class="small">Scalp Edge</span><br><strong id="scalpConf">—</strong></div>
+   </div>
+   <div class="meter"><div id="scalpMeter"></div></div>
+   <div class="grid4" style="margin-top:10px">
+    <div class="k"><span>Parent thesis</span><b id="scalpParent">—</b></div>
+    <div class="k"><span>First path</span><b id="scalpFirst">—</b></div>
+    <div class="k"><span>Window</span><b id="scalpWindow">0–30m</b></div>
+    <div class="k"><span>Evidence</span><b id="scalpEvidence">—</b></div>
+   </div>
+   <div class="grid4" style="margin-top:8px">
+    <div class="k"><span>Reference entry</span><b id="scalpEntry">—</b></div>
+    <div class="k"><span>Quick target</span><b id="scalpTarget">—</b></div>
+    <div class="k"><span>Invalidation</span><b id="scalpInvalid">—</b></div>
+    <div class="k"><span>Cost gate</span><b id="scalpCost">—</b></div>
+   </div>
+   <div id="scalpNarrative" class="item" style="margin-top:10px"><b>THESIS ≠ ENTRY</b><p>APEX SCALP GOD uses the larger APEX thesis as a parent setup, then independently models whether the first 0–30 minute move is likely to run the opposite way. It never reverses blindly.</p></div>
+  </div>
 
   <div class="card">
-   <div class="title"><h3>🔒 ACTIVE SIGNAL STATE</h3><span id="lockBadge" class="badge">NO ACTIVE SIGNAL</span></div>
+   <div class="title"><h3>🔒 PARENT THESIS STATE</h3><span id="lockBadge" class="badge">NO ACTIVE SIGNAL</span></div>
    <div class="grid4">
     <div class="k"><span>Committed signal</span><b id="lockSignal">—</b></div>
     <div class="k"><span>Minimum hold</span><b id="lockHold">—</b></div>
@@ -189,21 +209,32 @@ button.primary, #scan, #scanAll {
   </div>
 
   <div class="card">
-   <div class="title"><h3>⚔️ DUAL CLOCK / COUNTER-SCALP ENGINE</h3><span id="pathBadge" class="badge">LEARNING PATHS</span></div>
+   <div class="title"><h3>⚔️ SCALP EDGE ENGINE • FIRST 0–30M</h3><span id="pathBadge" class="badge">LEARNING PATHS</span></div>
    <div class="grid4">
-    <div class="k"><span>Final bias</span><b id="pathFinal">—</b></div>
+    <div class="k"><span>Parent thesis</span><b id="pathFinal">—</b></div>
     <div class="k"><span>Likely first path</span><b id="pathFirst">—</b></div>
-    <div class="k"><span>Counter probability</span><b id="pathCounterP">—</b></div>
+    <div class="k"><span>Fast counter score</span><b id="pathCounterP">—</b></div>
     <div class="k"><span>Matched paths</span><b id="pathSamples">0</b></div>
    </div>
    <div class="grid4" style="margin-top:8px">
     <div class="k"><span>Expected adverse excursion</span><b id="pathAdverse">—</b></div>
     <div class="k"><span>Counter capture target</span><b id="pathCapture">—</b></div>
-    <div class="k"><span>180m thesis recovery</span><b id="pathRecovery">—</b></div>
+    <div class="k"><span>Parent recovery by 180m</span><b id="pathRecovery">—</b></div>
     <div class="k"><span>0–30m counter window</span><b id="pathWindow">—</b></div>
    </div>
    <div class="grid4" style="margin-top:8px"><div class="k"><span>30m opposite-first</span><b id="path30Opp">—</b></div><div class="k"><span>Activation estimate</span><b id="pathActivation">—</b></div><div class="k"><span>Continuation risk</span><b id="pathContinue">—</b></div><div class="k"><span>Cost gate</span><b id="pathCost">—</b></div></div><div id="pathTradeBox" class="item" style="margin-top:10px"><p>Run a scan. FAST CLOCK models the first 0–30 minutes; SLOW CLOCK models whether the larger thesis recovers over 30–180 minutes.</p></div>
    <div id="pathNarrative" class="small" style="margin-top:9px">Losses and adverse first moves are retained as path intelligence. A counter scalp is only promoted when similar resolved paths support it and event/transaction-cost risk does not invalidate the idea.</div>
+  </div>
+
+  <div class="card" id="executionAuthorityCard">
+   <div class="title"><h3>🛡️ EXECUTION AUTHORITY / CAPITAL DEFENSE</h3><span id="execBadge" class="badge">THESIS ONLY</span></div>
+   <div class="grid4">
+    <div class="k"><span>Live action</span><b id="execAction">NO LIVE ENTRY</b></div>
+    <div class="k"><span>Path evidence</span><b id="execPathEvidence">0/8</b></div>
+    <div class="k"><span>Resolved outcomes</span><b id="execResolved">0/12</b></div>
+    <div class="k"><span>Cost / event safety</span><b id="execSafety">CHECKING</b></div>
+   </div>
+   <div id="execNarrative" class="item" style="margin-top:12px"><b>THESIS ≠ ENTRY</b><p>APEX may have a medium-term directional thesis, but GOD 4.2 refuses to label it a live entry until short-horizon path evidence and execution safety agree.</p></div>
   </div>
 
   <div class="card">
@@ -397,7 +428,7 @@ button.primary, #scan, #scanAll {
  <section id="oppsTab" class="hidden">
   <div class="card">
    <div class="title"><h3>🔥 WHAT SHOULD I TRADE RIGHT NOW?</h3><span class="badge">BASKET SCAN</span></div>
-   <div class="small">Runs the FULL APEX PREDATOR GOD authority on every market in the basket. BEST NOW and WORLD BRAIN use the exact same Opportunity Capture score, liquidity-pressure proxy, timeframe logic, event arbitration, fusion, learning and PASS/WAIT verdict — one brain, one answer.</div>
+   <div class="small">Runs APEX SCALP GOD across the basket. BEST NOW ranks the statistically supported 0–30 minute first-path scalp, while the old APEX directional output is retained only as the parent thesis/context.</div>
    <button id="scanAll">SCAN BEST OPPORTUNITIES</button>
    <div id="oppList" style="margin-top:8px"><div class="item"><p>Not scanned yet.</p></div></div>
   </div>
@@ -1285,13 +1316,15 @@ function render(r,events){
  const nh=r.consensus?.nh||newsHealth(events),newsState=nh.degraded?"NEWS FEED DEGRADED":`${r.news.items.length} relevant headlines`,biasState=(r.v==="WAIT"&&r.consensus?.biasLabel!=="WAIT")?` • ${r.consensus.biasLabel}`:"";
  $("status").textContent=`${r.sym} • ${r.align}/${r.valid} TF aligned • ${newsState}${biasState}${r.signalLocked?" • SIGNAL LOCK ACTIVE":""} • ${r.consensus?.reason||""}`;
 renderBrain(r,events);renderNewsRadar(r,events);
+ const auth=r.executionAuthority||{};
+ if(!auth.liveReady&&dir){$("signal").textContent=`THESIS ${dir>0?"BUY":"SELL"}`;$("signal").className="sig "+vclass(r.v);$("status").textContent+=` • EXECUTION: ${auth.mode||"THESIS ONLY"}`;}
  const aSig=r.activeSignal;
  $("origEntry").textContent=aSig&&isFinite(aSig.originalEntry)?fmt(aSig.originalEntry):(dir&&isFinite(p)?fmt(p):"—");
- $("entry").textContent=dir?`${fmt(lo)} – ${fmt(hi)}`:"WAIT";
- $("entryState").textContent=aSig?.entryState||(dir?"READY":"WAIT");
+ $("entry").textContent=(dir&&auth.liveReady)?`${fmt(lo)} – ${fmt(hi)}`:"WAIT — THESIS ONLY";
+ $("entryState").textContent=auth.liveReady?(aSig?.entryState||"READY"):"BLOCKED UNTIL PATH PROOF";
  $("planUpdated").textContent=aSig?.planUpdatedAt?new Date(aSig.planUpdatedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—";
  $("sl").textContent=fmt(sl);$("tp1").textContent=fmt(t1);$("tp2").textContent=fmt(t2);$("tp3").textContent=fmt(t3);
- $("grade").textContent=r.consensus?.gate!=="PASS"?"NO TRADE":r.conf>=84?"A-GRADE":r.conf>=74?"B-GRADE":"C-GRADE";
+ $("grade").textContent=!auth.liveReady?"THESIS ONLY":r.consensus?.gate!=="PASS"?"NO TRADE":r.conf>=84?"A-GRADE":r.conf>=74?"B-GRADE":"C-GRADE";
  const macroEvents=events.filter(e=>{
  const c=(e.cat||"").toLowerCase(),t=(e.title||"").toLowerCase();
  return /macro|policy|central bank|inflation|jobs|bonds|yield|geopolitic|sanction|trade/.test(c)||
@@ -1661,7 +1694,7 @@ function gradeFromBars(r){
  if(changed)persistJSON("titan_journal_v2",titanJournal)
 }
 
-// GOD 4.1 DUAL CLOCK PATH ENGINE -------------------------------------------------
+// GOD 4.2 COUNTER-FIRST DUAL CLOCK PATH ENGINE -----------------------------------------
 let apexPathLedger=readStoredJSON(APEX_PATH_KEY,[]);
 function persistPathLedger(){
  apexPathLedger=(Array.isArray(apexPathLedger)?apexPathLedger:[]).sort((a,b)=>(b.t||0)-(a.t||0)).slice(0,1800);
@@ -1716,35 +1749,128 @@ function counterPathEngine(r,events,b,dna){
  const finalDir=dirSign(r.v)||waitAuditDirection({bias:r.consensus?.biasLabel||r.rawV}),m=r.main||{};
  if(!finalDir||!dna||!Number.isFinite(+m.price)||!Number.isFinite(+m.atr)||+m.atr<=0)return{state:"NO DIRECTION",finalDir:0};
  const mem=pathMemory(r.sym,finalDir,dna),prior=pathResearchPrior(r,finalDir),n=mem.n||0;
- const learnWeight=clamp(n/18,0,.82),counterP=mem.pOpp==null?prior:(1-learnWeight)*prior+learnWeight*mem.pOpp;
- const firstDir=counterP>=.56?-finalDir:finalDir,counterDir=-finalDir;
  const shock=directionalEventProfile(events,r.sym,actionableDirection(r.v)||actionableDirection(r.consensus?.biasLabel||""));
- let continuationRisk=mem.recovery==null?.50:1-mem.recovery;
- if(shock.hostileDominant)continuationRisk+=.14;if(shock.directCriticalOverride&&shock.hostileDominant)continuationRisk+=.22;if(shock.supportiveDominant)continuationRisk-=.08;
- continuationRisk=clamp(continuationRisk,.05,.95);
+
+ // FAST CLOCK authority: 0-30m direction is deliberately independent of the 30-Parent recovery by 180m.
+ // A weak larger thesis can make the opposite first move MORE useful; it must never veto a valid counter scalp.
+ const hist30=Number.isFinite(mem.pOpp30)?mem.pOpp30:null;
+ const hist5=Number.isFinite(mem.pOpp)?mem.pOpp:null;
+ const flow=(+m.flowPressure||0)*finalDir;
+ let liveOpp=.50, liveVotes=0;
+ if(flow<-.20){liveOpp+=.08;liveVotes++} else if(flow>.45)liveOpp-=.06;
+ if(shock.hostileDominant){liveOpp+=.10;liveVotes++}
+ if(shock.supportiveDominant)liveOpp-=.07;
+ const rawScore=Number(r.masterScore??r.score??r.directionScore??0);
+ if(Number.isFinite(rawScore)&&rawScore>0&&rawScore<66){liveOpp+=.05;liveVotes++}
+ const rsi=+m.rsi||50;
+ if(finalDir<0&&rsi>=68){liveOpp+=.05;liveVotes++}
+ if(finalDir>0&&rsi<=32){liveOpp+=.05;liveVotes++}
+ liveOpp=clamp(liveOpp,.25,.82);
+
+ // Small samples are shrinkage-limited, but a strong 30m observation plus live opposition can still issue a PROVISIONAL counter signal.
+ const histWeight=hist30==null?0:clamp(n/10,.10,.72);
+ const fiveWeight=hist5==null?0:clamp(n/20,0,.16);
+ const priorWeight=Math.max(.10,1-histWeight-fiveWeight-.34);
+ let fastCounterP=liveOpp*.34 + prior*priorWeight;
+ if(hist30!=null)fastCounterP+=hist30*histWeight;
+ if(hist5!=null)fastCounterP+=hist5*fiveWeight;
+ const norm=0.34+priorWeight+histWeight+fiveWeight;
+ fastCounterP=clamp(fastCounterP/Math.max(norm,.01),.20,.88);
+
+ const counterDir=-finalDir,firstDir=fastCounterP>=.56?counterDir:finalDir;
+ let thesisRecovery=mem.recovery==null?.50:mem.recovery;
+ let thesisRisk=1-thesisRecovery;
+ if(shock.hostileDominant)thesisRisk+=.12;if(shock.supportiveDominant)thesisRisk-=.08;
+ thesisRisk=clamp(thesisRisk,.05,.95);
  const expectedAdvATR=mem.adv30ATR==null?.35:clamp(mem.adv30ATR,.05,3.5),targetATR=clamp(expectedAdvATR*.42,.16,.72),targetDist=targetATR*m.atr;
  const meta=r.feedMeta||{},spread=Number(meta.spread),costKnown=Number.isFinite(spread)&&spread>=0,costRatio=costKnown?spread/Math.max(targetDist,1e-9):null,costPass=costKnown?costRatio<=.18:null;
- const sampleOK=n>=8,probOK=counterP>=.61,first30OK=(mem.pOpp30==null||mem.pOpp30>=.55),excursionOK=expectedAdvATR>=.24,eventOK=!(shock.directCriticalOverride&&shock.hostileDominant),recoveryOK=continuationRisk<=.56;
+ const excursionOK=expectedAdvATR>=.20,fastProbOK=fastCounterP>=.60,liveConfirm=liveVotes>=1||hist30>=.64;
+ const provisionalStrong=hist30!=null&&hist30>=.68&&liveVotes>=1;
+ const volatilityBlock=!!(shock.directCriticalOverride&&costPass===false);
+ const fastSafe=costPass!==false&&!volatilityBlock;
+ const mature=n>=8&&fastCounterP>=.61;
  let state="NO COUNTER EDGE";
- if(sampleOK&&probOK&&first30OK&&excursionOK&&eventOK&&recoveryOK&&costPass!==false)state=costPass===null?"COUNTER WATCH":"COUNTER ACTIVE";
- else if(n>=4&&counterP>=.57&&eventOK)state="COUNTER WATCH";
+ if((fastProbOK||provisionalStrong)&&excursionOK&&liveConfirm&&fastSafe)state=mature?"COUNTER ACTIVE":"YES COUNTER • PROVISIONAL";
+ else if(fastCounterP>=.56&&fastSafe)state="COUNTER WATCH";
  else if(n<4)state="LEARNING PATHS";
+
  const price=+m.price,tp=price+counterDir*targetDist,invalid=price-counterDir*Math.max(m.atr*.48,targetDist*1.15);
- const activationMin=Number.isFinite(mem.activationMin)?clamp(Math.round(mem.activationMin/5)*5,5,180):null;return{state,finalDir,counterDir,firstDir,counterP,mem,prior,expectedAdvATR,targetATR,targetDist,tp,invalid,continuationRisk,shock,costKnown,costPass,costRatio,spread,recovery:mem.recovery,sampleOK,probOK,first30OK,excursionOK,eventOK,recoveryOK,activationMin};
+ const activationMin=Number.isFinite(mem.activationMin)?clamp(Math.round(mem.activationMin/5)*5,5,180):null;
+ const thesisFollowReady=Number.isFinite(thesisRecovery)&&thesisRecovery>=.60&&!shock.hostileDominant;
+ return{state,finalDir,counterDir,firstDir,counterP:fastCounterP,fastCounterP,liveOpp,liveVotes,mem,prior,expectedAdvATR,targetATR,targetDist,tp,invalid,continuationRisk:thesisRisk,thesisRisk,shock,costKnown,costPass,costRatio,spread,recovery:thesisRecovery,thesisFollowReady,mature,fastProbOK,provisionalStrong,liveConfirm,excursionOK,fastSafe,activationMin};
 }
 function renderPathEngine(r,events,b,dna){
  gradePathLearning(r);const p=counterPathEngine(r,events,b,dna);r.pathEngine=p;
  const dirText=d=>d>0?"BUY":d<0?"SELL":"WAIT";
- $("pathFinal").textContent=dirText(p.finalDir);$("pathFirst").textContent=p.finalDir?dirText(p.firstDir):"—";$("pathCounterP").textContent=Number.isFinite(p.counterP)?Math.round(p.counterP*100)+"%":"—";$("pathSamples").textContent=String(p.mem?.n||0);
- $("pathAdverse").textContent=Number.isFinite(p.expectedAdvATR)?p.expectedAdvATR.toFixed(2)+" ATR":"—";$("pathCapture").textContent=Number.isFinite(p.targetATR)?p.targetATR.toFixed(2)+" ATR":"—";$("pathRecovery").textContent=Number.isFinite(p.recovery)?Math.round(p.recovery*100)+"%":"—";$("pathContinue").textContent=Number.isFinite(p.continuationRisk)?Math.round(p.continuationRisk*100)+"%":"—";$("pathWindow").textContent=(p.finalDir&&p.counterP>=.56)?"0–30m":"NO EDGE";$("path30Opp").textContent=Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"—";$("pathActivation").textContent=Number.isFinite(p.activationMin)?`~${p.activationMin}m`:"LEARNING";$("pathCost").textContent=p.costKnown?(p.costPass?"PASS":"FAIL"):"UNVERIFIED";
+ $("pathFinal").textContent=dirText(p.finalDir);$("pathFirst").textContent=p.finalDir?dirText(p.firstDir):"—";$("pathCounterP").textContent=Number.isFinite(p.fastCounterP)?Math.round(p.fastCounterP*100)+"%":"—";$("pathSamples").textContent=String(p.mem?.n||0);
+ $("pathAdverse").textContent=Number.isFinite(p.expectedAdvATR)?p.expectedAdvATR.toFixed(2)+" ATR":"—";$("pathCapture").textContent=Number.isFinite(p.targetATR)?p.targetATR.toFixed(2)+" ATR":"—";$("pathRecovery").textContent=Number.isFinite(p.recovery)?Math.round(p.recovery*100)+"%":"—";$("pathContinue").textContent=Number.isFinite(p.thesisRisk)?Math.round(p.thesisRisk*100)+"%":"—";
+ $("pathWindow").textContent=(p.state==="COUNTER ACTIVE"||p.state==="YES COUNTER • PROVISIONAL")?"YES — COUNTER":p.state==="COUNTER WATCH"?"WATCH COUNTER":"NO EDGE";
+ $("path30Opp").textContent=Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"—";$("pathActivation").textContent=p.thesisFollowReady&&Number.isFinite(p.activationMin)?`~${p.activationMin}m`:p.thesisFollowReady?"WAIT TRIGGER":"THESIS WEAK";$("pathCost").textContent=p.costKnown?(p.costPass?"PASS":"FAIL"):"UNVERIFIED";
  $("pathBadge").textContent=p.state;
- if(p.state==="COUNTER ACTIVE"||p.state==="COUNTER WATCH"){
+ if(p.state==="COUNTER ACTIVE"||p.state==="YES COUNTER • PROVISIONAL"||p.state==="COUNTER WATCH"){
   const cost=p.costKnown?`spread/target ${Math.round((p.costRatio||0)*100)}% ${p.costPass?"PASS":"FAIL"}`:"live spread unavailable — cost gate unverified";
-  $("pathTradeBox").innerHTML=`<b>${p.state}: ${dirText(p.counterDir)} first → ${dirText(p.finalDir)} thesis</b><p>Counter reference ${fmt(r.main.price)} • target ${fmt(p.tp)} • invalidation ${fmt(p.invalid)} • expected counter capture ${p.targetATR.toFixed(2)} ATR • FAST CLOCK 0–30m • SLOW thesis activation ${Number.isFinite(p.activationMin)?`~${p.activationMin}m`:"learning"} • ${cost}.</p>`;
- }else $("pathTradeBox").innerHTML=`<b>${esc(p.state||"NO COUNTER EDGE")}</b><p>${p.finalDir?`Current larger thesis ${dirText(p.finalDir)}. APEX will not reverse it blindly.`:"No actionable larger-direction thesis yet."}</p>`;
- const n=p.mem?.n||0,why=[];if(n<8)why.push(`need more matched resolved paths (${n}/8)`);if(Number.isFinite(p.counterP)&&p.counterP<.61)why.push(`counter probability ${Math.round(p.counterP*100)}% below active threshold`);if(Number.isFinite(p.expectedAdvATR)&&p.expectedAdvATR<.24)why.push("historical adverse excursion too small");if(p.shock?.directCriticalOverride&&p.shock?.hostileDominant)why.push("direct hostile event shock can turn a scalp into continuation");if(p.costPass===false)why.push("spread consumes too much of target");if(p.first30OK===false)why.push("30m path does not confirm the opposite-first move");if(Number.isFinite(p.continuationRisk)&&p.continuationRisk>.56)why.push("30–180m thesis recovery too weak");
- $("pathNarrative").textContent=`GOD 4.1 separates two clocks: FAST CLOCK 0–30m seeks a statistically repeatable adverse/counter excursion; SLOW CLOCK 30–180m tests whether the original thesis recovers. ${n?`${n} close DNA paths matched; weighted 5m opposite-first probability ${Math.round(p.counterP*100)}%, 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}, expected 0–30m adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR, 180m thesis recovery ${Number.isFinite(p.recovery)?Math.round(p.recovery*100)+"%":"learning"}.`:`No mature matching path sample yet; only a restrained research prior is visible.`} ${why.length?`Not fully promoted because: ${why.join("; ")}.`:"Counter setup passed sample, path, event and cost checks."}`;
+  const confidence=p.mature?"MATURE PATH EVIDENCE":"PROVISIONAL — SMALL SAMPLE / LIVE CONFIRMATION";
+  $("pathTradeBox").innerHTML=`<b>${p.state}: ${dirText(p.counterDir)} first</b><p>${confidence}. Counter reference ${fmt(r.main.price)} • target ${fmt(p.tp)} • invalidation ${fmt(p.invalid)} • expected capture ${p.targetATR.toFixed(2)} ATR • FAST CLOCK 0–30m • ${cost}. Larger ${dirText(p.finalDir)} thesis is ${p.thesisFollowReady?"still eligible after a fresh trigger":"NOT approved for follow-through yet"}.</p>`;
+ }else $("pathTradeBox").innerHTML=`<b>${esc(p.state||"NO COUNTER EDGE")}</b><p>${p.finalDir?`Medium-term thesis ${dirText(p.finalDir)} is NOT the same as an immediate entry.`:"No actionable larger-direction thesis yet."}</p>`;
+ const n=p.mem?.n||0,why=[];if(n<8)why.push(`path sample still small (${n}/8)`);if(Number.isFinite(p.fastCounterP)&&p.fastCounterP<.60)why.push(`0–30m counter score ${Math.round(p.fastCounterP*100)}% below YES threshold`);if(Number.isFinite(p.expectedAdvATR)&&p.expectedAdvATR<.20)why.push("expected adverse excursion too small");if(p.costPass===false)why.push("spread consumes too much of target");if(!p.liveConfirm)why.push("no live short-horizon opposition confirmation");if(!p.thesisFollowReady)why.push("larger thesis recovery is weak — do not automatically flip back into the original thesis");
+ $("pathNarrative").textContent=`SCALP GOD 5.0: FAST CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; blended fast-counter score ${Math.round((p.fastCounterP||.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
  return p;
+}
+
+// APEX SCALP GOD 5.0 — INVERSE FIRST-PATH EXECUTION LAYER -------------------------
+function scalpGodDecision(r,p){
+ const dirText=d=>d>0?"BUY":d<0?"SELL":"WAIT";
+ const parent=p?.finalDir||0,counter=p?.counterDir||0,edge=Number(p?.fastCounterP)||0;
+ const costSafe=p?.costPass!==false;
+ const shockBlocked=!!(p?.shock?.directCriticalOverride&&p?.shock?.hostileDominant&&p?.costPass===false);
+ let state="NO TRADE",action="NO TRADE",grade="WAIT",reason="No validated short-horizon inverse edge.";
+ // Primary philosophy: parent APEX thesis is context only. Execution is the statistically supported FIRST PATH.
+ if(parent&&counter&&costSafe&&!shockBlocked){
+   if(p.state==="COUNTER ACTIVE"){
+     state="SCALP ACTIVE";action=`${dirText(counter)} SCALP`;grade="ACTIVE";reason="Mature first-path evidence supports the move opposite the parent thesis.";
+   }else if(p.state==="YES COUNTER • PROVISIONAL"){
+     state="SCALP PROVISIONAL";action=`${dirText(counter)} SCALP`;grade="PROVISIONAL";reason="Live first-path pressure supports the inverse scalp, but the matched-path sample is still small.";
+   }else if(p.state==="COUNTER WATCH"){
+     state="WATCH";action=`WATCH ${dirText(counter)}`;grade="WATCH";reason="Inverse path is plausible but not strong enough for a promoted scalp command.";
+   }
+ }
+ if(!costSafe){state="NO TRADE";action="NO TRADE";grade="COST FAIL";reason="Spread is too large relative to the quick target."}
+ if(!parent){state="NO TRADE";action="NO TRADE";grade="NO PARENT";reason="No directional parent thesis exists."}
+ return{state,action,grade,reason,parent,counter,edge,costSafe,entry:+r.main?.price||0,target:+p?.tp||0,invalid:+p?.invalid||0,evidence:p?.mem?.n||0,mature:!!p?.mature,window:"0–30m"};
+}
+function renderScalpGod(r,p){
+ const d=scalpGodDecision(r,p);r.scalpGod=d;
+ const dirText=x=>x>0?"BUY":x<0?"SELL":"WAIT";
+ const a=$("scalpAction"),c=$("scalpConf"),m=$("scalpMeter");
+ a.textContent=d.action;a.className="sig "+(d.action.includes("BUY")?"buy":d.action.includes("SELL")?"sell":"wait");
+ c.textContent=Number.isFinite(d.edge)?Math.round(d.edge*100)+"%":"—";m.style.width=`${clamp((d.edge||0)*100,0,100)}%`;
+ $("scalpBadge").textContent=d.grade;$("scalpParent").textContent=dirText(d.parent);$("scalpFirst").textContent=d.action.includes("BUY")?"BUY":d.action.includes("SELL")?"SELL":"WAIT";
+ $("scalpEvidence").textContent=`${d.evidence} path${d.evidence===1?"":"s"}`;$("scalpEntry").textContent=d.entry?fmt(d.entry):"—";$("scalpTarget").textContent=d.target?fmt(d.target):"—";$("scalpInvalid").textContent=d.invalid?fmt(d.invalid):"—";
+ $("scalpCost").textContent=p?.costKnown?(p.costPass?"PASS":"FAIL"):"UNVERIFIED";$("scalpReason").textContent=d.reason;
+ const parent=dirText(d.parent),opp=dirText(d.counter),sample=d.evidence,opp30=Number.isFinite(p?.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning";
+ $("scalpNarrative").innerHTML=`<b>${esc(d.action)}</b><p>Parent APEX thesis: ${esc(parent)}. SCALP GOD asks a different question: is the first 0–30m move statistically more likely to run ${esc(opp)} first? Fast score ${Math.round((d.edge||0)*100)}%, 30m opposite-first ${esc(opp30)}, matched paths ${sample}, expected adverse excursion ${Number.isFinite(p?.expectedAdvATR)?p.expectedAdvATR.toFixed(2):"—"} ATR. ${esc(d.reason)} This is a short-horizon signal only; it is not a promise of profit and it does not authorize averaging into a loss.</p>`;
+ return d;
+}
+// --------------------------------------------------------------------------
+
+// GOD 4.2 CAPITAL DEFENSE EXECUTION AUTHORITY ------------------------------
+function resolvedFirstHitCount(sym){
+ return titanJournal.filter(x=>x.sym===sym&&x.firstHit?.hit).length;
+}
+function executionAuthority(r,p){
+ const dirText=d=>d>0?"BUY":d<0?"SELL":"WAIT";
+ const n=p?.mem?.n||0,resolved=resolvedFirstHitCount(r.sym),costUnsafe=p?.costPass===false;
+ const sg=scalpGodDecision(r,p);let mode="SCALP ONLY",action=sg.action,why=[];
+ if(sg.state==="SCALP ACTIVE")mode="SCALP EXECUTION READY";
+ else if(sg.state==="SCALP PROVISIONAL")mode="SCALP SCOUT READY";
+ else if(sg.state==="WATCH")mode="SCALP WATCH";
+ else {action="NO LIVE ENTRY";if(p?.fastCounterP<.60)why.push("first-path edge below promotion threshold");if(costUnsafe)why.push("spread/target cost gate failed");if((p?.mem?.n||0)<1)why.push("no matched resolved path yet");}
+ const liveReady=mode.includes("READY");
+ $("execBadge").textContent=mode;$("execAction").textContent=action;$("execPathEvidence").textContent=`${n}/8`;$("execResolved").textContent=`${resolved}/12`;$("execSafety").textContent=costUnsafe?"COST FAIL":p?.costKnown?"PASS":"COST UNVERIFIED";
+ $("execNarrative").innerHTML=liveReady
+   ?`<b>${esc(action)}</b><p>GOD 5.0 is scalp-first. The parent ${esc(dirText(p?.finalDir))} thesis is context only and is never promoted directly into an entry by this layer. ${p?.mature?"Matched first-path evidence is mature.":"This is provisional because the sample is still developing."}</p>`
+   :`<b>NO SCALP ENTRY</b><p>${why.length?`Blocked because: ${esc(why.join("; "))}.`:"No executable 0–30m first-path edge is currently promoted."} Parent thesis remains context only.</p>`;
+ r.executionAuthority={mode,action,liveReady,n,resolved,costUnsafe,counterYes:liveReady};return r.executionAuthority;
 }
 // --------------------------------------------------------------------------
 
@@ -1948,7 +2074,7 @@ function renderBrain(r,events){
   $("changedBox").innerHTML=changes.length?changes.map(x=>`<p>⚡ ${esc(x)}</p>`).join(""):"<p>No material state change since the previous scan.</p>";
  }
  titanState[r.sym]=now;persistJSON("titan_state_v2",titanState);setTimeout(()=>vaultSave("STATE"),0);
- const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); renderPathEngine(r,events,b,mg.dna); recordJournal(r,b);renderJournal();
+ const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); const path=renderPathEngine(r,events,b,mg.dna); renderScalpGod(r,path); executionAuthority(r,path); recordJournal(r,b);renderJournal();
 }
 function waitStateFingerprint(r){
  const dna=r._dna||{},bias=String(r.consensus?.biasLabel||r.rawV||"WAIT").replace(/\s+/g," "),reason=r.consensus?.reason||"WAIT";
@@ -1974,7 +2100,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-GOD-4.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-SCALP-GOD-5.0",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,scalpAtDecision:r.scalpGod?{state:r.scalpGod.state,action:r.scalpGod.action,edge:r.scalpGod.edge,parent:r.scalpGod.parent,counter:r.scalpGod.counter,evidence:r.scalpGod.evidence,target:r.scalpGod.target,invalid:r.scalpGod.invalid}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);setTimeout(()=>vaultSave("JOURNAL"),0);
 }
 
@@ -2021,16 +2147,17 @@ async function authoritativeBestScan(sym,tf,baseEvents){
  const lock=lockInvalid?null:storedLock;
  const final=unifiedFinalVerdict(r.consensus,lock);
  const displayVerdict=final.verdict,displayConf=final.confidence;
- return {...r,...dg,events,displayVerdict,displayConf,final,lock,lockInvalid};
+ const brain=buildBrain(r,events),dna=makeDNA(r,events,brain);gradePathLearning(r);const path=counterPathEngine(r,events,brain,dna),scalp=scalpGodDecision(r,path);
+ return {...r,...dg,events,displayVerdict,displayConf,final,lock,lockInvalid,path,scalp};
 }
 $("scanAll").onclick=async()=>{
- const b=$("scanAll");b.disabled=true;b.textContent="RUNNING APEX PREDATOR GOD...";$("oppList").innerHTML='<div class="item"><p>Running the exact APEX PREDATOR GOD authority across every market…</p></div>';
+ const b=$("scanAll");b.disabled=true;b.textContent="RUNNING SCALP GOD...";$("oppList").innerHTML='<div class="item"><p>Ranking 0–30 minute first-path scalp opportunities across the basket…</p></div>';
  try{
   const base=await ensureEvents(),tf=$("tf").value,basket=["BTC/USD","ETH/USD","XAU/USD","EUR/USD","USD/JPY"],rows=[];
   for(const s of basket){try{rows.push(await authoritativeBestScan(s,tf,base));}catch(e){rows.push({sym:s,error:e.message,displayVerdict:"NO TRADE",displayConf:0,gate:"WAIT"});}await new Promise(r=>setTimeout(r,220));}
-  const gateRank=x=>x.error?3:x.gate==="PASS"?0:x.gate==="WAIT"?1:2;rows.sort((a,b)=>gateRank(a)-gateRank(b)||(b.displayConf||0)-(a.displayConf||0)||Math.abs(b.total||0)-Math.abs(a.total||0));
-  const min=+$("minConf").value,shown=rows.filter(x=>!x.error&&((x.displayConf||0)>=Math.min(min,72)||x.gate==="PASS")).slice(0,6);
-  $("oppList").innerHTML=shown.length?shown.map((x,i)=>{const c=x.consensus||{},lockTxt=x.lock?.direction?` • ACTIVE ${x.lock.direction} LOCK`:"",label=x.gate==="PASS"?"WORLD BRAIN PASS":x.gate==="REJECT"?"WORLD BRAIN REJECT":"WORLD BRAIN WAIT";const detail=`${x.align}/${x.valid} TF • ${Math.round((c.uncertainty||0)*100)}% uncertainty • ${x.news?.items?.length||0} direct news • ${x.tf.toUpperCase()}`,proof=x.memN?` • analogs ${x.memN} ${x.memVote||""}`:"";return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(x.displayVerdict)}">${x.displayVerdict}</span></b><small>${detail}</small><small><b>${label}</b> • ${esc(c.reason||"")}${proof}${lockTxt}</small></div><div class="right"><b>${x.displayConf}%</b><small>GOD AUTHORITY</small></div></div>`;}).join(""):'<div class="item"><p>No market met the current display threshold. BEST NOW and WORLD BRAIN are using the same decision authority.</p></div>';
+  const scalpRank=x=>x.error?9:x.scalp?.state==="SCALP ACTIVE"?0:x.scalp?.state==="SCALP PROVISIONAL"?1:x.scalp?.state==="WATCH"?2:5;rows.sort((a,b)=>scalpRank(a)-scalpRank(b)||(b.scalp?.edge||0)-(a.scalp?.edge||0)||(b.path?.expectedAdvATR||0)-(a.path?.expectedAdvATR||0));
+  const shown=rows.filter(x=>!x.error).slice(0,6);
+  $("oppList").innerHTML=shown.length?shown.map((x,i)=>{const sg=x.scalp||{},p=x.path||{},parent=p.finalDir>0?"BUY":p.finalDir<0?"SELL":"WAIT",act=sg.action||"NO TRADE",cls=act.includes("BUY")?"buy":act.includes("SELL")?"sell":"wait",edge=Math.round((sg.edge||0)*100),opp30=Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning";return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${cls}">${esc(act)}</span></b><small>Parent ${parent} • first-path edge ${edge}% • 30m opposite-first ${opp30} • ${p.mem?.n||0} matched paths</small><small><b>${esc(sg.grade||"WAIT")}</b> • expected counter excursion ${Number.isFinite(p.expectedAdvATR)?p.expectedAdvATR.toFixed(2):"—"} ATR • cost ${p.costKnown?(p.costPass?"PASS":"FAIL"):"UNVERIFIED"}</small></div><div class="right"><b>${edge}%</b><small>SCALP EDGE</small></div></div>`;}).join(""):'<div class="item"><p>No scalp candidates returned.</p></div>';
  }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`;}finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES";}
 }
 
@@ -2046,7 +2173,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 4.1 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 4.2 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -2113,15 +2240,15 @@ renderJournal();renderVaultStatus();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("APEX PREDATOR GOD 4.1"),"page version/title consistency");
+  req(document.title.includes("APEX PREDATOR GOD 4.2"),"page version/title consistency");
   req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
   req(unifiedFinalVerdict({finalVerdict:"STRONG SELL",confidence:83},{direction:"SELL",verdict:"STRONG SELL",modelScore:83}).verdict==="STRONG SELL","locked STRONG verdict preservation");
   req(typeof vaultSave==="function"&&typeof vaultRecoverIfSafer==="function","Memory Vault loaded");
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
-  req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","GOD 4.1 Dual Path Engine loaded");
+  req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","GOD 4.2 Counter-First Dual Clock Engine loaded");
  }catch(e){failures.push(e.message||String(e))}
  window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"GOD-4.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 4.1");
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 4.2");
 })();
 
 (function titanIntegrityCheck(){
@@ -2142,14 +2269,14 @@ renderJournal();renderVaultStatus();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX PREDATOR GOD 4.1 integrity PASS ✓ Dual Path Engine, compact loss/path ledger, Unified Final Verdict, Memory Vault, event arbitration and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX PREDATOR GOD 4.2 integrity PASS ✓ Capital Defense + Dual Path Engine, compact loss/path ledger, Unified Final Verdict, Memory Vault, event arbitration and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"APEX-PREDATOR-GOD-4.1",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),pathLedger:readStoredJSON(APEX_PATH_KEY,[]),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-SCALP-GOD-5.0",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),pathLedger:readStoredJSON(APEX_PATH_KEY,[]),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };

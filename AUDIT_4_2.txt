@@ -1,0 +1,11 @@
+version: APEX PREDATOR GOD 4.2 COUNTER-FIRST
+fuzz_iterations: 1000000
+fuzz_failures: 0
+dom_ids: 181
+duplicate_ids: []
+missing_dollar_refs: []
+js_syntax: PASS (node --check)
+service_worker_syntax: PASS (node --check)
+manifest_json: PASS
+design_rule: FAST CLOCK counter qualification is independent of SLOW CLOCK thesis recovery. Weak 180m recovery cannot veto a valid 0-30m counter alert.
+provisional_rule: A 30m opposite-first estimate >=68% plus at least one live opposing confirmation may issue YES COUNTER • PROVISIONAL when cost/excursion gates pass; it is not labeled mature evidence.
