@@ -1,0 +1,23 @@
+{
+  "version": "APEX-SCALP-GOD-6.9.0",
+  "sourceSha256": "42f64ee668ecd67bb616feb58ed826605c41ac119db6922e888e32d1a565f778",
+  "scenarios": 1000000,
+  "seed": "0x69c0ffee",
+  "elapsedMs": 446,
+  "passed": true,
+  "liveCount": 26364,
+  "waitCount": 973636,
+  "invalidGeom": 500248,
+  "hydraVeto": 526410,
+  "costVeto": 220420,
+  "dataVeto": 179971,
+  "proofCases": 199746,
+  "invariants": [
+    "ENTER iff final execution authority is complete",
+    "Every non-live command is WAIT — NO LIVE TRADE",
+    "No live entry/SL/TP levels leak while WAIT",
+    "BUY/SELL text matches authorized direction",
+    "BEST NOW can never label ENTER from scalp state alone",
+    "Every non-live BEST NOW row begins with WAIT"
+  ]
+}

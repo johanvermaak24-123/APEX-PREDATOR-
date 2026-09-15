@@ -1,34 +1,80 @@
-APEX SCALP GOD 6.8.2 — ENTRY CLARITY
-TEST REPORT — 15 September 2026
+APEX SCALP GOD 6.9.0 — EXECUTION COMMAND
+FINAL AUDIT REPORT — 15 September 2026
+========================================
 
-ENTRY CLARITY TARGETS
-1. LIVE ENTRY WORDING
-   PASS — when the internal live-ready state is reached, SCALP COMMAND CENTER action is ENTER BUY NOW or ENTER SELL NOW (including COUNTER direction wording where applicable).
-   PASS — Execution Authority badge becomes ENTER NOW only when sg.fire + Fortress + Hydra live authority all pass.
-   PASS — non-live states remain NO LIVE ENTRY, PROOF ONLY, RESEARCH ARMED, WATCH or NO TRADE.
+RESULT: PASS
 
-2. EDGE / THESIS SEMANTICS
-   PASS — Trigger Readiness uses ACTIVE THESIS / THESIS READY, not ACTIVE EDGE.
-   PASS — Proof Status remains the separate authority for EDGE UNPROVEN / SCOUT / CONFIRMED.
-   PASS — ARMED is user-facing RESEARCH ARMED, preventing it from looking like an entry instruction.
+A. 1,000,000-SCENARIO EXECUTION-AUTHORITY AUDIT
+------------------------------------------------
+Exact source tested: executionCommandFromParts() and BEST NOW display/ranking
+functions extracted directly from app.js.
 
-3. BEST NOW SEMANTICS
-   PASS — public ranking label is ENTER > PROOF > RESEARCH ARMED > WATCH > setup score.
-   PASS — internal FIRE NOW state is retained only for backward-compatible logic/ranking and is translated to ENTER in the UI.
+Scenarios:                 1,000,000
+Deterministic seed:        0x69c0ffee
+Result:                    PASS
+Live-authorized cases:     26,364
+WAIT cases:                973,636
+Invalid-geometry cases:    500,248
+Hydra-veto cases:          526,410
+Execution/cost-veto cases: 220,420
+Data-integrity-veto cases: 179,971
+PROOF-state cases:         199,746
 
-4. COST / NEWS / PROOF REGRESSION
-   PASS — 6.8.1 cost-authority distinction remains: RESEARCH PROXY PASS • LIVE VETO when broker costs are unverified.
-   PASS — canonical news count logic remains unchanged.
-   PASS — APEX_PROOF_EPOCH and existing storage keys remain unchanged, so this hotfix does not reset forward proof or memory.
+Properties asserted on every scenario:
+- ENTER exists if and only if complete final execution authority is true.
+- Every non-live final command is WAIT — NO LIVE TRADE.
+- Non-live states cannot leak live entry / SL / TP levels.
+- BUY/SELL wording always matches the authorized direction.
+- BEST NOW cannot label ENTER from scalp/FIRE state alone.
+- Every non-live BEST NOW row begins with WAIT.
 
-STATIC / PACKAGE CHECKS
+Targeted regressions also passed:
+- PROOF-only + otherwise healthy inputs => WAIT.
+- Cost/execution veto => WAIT.
+- Hydra veto => WAIT.
+- Complete SELL authority => ENTER SELL NOW.
+
+B. STATIC / PACKAGE INTEGRITY
+-----------------------------
 PASS — node --check app.js
 PASS — node --check embedded index.html JavaScript
 PASS — node --check sw.js
 PASS — manifest.webmanifest parses as valid JSON
-PASS — 313 unique HTML IDs; 0 duplicate IDs
-PASS — 259 literal JS DOM references checked; 0 missing IDs
-PASS — page title/version constants are 6.8.2
+PASS — 326 HTML IDs / 326 unique / 0 duplicate IDs
+PASS — 290 literal JavaScript DOM references / 0 missing IDs
+PASS — embedded index.html JavaScript exactly matches app.js
+PASS — no 6.8.2 version references remain in the deployed source
+PASS — 6.9.0 page/app version consistency
 
-IMPORTANT
-These tests verify implementation consistency and entry-label behavior. They do not prove trading profitability or future market direction.
+C. MEMORY / PROOF COMPATIBILITY
+-------------------------------
+PASS — storage-like key set unchanged versus 6.8.2 (23 old / 23 new;
+       0 removed / 0 added)
+PASS — apex_memory_vault_v4_0 unchanged
+PASS — apex_path_ledger_v4 unchanged
+PASS — apex_6_8_forward_proof_epoch unchanged
+PASS — titan_active_signals_v2 unchanged
+PASS — titan_world_brain_memory unchanged
+PASS — 6.8_FORWARD proof eligibility remains in place
+
+D. FAIL-CLOSED UI / AUTHORITY REGRESSIONS
+-----------------------------------------
+PASS — main APEX EXECUTION COMMAND is the only final ENTER/WAIT authority
+PASS — SCALP COMMAND CENTER cannot show ENTER unless final arbiter passes
+PASS — lot sizing cannot issue live lot unless final arbiter passes
+PASS — Harvest ENTRY READY additionally requires Fortress pass
+PASS — BEST NOW stale/failed scans cannot leave a previous ENTER visible
+PASS — starting any fresh scan suspends the previous live command
+PASS — live ENTER command expires after the 120-second freshness window
+PASS — return-from-background freshness check demotes stale live command
+PASS — BEST NOW comparison does not mutate the normal scan race guard
+
+SOURCE SHA256 USED BY THE 1M AUDIT
+42f64ee668ecd67bb616feb58ed826605c41ac119db6922e888e32d1a565f778  app.js
+
+LIMITATION / TRUTH STATEMENT
+This is a one-million-scenario software logic/property audit, not one million
+real trades or one million external market-data requests. It verifies that the
+application cannot display ENTER when its own final authority requirements are
+not met. It does not prove trading profitability, future price direction, feed
+availability, or broker execution quality.

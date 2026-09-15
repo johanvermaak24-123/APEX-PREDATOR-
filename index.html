@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX SCALP GOD 6.8.2 — ENTRY CLARITY</title>
+<title>APEX SCALP GOD 6.9.0 — EXECUTION COMMAND</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -120,11 +120,16 @@ button.primary, #scan, #scanAll {
 .gateRow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid #172532;font-size:10px}.gateRow:last-child{border-bottom:0}.gatePass{color:var(--green);font-weight:900}.gateFail{color:var(--amber);font-weight:900}.gateBlock{color:var(--red);font-weight:900}
 .miniPill{display:inline-block;padding:4px 7px;border:1px solid #28465d;border-radius:999px;font-size:9px;font-weight:900;margin:2px 3px 2px 0;color:#a7dfff;background:#0a1b28}
 
+/* 6.9 single-source execution command */
+.executionCommand{border:1px solid #365a72;background:linear-gradient(135deg,rgba(8,25,37,.99),rgba(6,13,20,.99));border-radius:18px;padding:15px;margin:10px 0 14px;box-shadow:0 0 38px rgba(91,232,255,.06)}
+.commandTop{display:flex;justify-content:space-between;gap:10px;align-items:center}.commandTop span:first-child{font-size:11px;font-weight:1000;letter-spacing:.8px;color:#fff}.commandAction,.bestNowAction{font-size:38px;line-height:1.02;font-weight:1000;margin:10px 0 6px;letter-spacing:-.7px}.commandContext{font-size:11px;color:#a6bbcc;line-height:1.45}.commandGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px}.commandGrid .k{min-height:68px}.commandReason{font-size:11px;line-height:1.5;color:#a9bdcd;margin-top:10px;padding-top:10px;border-top:1px solid #193042}.bestNowSummary{margin-top:10px}.bestNowAction{font-size:28px}.finalAuthority{margin-top:8px;padding:8px 10px;border:1px solid #20394b;border-radius:11px;background:#071019;font-size:10px;color:#9db3c6}.finalAuthority b{color:#fff}
+@media(max-width:700px){.commandAction{font-size:34px}.commandGrid{grid-template-columns:repeat(2,1fr)}.bestNowAction{font-size:25px}}
+
 </style>
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 6.8.2 • PROOF ENGINE</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 6.9.0 • EXECUTION COMMAND</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -146,6 +151,19 @@ button.primary, #scan, #scanAll {
    <button id="scan">🔄 UPDATE / SCAN MARKET</button>
    <div class="small" style="margin-top:8px">Manual mode: APEX only pulls fresh market/news data when you press UPDATE / SCAN MARKET. The last signal stays on screen between scans. No paid market-data key is required.</div>
    <div class="grid3" style="margin-top:10px"><div class="k"><span>Data mode</span><b>FREE / MANUAL</b></div><div class="k"><span>Last update</span><b id="manualLastUpdate">NEVER</b></div><div class="k"><span>API credits</span><b>NOT REQUIRED</b></div></div>
+  </div>
+
+  <div class="executionCommand" id="executionCommandCard">
+   <div class="commandTop"><span>🎯 APEX EXECUTION COMMAND</span><span id="commandBadge" class="badge">WAIT</span></div>
+   <div id="commandAction" class="commandAction wait">WAIT — NO LIVE TRADE</div>
+   <div id="commandContext" class="commandContext">Run a fresh scan. Parent thesis and research candidates cannot override final execution authority.</div>
+   <div class="commandGrid">
+    <div class="k"><span>LIVE ENTRY</span><b id="commandEntry">—</b></div>
+    <div class="k"><span>INVALIDATION / SL</span><b id="commandInvalid">—</b></div>
+    <div class="k"><span>QUICK TARGET</span><b id="commandTarget">—</b></div>
+    <div class="k"><span>FORWARD PROOF</span><b id="commandProof">0 forward / 0 effective</b></div>
+   </div>
+   <div id="commandReason" class="commandReason">Only this card is the final live-trade command. ENTER appears only after proof, verified costs, fresh data, Fortress, Hydra and geometry all pass.</div>
   </div>
 
   <div class="card">
@@ -180,6 +198,7 @@ button.primary, #scan, #scanAll {
     <div class="k"><span>Invalidation</span><b id="scalpInvalid">—</b></div>
     <div class="k"><span>Cost gate</span><b id="scalpCost">—</b></div>
    </div>
+   <div class="finalAuthority">FINAL LIVE AUTHORITY: <b id="scalpLiveAuth">NO LIVE ENTRY</b> — this research card never overrides the APEX Execution Command above.</div>
    <div id="scalpNarrative" class="item" style="margin-top:10px"><b>THESIS ≠ ENTRY</b><p>APEX SCALP GOD uses the larger APEX thesis as a parent setup, then independently models whether the first 0–30 minute move is likely to run the opposite way. It never reverses blindly.</p></div>
   </div>
 
@@ -407,7 +426,7 @@ button.primary, #scan, #scanAll {
   <div class="card" id="executionAuthorityCard">
    <div class="title"><h3>🛡️ EXECUTION AUTHORITY / CAPITAL DEFENSE</h3><span id="execBadge" class="badge">THESIS ONLY</span></div>
    <div class="grid4">
-    <div class="k"><span>Live action</span><b id="execAction">NO LIVE ENTRY</b></div>
+    <div class="k"><span>Live action</span><b id="execAction">WAIT — NO LIVE TRADE</b></div>
     <div class="k"><span>Path evidence</span><b id="execPathEvidence">0/8</b></div>
     <div class="k"><span>Resolved outcomes</span><b id="execResolved">0/12</b></div>
     <div class="k"><span>Cost / event safety</span><b id="execSafety">CHECKING</b></div>
@@ -606,8 +625,13 @@ button.primary, #scan, #scanAll {
  <section id="oppsTab" class="hidden">
   <div class="card">
    <div class="title"><h3>🔥 WHAT SHOULD I TRADE RIGHT NOW?</h3><span class="badge">BASKET SCAN</span></div>
-   <div class="small">Runs APEX SCALP GOD across the basket. BEST NOW compares continuation, reversal and parent-counter scalps independently. <b>Ranking priority is ENTER → PROOF → RESEARCH ARMED → WATCH → setup score</b>; setup score alone does not decide #1. A parent thesis is optional context — WAIT no longer kills the short-horizon engine.</div>
+   <div class="small">Runs APEX SCALP GOD across the basket. BEST NOW compares continuation, reversal and parent-counter scalps independently. <b>FINAL COMMAND wins: ENTER → PROOF → RESEARCH ARMED → WATCH → setup score.</b> Every non-live candidate is forced to begin with WAIT so research states cannot look like trade instructions. A parent thesis is optional context.</div>
    <button id="scanAll">SCAN BEST OPPORTUNITIES</button>
+   <div class="executionCommand bestNowSummary">
+    <div class="commandTop"><span>FINAL BASKET COMMAND</span><span id="bestNowBadge" class="badge">WAIT</span></div>
+    <div id="bestNowAction" class="bestNowAction wait">NOT SCANNED YET</div>
+    <div id="bestNowReason" class="commandContext">Run the basket scan. If no candidate has complete live authority, this stays NO LIVE TRADE RIGHT NOW.</div>
+   </div>
    <div id="oppList" style="margin-top:8px"><div class="item"><p>Not scanned yet.</p></div></div>
   </div>
  </section>
@@ -681,7 +705,7 @@ function persistJSON(key,value){
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
-const APEX_APP_VERSION="APEX-SCALP-GOD-6.8.2";
+const APEX_APP_VERSION="APEX-SCALP-GOD-6.9.0";
 const APEX_VAULT_KEY="apex_memory_vault_v4_0";
 const APEX_VAULT_MAX=2;
 const APEX_VAULT_CLEAR_KEY="apex_memory_vault_intentional_clear_ms";
@@ -2117,7 +2141,7 @@ function renderPathEngine(r,events,b,dna){
   $("pathTradeBox").innerHTML=`<b>${p.state}: ${dirText(p.counterDir)} first</b><p>${confidence}. Counter reference ${fmt(r.main.price)} • target ${fmt(p.tp)} • invalidation ${fmt(p.invalid)} • expected capture ${p.targetATR.toFixed(2)} ATR • FAST CLOCK 0–30m • ${cost}. Larger ${dirText(p.finalDir)} thesis is ${p.thesisFollowReady?"still eligible after a fresh trigger":"NOT approved for follow-through yet"}.</p>`;
  }else $("pathTradeBox").innerHTML=`<b>${esc(p.state||"NO COUNTER EDGE")}</b><p>${p.finalDir?`Medium-term thesis ${dirText(p.finalDir)} is NOT the same as an immediate entry.`:"No actionable larger-direction thesis yet."}</p>`;
  const n=p.mem?.n||0,why=[];if(n<8)why.push(`path sample still small (${n}/8)`);if(Number.isFinite(p.benchExpATR)&&p.benchExpATR<=0)why.push(`historical counter benchmark expectancy ${p.benchExpATR.toFixed(3)} ATR is not positive`);if(p.criticalShockBlock)why.push("critical event shock favors continuation; inverse fade blocked");if(Number.isFinite(p.decisionP)&&p.decisionP<.60)why.push(`0–30m decision score ${Math.round(p.decisionP*100)}% below YES threshold`);if(Number.isFinite(p.expectedAdvATR)&&p.expectedAdvATR<.20)why.push("expected adverse excursion too small");if(p.costPass===false)why.push("spread consumes too much of target");if(!p.liveConfirm)why.push("no live short-horizon opposition confirmation");if(!p.thesisFollowReady)why.push("larger thesis recovery is weak — do not automatically flip back into the original thesis");
- $("pathNarrative").textContent=`SCALP GOD 6.8.2: LEGACY COUNTER CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; state-fused decision score ${Math.round((p.decisionP??p.fastCounterP??.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR; counter benchmark ${Number.isFinite(p.benchExpATR)?p.benchExpATR.toFixed(3)+" ATR/trade":"learning"}; conservative win floor ${Math.round((p.benchLCB||0)*100)}%.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
+ $("pathNarrative").textContent=`SCALP GOD 6.9.0: LEGACY COUNTER CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; state-fused decision score ${Math.round((p.decisionP??p.fastCounterP??.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR; counter benchmark ${Number.isFinite(p.benchExpATR)?p.benchExpATR.toFixed(3)+" ATR/trade":"learning"}; conservative win floor ${Math.round((p.benchLCB||0)*100)}%.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
  return p;
 }
 
@@ -2248,9 +2272,9 @@ function opportunityDuel(r,p){
  if(parent&&p?.counterDir){const base=clamp(.58*(p.decisionP??p.fastCounterP??.5)+.22*(m.reversalFitness||0)+.12*(1-(m.pathEfficiency||.5))+.08*(p.liveConfirm?1:0),0,1);add('PARENT COUNTER',p.counterDir,base,!!(p.criticalShockBlock||p.microFadeVeto))}
  const circuit=circuitBreakerState(r.sym);for(const c of candidates){c.trigger=universalTrigger(r,c);if(c.veto)c.score*=.55;const mem=c.mem,eff=mem.effectiveN||0,histOK=eff>=APEX_DUEL_MIN_N&&Number.isFinite(mem.expLower)&&mem.expLower>0&&Number.isFinite(mem.holdoutAvg)&&mem.holdoutAvg>0&&mem.fdrPass===true;c.histOK=histOK;c.fire=!circuit.block&&!c.veto&&c.score>=.74&&c.trigger.state==='TRIGGERED'&&c.trigger.costPass&&c.trigger.costVerified&&c.trigger.netRR>=1.20&&histOK}
  candidates.sort((a,b)=>(b.fire-a.fire)||((b.trigger.state==='TRIGGERED')-(a.trigger.state==='TRIGGERED'))||(b.score-a.score)||(b.trigger.score-a.trigger.score));const best=candidates[0]||null;if(!best)return{state:'NO TRADE',action:'NO TRADE',grade:'WAIT',reason:circuit.block?`Circuit breaker: ${circuit.reasons.join('; ')}`:'No directional M5 candidate exists yet.',parent,counter:0,edge:0,evidence:0,effectiveEvidence:0,entry:+m.price||0,target:0,invalid:0,window:'0–30m',candidates:[],circuitBreaker:circuit};
- const dirText=d=>d>0?'BUY':'SELL',isCounter=!!parent&&best.dir===-parent,prefix=isCounter?'COUNTER ':'';let state='NO TRADE',action='NO TRADE',grade='WAIT';if(best.fire){state='FIRE NOW';action=`ENTER ${dirText(best.dir)} NOW — ${prefix}${dirText(best.dir)} SCALP`;grade='LIVE ENTRY'}else if(best.trigger.state==='TRIGGERED'){state='PROOF';action=`TRIGGERED — PROOF ONLY — ${prefix}${dirText(best.dir)} SCALP`;grade='BUILDING EVIDENCE'}else if(best.score>=.64&&best.trigger.state==='ARMED'){state='ARMED';action=`RESEARCH ARMED — ${prefix}${dirText(best.dir)} SCALP`;grade='RESEARCH ARMED'}else if(best.score>=.56){state='WATCH';action=`WATCH ${prefix}${dirText(best.dir)}`;grade='WATCH'}
+ const dirText=d=>d>0?'BUY':'SELL',isCounter=!!parent&&best.dir===-parent,prefix=isCounter?'COUNTER ':'';let state='NO TRADE',action='WAIT — NO LIVE TRADE',grade='WAIT';if(best.fire){state='FIRE NOW';action=`ENTER ${dirText(best.dir)} NOW`;grade='LIVE ENTRY'}else if(best.trigger.state==='TRIGGERED'){state='PROOF';action=`WAIT — PROOF ONLY — ${prefix}${dirText(best.dir)} SCALP`;grade='BUILDING EVIDENCE'}else if(best.score>=.64&&best.trigger.state==='ARMED'){state='ARMED';action=`WAIT — RESEARCH ARMED — ${prefix}${dirText(best.dir)} SCALP`;grade='RESEARCH ARMED'}else if(best.score>=.56){state='WATCH';action=`WAIT — WATCH ${prefix}${dirText(best.dir)}`;grade='WATCH'}
  const mem=best.mem||{},proof=`${mem.n||0} forward / ${mem.effectiveN||0} effective • boot floor ${Number.isFinite(mem.expLower)?mem.expLower.toFixed(2):'—'}R • holdout ${Number.isFinite(mem.holdoutAvg)?mem.holdoutAvg.toFixed(2):'—'}R • FDR ${mem.fdrPass?'PASS':'WAIT'}`;
- const reason=circuit.block?`Circuit breaker active: ${circuit.reasons.join('; ')}.`:best.veto?`${best.mode} candidate vetoed by current M5 proxy state.`:state==='FIRE NOW'?`${best.mode} has fresh timing, verified broker costs and positive forward out-of-sample expectancy (${proof}); LIVE ENTRY is authorized.`:state==='PROOF'?`${best.mode} trigger fired, but live entry authority is withheld (${proof}; cost ${best.trigger.costVerified?'VERIFIED':'UNVERIFIED'}).`:state==='ARMED'?`${best.mode} leads, but this is RESEARCH ARMED only; the live entry trigger is not complete yet.`:`${best.mode} is strongest, but setup/trigger quality is below live threshold.`;
+ const reason=circuit.block?`Circuit breaker active: ${circuit.reasons.join('; ')}.`:best.veto?`${best.mode} candidate vetoed by current M5 proxy state.`:state==='FIRE NOW'?`${best.mode} has fresh timing, verified broker costs and positive forward out-of-sample expectancy (${proof}); candidate is promoted to FINAL GATE CHECK, not live ENTER until Fortress and Hydra also pass.`:state==='PROOF'?`${best.mode} trigger fired, but live entry authority is withheld (${proof}; cost ${best.trigger.costVerified?'VERIFIED':'UNVERIFIED'}).`:state==='ARMED'?`${best.mode} leads, but this is RESEARCH ARMED only; the live entry trigger is not complete yet.`:`${best.mode} is strongest, but setup/trigger quality is below live threshold.`;
  return{state,action,grade,reason,parent,counter:best.dir,isCounter,edge:best.score,evidence:best.mem.n,effectiveEvidence:best.mem.effectiveN||0,entry:best.trigger.entry||+m.price||0,target:best.trigger.target||0,invalid:best.trigger.stop||0,window:'0–30m',mode:best.mode,trigger:best.trigger,fire:best.fire,candidates,bestMem:best.mem,histOK:best.histOK,circuitBreaker:circuit}
 }
 // --------------------------------------------------------------------------
@@ -2359,13 +2383,13 @@ function harvestEconomics(r,p,d){
  const bal=Math.max(1,Number($("harvestBalance")?.value)||20),goal=Math.max(.01,Number($("harvestGoal")?.value)||.25),goalPct=goal/bal,t=d?.trigger||{},mem=d?.bestMem||{};
  const riskPct=clamp(Number($("riskPct")?.value)||.5,.1,1),maxLoss=bal*riskPct/100,hydraOK=!r?.hydra?.retired&&(r?.hydra?.toxicity??0)<.78&&(r?.hydra?.fragility??0)<.84,truthOK=!!d?.fire;
  const be=Number.isFinite(t.netRR)&&t.netRR>0?1/(1+t.netRR):null,empP=Number.isFinite(mem.hit)?mem.hit:null,surplus=Number.isFinite(empP)&&Number.isFinite(be)?empP-be:null,ev=Number.isFinite(mem.avg)?mem.avg:null;
- const cb=d?.circuitBreaker||circuitBreakerState(r.sym),verdict=cb.block?"CIRCUIT BLOCK":truthOK&&hydraOK?"ENTRY READY":truthOK?"HYDRA VETO":d?.state==="PROOF"?"PROOF ONLY":d?.state==="ARMED"?"RESEARCH ARMED":"WAIT";
+ const fortressOK=!!r?.fortress?.pass,cb=d?.circuitBreaker||circuitBreakerState(r.sym),verdict=cb.block?"CIRCUIT BLOCK":truthOK&&hydraOK&&fortressOK?"ENTRY READY":truthOK&&!fortressOK?"EXECUTION VETO":truthOK?"HYDRA VETO":d?.state==="PROOF"?"PROOF ONLY":d?.state==="ARMED"?"RESEARCH ARMED":"WAIT";
  return{bal,goal,goalPct,rr:t.netRR??null,grossRR:t.grossRR??null,maxLoss,riskPct,authority:d?.grade||"WAIT",verdict,be,surplus,ev,empP,friction:Number.isFinite(t.frictionShare)?t.frictionShare:null,target:d?.target||null,price:+(r.feedMeta?.spot??r.main?.price)||0,mem};
 }
 function lotSizingAuthority(r,d,h){
- const minLot=Math.max(.001,Number($("minLot")?.value)||.01),tickSize=Number($("tickSize")?.value),tickValue=Number($("tickValue")?.value),step=minLot>=.01?.01:.001,mem=d?.bestMem||{},t=d?.trigger||{},proofStrong=(mem.effectiveN||0)>=50&&Number.isFinite(mem.expLower)&&mem.expLower>.05&&Number.isFinite(mem.holdoutAvg)&&mem.holdoutAvg>.05&&mem.fdrPass===true&&(mem.avg||0)>=.10&&Number.isFinite(t.netRR)&&t.netRR>=1.25;
- let authority=!d?.fire?"NO LIVE LOT":proofStrong?"CONFIRMED FORWARD EDGE — NORMAL RISK ONLY":"MINIMUM / BASE RISK ONLY",suggested=null,riskDollar=null,verified=false;const stopDist=Math.abs((+t.entry||0)-(+t.stop||0));
- if(d?.fire&&tickSize>0&&tickValue>0&&stopDist>0){const riskPerLot=(stopDist/tickSize)*tickValue,raw=h.maxLoss/Math.max(riskPerLot,1e-9),floor=x=>Math.floor(x/step+1e-9)*step;verified=true;if(raw<minLot){authority="SKIP — MIN LOT EXCEEDS RISK";suggested=0;riskDollar=riskPerLot*minLot}else{suggested=proofStrong?Math.max(minLot,floor(raw)):minLot;riskDollar=riskPerLot*suggested;if(riskDollar>h.maxLoss*1.001){authority="SKIP — RISK TOO HIGH";suggested=0}}}else if(d?.fire&&!verified){authority=proofStrong?"BROKER SPECS REQUIRED":"NO LOT — $RISK UNVERIFIED"}return{authority,suggested,riskDollar,verified,proofStrong,minLot}
+ const minLot=Math.max(.001,Number($("minLot")?.value)||.01),tickSize=Number($("tickSize")?.value),tickValue=Number($("tickValue")?.value),step=minLot>=.01?.01:.001,mem=d?.bestMem||{},t=d?.trigger||{},proofStrong=(mem.effectiveN||0)>=50&&Number.isFinite(mem.expLower)&&mem.expLower>.05&&Number.isFinite(mem.holdoutAvg)&&mem.holdoutAvg>.05&&mem.fdrPass===true&&(mem.avg||0)>=.10&&Number.isFinite(t.netRR)&&t.netRR>=1.25,finalLive=executionCommandFromParts(d,r?.fortress||{},r?.hydra||{}).liveReady;
+ let authority=!finalLive?"NO LIVE LOT":proofStrong?"CONFIRMED FORWARD EDGE — NORMAL RISK ONLY":"MINIMUM / BASE RISK ONLY",suggested=null,riskDollar=null,verified=false;const stopDist=Math.abs((+t.entry||0)-(+t.stop||0));
+ if(finalLive&&tickSize>0&&tickValue>0&&stopDist>0){const riskPerLot=(stopDist/tickSize)*tickValue,raw=h.maxLoss/Math.max(riskPerLot,1e-9),floor=x=>Math.floor(x/step+1e-9)*step;verified=true;if(raw<minLot){authority="SKIP — MIN LOT EXCEEDS RISK";suggested=0;riskDollar=riskPerLot*minLot}else{suggested=proofStrong?Math.max(minLot,floor(raw)):minLot;riskDollar=riskPerLot*suggested;if(riskDollar>h.maxLoss*1.001){authority="SKIP — RISK TOO HIGH";suggested=0}}}else if(finalLive&&!verified){authority=proofStrong?"BROKER SPECS REQUIRED":"NO LOT — $RISK UNVERIFIED"}return{authority,suggested,riskDollar,verified,proofStrong,minLot,finalLive}
 }
 function renderHarvestVault(r,p,d){
  const h=harvestEconomics(r,p,d),lot=lotSizingAuthority(r,d,h),cb=renderCircuit(r.sym);r.harvestEconomics=h;r.lotAuthority=lot;const cs=$("costSource");if(cs)cs.textContent=d?.trigger?.costSource||"UNVERIFIED";
@@ -2402,8 +2426,8 @@ function renderProofAuthority(r,d){
 
 function renderScalpGod(r,p){
  resolveDuelTape(r);const d=scalpGodDecision(r,p);r.scalpGod=d;r.opportunityDuel=d;recordDuelCandidates(r,d);renderRobustCourt(r,p);renderProofAuthority(r,d);renderMicroCourt(r,p);renderTimingTrapCourt(r,p);renderSniper(r,p);renderHydraCourt(r,p);renderFortress(r,p);renderHarvestVault(r,p,d);
- const dirText=x=>x>0?"BUY":x<0?"SELL":"WAIT",a=$("scalpAction"),c=$("scalpConf"),m=$("scalpMeter");a.textContent=d.action;a.className="sig "+(d.action.includes("BUY")?"buy":d.action.includes("SELL")?"sell":"wait");c.textContent=Math.round((d.edge||0)*100)+"/100";m.style.width=`${clamp((d.edge||0)*100,0,100)}%`;$("scalpBadge").textContent=d.grade;$("scalpParent").textContent=dirText(d.parent);$("scalpFirst").textContent=d.mode||"WAIT";$("scalpWindow").textContent=d.window||"0–30m";$("scalpEvidence").textContent=`${d.evidence||0} forward / ${d.effectiveEvidence||0} effective`;$("scalpEntry").textContent=d.entry?fmt(d.entry):"—";$("scalpTarget").textContent=d.target?fmt(d.target):"—";$("scalpInvalid").textContent=d.invalid?fmt(d.invalid):"—";$("scalpCost").textContent=d.trigger?.costVerified?"VERIFIED PASS":d.trigger?.costPass?"PROXY ONLY":"UNVERIFIED / FAIL";$("scalpReason").textContent=d.reason;
- $("scalpNarrative").innerHTML=`<b>${esc(d.action)}</b><p>6.8 uses closed M5 data for setup timing, M1 post-entry resolution and a clean mode-specific ledger. Setup score ${Math.round((d.edge||0)*100)}/100 is NOT a probability. Forward ${esc(d.mode||"NONE")} cases ${d.evidence||0} nominal / ${d.effectiveEvidence||0} effective; bootstrap floor ${Number.isFinite(d.bestMem?.expLower)?d.bestMem.expLower.toFixed(2)+'R':'—'}; holdout ${Number.isFinite(d.bestMem?.holdoutAvg)?d.bestMem.holdoutAvg.toFixed(2)+'R':'—'}; FDR ${d.bestMem?.fdrPass?'PASS':'WAIT'}. ENTER requires empirical authority and verified broker-cost inputs; zero-history triggers are PROOF ONLY, never ENTER.</p>`;return d;
+ const dirText=x=>x>0?"BUY":x<0?"SELL":"WAIT",finalCmd=executionCommandFromParts(d,r.fortress||{},r.hydra||{}),a=$("scalpAction"),c=$("scalpConf"),m=$("scalpMeter"),displayAction=finalCmd.liveReady?finalCmd.action:(String(d.action||"").startsWith("ENTER")?`WAIT — ${finalCmd.stage}`:d.action);a.textContent=displayAction;a.className="sig "+(finalCmd.liveReady?(finalCmd.direction>0?"buy":"sell"):"wait");c.textContent=Math.round((d.edge||0)*100)+"/100";m.style.width=`${clamp((d.edge||0)*100,0,100)}%`;$("scalpBadge").textContent=finalCmd.liveReady?"LIVE ENTRY":d.grade;$("scalpParent").textContent=dirText(d.parent);$("scalpFirst").textContent=d.mode||"WAIT";$("scalpWindow").textContent=d.window||"0–30m";$("scalpEvidence").textContent=`${d.evidence||0} forward / ${d.effectiveEvidence||0} effective`;$("scalpEntry").textContent=d.entry?fmt(d.entry):"—";$("scalpTarget").textContent=d.target?fmt(d.target):"—";$("scalpInvalid").textContent=d.invalid?fmt(d.invalid):"—";$("scalpLiveAuth").textContent=finalCmd.liveReady?"AUTHORIZED":`NO LIVE ENTRY • ${finalCmd.stage}`;$("scalpCost").textContent=d.trigger?.costVerified?"VERIFIED PASS":d.trigger?.costPass?"PROXY ONLY":"UNVERIFIED / FAIL";$("scalpReason").textContent=finalCmd.liveReady?finalCmd.reason:d.reason;
+ $("scalpNarrative").innerHTML=`<b>${esc(displayAction)}</b><p>6.8 uses closed M5 data for setup timing, M1 post-entry resolution and a clean mode-specific ledger. Setup score ${Math.round((d.edge||0)*100)}/100 is NOT a probability. Forward ${esc(d.mode||"NONE")} cases ${d.evidence||0} nominal / ${d.effectiveEvidence||0} effective; bootstrap floor ${Number.isFinite(d.bestMem?.expLower)?d.bestMem.expLower.toFixed(2)+'R':'—'}; holdout ${Number.isFinite(d.bestMem?.holdoutAvg)?d.bestMem.holdoutAvg.toFixed(2)+'R':'—'}; FDR ${d.bestMem?.fdrPass?'PASS':'WAIT'}. ENTER requires empirical authority and verified broker-cost inputs; zero-history triggers are PROOF ONLY, never ENTER.</p>`;return d;
 }
 // --------------------------------------------------------------------------
 
@@ -2411,10 +2435,10 @@ function renderScalpGod(r,p){
 // GOD 6.8 OPPORTUNITY DUEL FORTRESS / FAIL-CLOSED KERNEL ------------------------
 const APEX_SCAN_GUARD={lastKey:"",lastAt:0};
 function finiteN(x){return typeof x==="number"&&Number.isFinite(x)}
-function fortressKernel(r,p){
+function fortressKernel(r,p,opts={}){
  const now=Date.now(),reasons=[],meta=r?.feedMeta||{},price=Number(meta.spot??r?.main?.price),spread=Number(meta.spread),marketState=String(meta.data_state?.market_state||"unknown").toLowerCase(),reportedAge=Number(meta.data_state?.age_seconds),tsAge=Number.isFinite(+meta.quoteTimestampMs)?Math.max(0,(now-(+meta.quoteTimestampMs))/1000):Infinity,ageSec=Number.isFinite(reportedAge)?reportedAge:tsAge;
  const dataOK=finiteN(price)&&price>0&&Array.isArray(r?.raw5)&&r.raw5.length>=20;if(!dataOK)reasons.push("market data malformed/incomplete");const stateOK=marketState==="open";if(!stateOK)reasons.push(`market state is ${marketState||"unknown"} — only explicit OPEN is tradeable`);const freshOK=stateOK&&Number.isFinite(ageSec)&&ageSec>=0&&ageSec<=120;if(!freshOK)reasons.push(`market data stale/unverified (${Number.isFinite(ageSec)?Math.round(ageSec)+'s':'unknown age'})`);const quoteOK=Number.isFinite(spread)&&spread>0&&spread<price*.002;if(!quoteOK)reasons.push("spread/quote sanity failed, zero, excessive or unknown");
- const storageOK=!window.__apexStorageDegraded&&(()=>{try{const t="__apex68_probe__";localStorage.setItem(t,"1");const ok=localStorage.getItem(t)==="1";localStorage.removeItem(t);return ok}catch(e){return false}})();if(!storageOK)reasons.push("storage integrity unavailable/degraded");const key=`${r?.sym||"?"}|${(r.res?.["5min"]||r.main)?.barTime||""}|${r?.rawV||r?.v||""}`,dup=key&&APEX_SCAN_GUARD.lastKey===key&&(now-APEX_SCAN_GUARD.lastAt)<1200;if(!dup){APEX_SCAN_GUARD.lastKey=key;APEX_SCAN_GUARD.lastAt=now}else reasons.push("duplicate/race scan guard");
+ const storageOK=!window.__apexStorageDegraded&&(()=>{try{const t="__apex68_probe__";localStorage.setItem(t,"1");const ok=localStorage.getItem(t)==="1";localStorage.removeItem(t);return ok}catch(e){return false}})();if(!storageOK)reasons.push("storage integrity unavailable/degraded");const key=`${r?.sym||"?"}|${(r.res?.["5min"]||r.main)?.barTime||""}|${r?.rawV||r?.v||""}`,raceCheck=opts?.raceCheck!==false,dup=!!(raceCheck&&key&&APEX_SCAN_GUARD.lastKey===key&&(now-APEX_SCAN_GUARD.lastAt)<1200);if(raceCheck&&!dup){APEX_SCAN_GUARD.lastKey=key;APEX_SCAN_GUARD.lastAt=now}else if(dup)reasons.push("duplicate/race scan guard");
  const d=r?.opportunityDuel||null,hasCandidate=!!d?.trigger,execOK=!hasCandidate||((d.trigger.costPass===true)&&(d.trigger.costVerified===true)&&Number.isFinite(d.trigger.netRR)&&d.trigger.netRR>=1.20);if(hasCandidate&&!d.trigger.costVerified)reasons.push("broker cost authority unverified — spread + tick size/value required");const integrityPass=dataOK&&freshOK&&quoteOK&&stateOK&&storageOK&&!dup,pass=integrityPass&&execOK,authority=!integrityPass?"HARD BLOCK":execOK?"FORTRESS PASS":"EXECUTION VETO";return{pass,integrityPass,dataOK,freshOK,quoteOK,stateOK,storageOK,raceOK:!dup,execOK,ageSec,reasons,marketState,authority}
 }
 function renderFortress(r,p){
@@ -2427,10 +2451,49 @@ function resolvedFirstHitCount(sym){
  // Count every resolved outcome, including SL-first losses. The old predicate counted wins only.
  return titanJournal.filter(x=>x.sym===sym&&x.firstHit?.resolved).length;
 }
+function executionCommandFromParts(sg,fortress,hydra){
+ const f=fortress||{},h=hydra||{},dir=Math.sign(Number(sg?.counter)||0),geometryReady=[sg?.entry,sg?.target,sg?.invalid].every(x=>Number.isFinite(+x)&&+x>0),hydraPass=!h.retired&&!h.staleEdge&&Number(h.toxicity)<.78&&Number(h.fragility)<.84;
+ const liveReady=!!(sg?.fire===true&&f.pass===true&&f.integrityPass===true&&f.execOK===true&&hydraPass&&geometryReady&&(dir===1||dir===-1));
+ let stage='WAIT',rankTier=5;
+ if(liveReady){stage='ENTER';rankTier=0}
+ else if(f.integrityPass===false){stage='HARD BLOCK';rankTier=6}
+ else if(f.execOK===false){stage='EXECUTION VETO';rankTier=5}
+ else if(sg?.fire===true&&!hydraPass){stage='HYDRA VETO';rankTier=5}
+ else if(sg?.state==='PROOF'){stage='PROOF ONLY';rankTier=1}
+ else if(sg?.state==='ARMED'){stage='RESEARCH ARMED';rankTier=2}
+ else if(sg?.state==='WATCH'){stage='WATCH';rankTier=3}
+ else if(sg?.fire===true&&!geometryReady){stage='GEOMETRY BLOCK';rankTier=5}
+ const action=liveReady?(dir>0?'ENTER BUY NOW':'ENTER SELL NOW'):'WAIT — NO LIVE TRADE';
+ const candidateDir=dir>0?'BUY':dir<0?'SELL':'NONE',isCounter=!!sg?.isCounter,descriptor=candidateDir==='NONE'?'NO DIRECTION':`${isCounter?'COUNTER ':''}${candidateDir} ${sg?.mode||'SETUP'}`;
+ const reason=liveReady?`${sg?.mode||'Opportunity'} cleared proof, verified execution costs, Fortress, Hydra and final geometry.`:stage==='HARD BLOCK'?`Market/data integrity is blocked: ${(f.reasons||[]).join('; ')||'fail-closed integrity gate'}.`:stage==='EXECUTION VETO'?`Candidate exists, but verified execution-cost geometry has not cleared.`:stage==='HYDRA VETO'?`Candidate proof passed, but state/flow freshness or fragility vetoed live execution.`:stage==='PROOF ONLY'?`Trigger fired, but forward evidence is not yet sufficient for live authority.`:stage==='RESEARCH ARMED'?`Research setup is armed, but the live trigger/proof stack is incomplete.`:stage==='WATCH'?`Directional setup is being watched; no live trigger is authorized.`:stage==='GEOMETRY BLOCK'?`A promoted setup has invalid or incomplete live entry geometry.`:(sg?.reason||'No promoted live opportunity.');
+ return{liveReady,action,stage,rankTier,direction:dir,candidateDir,descriptor,showLevels:liveReady,entry:liveReady?+sg.entry:null,target:liveReady?+sg.target:null,invalid:liveReady?+sg.invalid:null,reason};
+}
+function executionCommandDecision(r,p,sgOverride=null,fortressOverride=null,hydraOverride=null){
+ const sg=sgOverride||r?.opportunityDuel||scalpGodDecision(r,p),fortress=fortressOverride||r?.fortress||fortressKernel(r,p),hydra=hydraOverride||r?.hydra||hydraCourt(r,p),cmd=executionCommandFromParts(sg,fortress,hydra);return{...cmd,sg,fortress,hydra};
+}
+let APEX_COMMAND_EXPIRY_TIMER=null,APEX_BESTNOW_EXPIRY_TIMER=null;
+function expireLiveCommandUI(reason='Freshness window expired — run UPDATE / SCAN MARKET again.'){
+ const a=$("commandAction"),b=$("commandBadge");if(a){a.textContent='WAIT — RESCAN REQUIRED';a.className='commandAction wait'}if(b)b.textContent='STALE';for(const id of ['commandEntry','commandInvalid','commandTarget']){const e=$(id);if(e)e.textContent='—'}const c=$("commandContext");if(c)c.textContent='Previous live authority expired • manual mode requires a fresh scan';const n=$("commandReason");if(n)n.textContent=reason;const ea=$("execAction");if(ea)ea.textContent='WAIT — NO LIVE TRADE';const eb=$("execBadge");if(eb)eb.textContent='STALE — RESCAN';const sa=$("scalpAction");if(sa){sa.textContent='WAIT — RESCAN REQUIRED';sa.className='sig wait'}const sb=$("scalpBadge");if(sb)sb.textContent='STALE';const sl=$("scalpLiveAuth");if(sl)sl.textContent='EXPIRED — RESCAN';window.__apexLiveCommandIssuedAt=0;
+}
+function scheduleLiveCommandExpiry(liveReady){
+ if(APEX_COMMAND_EXPIRY_TIMER){clearTimeout(APEX_COMMAND_EXPIRY_TIMER);APEX_COMMAND_EXPIRY_TIMER=null}if(!liveReady){window.__apexLiveCommandIssuedAt=0;return}window.__apexLiveCommandIssuedAt=Date.now();APEX_COMMAND_EXPIRY_TIMER=setTimeout(()=>expireLiveCommandUI(),121000);
+}
+function expireBestNowUI(){const a=$("bestNowAction"),b=$("bestNowBadge"),r=$("bestNowReason");if(a){a.textContent='NO LIVE TRADE — RESCAN REQUIRED';a.className='bestNowAction wait'}if(b)b.textContent='STALE';if(r)r.textContent='The previous basket command exceeded the 120-second freshness window. Run SCAN BEST OPPORTUNITIES again.';window.__apexBestNowIssuedAt=0;}
+function scheduleBestNowExpiry(liveReady){if(APEX_BESTNOW_EXPIRY_TIMER){clearTimeout(APEX_BESTNOW_EXPIRY_TIMER);APEX_BESTNOW_EXPIRY_TIMER=null}if(!liveReady){window.__apexBestNowIssuedAt=0;return}window.__apexBestNowIssuedAt=Date.now();APEX_BESTNOW_EXPIRY_TIMER=setTimeout(expireBestNowUI,121000);}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){if(window.__apexLiveCommandIssuedAt&&Date.now()-window.__apexLiveCommandIssuedAt>120000)expireLiveCommandUI();if(window.__apexBestNowIssuedAt&&Date.now()-window.__apexBestNowIssuedAt>120000)expireBestNowUI();}});
+function renderExecutionCommand(r,p,cmd=null){
+ const c=cmd||executionCommandDecision(r,p),sg=c.sg||r?.opportunityDuel||{},a=$("commandAction"),b=$("commandBadge");if(!a||!b)return c;
+ a.textContent=c.action;a.className='commandAction '+(c.liveReady?(c.direction>0?'buy':'sell'):'wait');b.textContent=c.liveReady?'LIVE ENTRY AUTHORIZED':c.stage;
+ $("commandContext").textContent=`Parent ${sg.parent>0?'BUY':sg.parent<0?'SELL':'WAIT'} • Candidate ${c.descriptor} • ${c.stage}`;
+ $("commandEntry").textContent=c.showLevels?fmt(c.entry):'—';$("commandInvalid").textContent=c.showLevels?fmt(c.invalid):'—';$("commandTarget").textContent=c.showLevels?fmt(c.target):'—';$("commandProof").textContent=`${sg.evidence||0} forward / ${sg.effectiveEvidence||0} effective`;
+ $("commandReason").textContent=c.liveReady?`${c.reason} Live levels below are executable model levels; lot/risk authority remains separate.`:`${c.reason} APEX will not display live entry/SL/TP levels here until every execution gate clears.`;scheduleLiveCommandExpiry(c.liveReady);
+ return c;
+}
 function executionAuthority(r,p){
- const sg=r.opportunityDuel||scalpGodDecision(r,p),fortress=r.fortress||fortressKernel(r,p),resolved=resolvedFirstHitCount(r.sym),n=sg?.evidence||0,eff=sg?.effectiveEvidence||sg?.bestMem?.effectiveN||0,hydra=r.hydra||hydraCourt(r,p),hydraPass=!hydra.retired&&!hydra.staleEdge&&hydra.toxicity<.78&&hydra.fragility<.84,liveReady=!!(sg?.fire&&fortress.pass&&hydraPass),mode=!fortress.integrityPass?"HARD BLOCK":!fortress.execOK?"EXECUTION VETO":sg?.fire&&!hydraPass?"HYDRA VETO":liveReady?"ENTER NOW":sg?.state==="PROOF"?"PROOF ONLY — NO LIVE ENTRY":sg?.state==="ARMED"?"RESEARCH ARMED — WAIT TRIGGER":sg?.state==="WATCH"?"SCALP WATCH":"RESEARCH / WAIT",action=liveReady?sg.action:"NO LIVE ENTRY",why=[];
- if(!fortress.integrityPass)why.push(`Fortress: ${fortress.reasons.join("; ")}`);if(!fortress.execOK)why.push("verified net execution geometry failed");if(sg?.fire&&!hydraPass)why.push(`Hydra veto: toxicity ${Math.round(hydra.toxicity*100)}% / fragility ${Math.round(hydra.fragility*100)}%${hydra.staleEdge?' / stale evidence':''}`);if(!sg?.fire)why.push(sg?.reason||"no promoted opportunity");
- $("execBadge").textContent=mode;$("execAction").textContent=action;$("execPathEvidence").textContent=`${n} forward / ${eff} effective`;$("execResolved").textContent=`${eff}/${APEX_DUEL_MIN_N} effective`;$("execSafety").textContent=fortress.integrityPass&&fortress.execOK?"DATA + COST PASS":fortress.integrityPass?"COST VETO":"DATA BLOCK";$("execNarrative").innerHTML=liveReady?`<b>${esc(sg.action)}</b><p>${esc(sg.mode||"OPPORTUNITY")} passed the 6.8 forward truth ledger, verified net cost geometry, fresh M5 trigger, Fortress and Hydra. ENTER NOW means live timing authority has cleared; lot/risk authority remains separate.</p>`:`<b>NO LIVE ENTRY</b><p>${esc(why.join("; "))}.</p>`;r.executionAuthority={mode,action,liveReady,scoutOnly:sg?.state==="PROOF",n,effectiveN:eff,resolved,costUnsafe:!fortress.execOK,counterYes:liveReady};return r.executionAuthority
+ const sg=r.opportunityDuel||scalpGodDecision(r,p),fortress=r.fortress||fortressKernel(r,p),resolved=resolvedFirstHitCount(r.sym),n=sg?.evidence||0,eff=sg?.effectiveEvidence||sg?.bestMem?.effectiveN||0,hydra=r.hydra||hydraCourt(r,p),cmd=executionCommandDecision(r,p,sg,fortress,hydra),liveReady=cmd.liveReady,mode=liveReady?'ENTER NOW':cmd.stage,action=cmd.action,why=[];
+ if(!fortress.integrityPass)why.push(`Fortress: ${fortress.reasons.join('; ')}`);if(!fortress.execOK)why.push('verified net execution geometry failed');if(sg?.fire&&!liveReady&&cmd.stage==='HYDRA VETO')why.push(`Hydra veto: toxicity ${Math.round(hydra.toxicity*100)}% / fragility ${Math.round(hydra.fragility*100)}%${hydra.staleEdge?' / stale evidence':''}`);if(!sg?.fire)why.push(sg?.reason||'no promoted opportunity');if(sg?.fire&&!cmd.showLevels)why.push('live geometry incomplete');
+ $("execBadge").textContent=mode;$("execAction").textContent=action;$("execPathEvidence").textContent=`${n} forward / ${eff} effective`;$("execResolved").textContent=`${eff}/${APEX_DUEL_MIN_N} effective`;$("execSafety").textContent=fortress.integrityPass&&fortress.execOK?'DATA + COST PASS':fortress.integrityPass?'COST VETO':'DATA BLOCK';$("execNarrative").innerHTML=liveReady?`<b>${esc(action)}</b><p>${esc(sg.mode||'OPPORTUNITY')} passed the 6.8 forward truth ledger, verified net cost geometry, fresh M5 trigger, Fortress, Hydra and geometry sanity. ENTER NOW means live timing authority has cleared; lot/risk authority remains separate.</p>`:`<b>WAIT — NO LIVE TRADE</b><p>${esc((why.length?why:[cmd.reason]).join('; '))}.</p>`;
+ const out={mode,action,liveReady,stage:cmd.stage,scoutOnly:sg?.state==='PROOF',n,effectiveN:eff,resolved,costUnsafe:!fortress.execOK,counterYes:liveReady,command:cmd};r.executionAuthority=out;r.executionCommand=cmd;renderExecutionCommand(r,p,cmd);return out;
 }
 // --------------------------------------------------------------------------
 
@@ -2655,7 +2718,7 @@ function renderEvents(events){
 }
 const _lastManual=+readStoredText("titan_last_manual_update","0")||0;if(_lastManual&&$("manualLastUpdate"))$("manualLastUpdate").textContent=new Date(_lastManual).toLocaleString();
 $("refreshEvents").onclick=async()=>{$("eventList").innerHTML='<div class="item"><p>Refreshing world news...</p></div>';cachedEvents=await worldEvents(true);renderEvents(cachedEvents)}
-$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev);persistText("titan_last_manual_update",Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+readStoredText("titan_last_manual_update","0")).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("conf");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds."}finally{b.disabled=false;b.textContent="🔄 UPDATE / SCAN MARKET"}}
+$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";scheduleLiveCommandExpiry(false);const ca0=$("commandAction");if(ca0){ca0.textContent="WAIT — SCANNING";ca0.className="commandAction wait"}const cb0=$("commandBadge");if(cb0)cb0.textContent="SCANNING";const cr0=$("commandReason");if(cr0)cr0.textContent="Previous live authority is suspended while fresh market/news data is being validated.";for(const id of ["commandEntry","commandInvalid","commandTarget"]){const e=$(id);if(e)e.textContent="—"}const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev);persistText("titan_last_manual_update",Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+readStoredText("titan_last_manual_update","0")).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("conf");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds.";const ca=$("commandAction");if(ca){ca.textContent="WAIT — NO LIVE TRADE";ca.className="commandAction wait"}const cb=$("commandBadge");if(cb)cb.textContent="HARD BLOCK";const cr=$("commandReason");if(cr)cr.textContent="Fresh verified market data failed. APEX is fail-closed and will not show live entry levels."}finally{b.disabled=false;b.textContent="🔄 UPDATE / SCAN MARKET"}}
 
 
 function deepGateForBest(r,events){
@@ -2677,13 +2740,13 @@ function unifiedFinalVerdict(consensus,lock=null){
  return{verdict:c.finalVerdict||"WAIT",confidence:Number(c.confidence)||0,direction:actionableDirection(c.finalVerdict||""),source:"MASTER CONSENSUS",locked:false};
 }
 function bestNowStateRank(x){
- const s=String(x?.scalp?.state||"").toUpperCase();
- return x?.error?9:s==="FIRE NOW"?0:s==="PROOF"?1:s==="ARMED"?2:s==="WATCH"?3:5;
+ if(x?.error)return 9;const c=x?.command;if(c&&Number.isFinite(c.rankTier))return c.rankTier;const s=String(x?.scalp?.state||"").toUpperCase();return s==="PROOF"?1:s==="ARMED"?2:s==="WATCH"?3:5;
 }
 function bestNowCompare(a,b){
  return bestNowStateRank(a)-bestNowStateRank(b)||((b?.scalp?.edge||0)-(a?.scalp?.edge||0))||((b?.scalp?.trigger?.score||0)-(a?.scalp?.trigger?.score||0));
 }
-function bestNowRankLabel(x){const s=String(x?.scalp?.state||"NO TRADE").toUpperCase();return s==="FIRE NOW"?"ENTER":s==="PROOF"?"PROOF":s==="ARMED"?"RESEARCH ARMED":s==="WATCH"?"WATCH":"NO TRADE";}
+function bestNowRankLabel(x){const c=x?.command;if(c?.liveReady)return "ENTER";if(c?.stage==="PROOF ONLY")return "PROOF";if(c?.stage==="RESEARCH ARMED")return "RESEARCH ARMED";if(c?.stage==="WATCH")return "WATCH";return c?.stage||"WAIT";}
+function bestNowDisplayAction(x){const c=x?.command,sg=x?.scalp||{};if(c?.liveReady)return c.action;const dir=sg.counter>0?'BUY':sg.counter<0?'SELL':'',prefix=sg.isCounter?'COUNTER ':'';if(c?.stage==='PROOF ONLY')return `WAIT — PROOF ONLY${dir?' — '+prefix+dir+' SCALP':''}`;if(c?.stage==='RESEARCH ARMED')return `WAIT — RESEARCH ARMED${dir?' — '+prefix+dir+' SCALP':''}`;if(c?.stage==='WATCH')return `WAIT — WATCH${dir?' — '+prefix+dir:''}`;return `WAIT — ${c?.stage||'NO LIVE TRADE'}`;}
 async function authoritativeBestScan(sym,tf,baseEvents){
  const specific=await symbolWorldEvents(sym).catch(()=>[]),events=mergeEventFeeds(baseEvents,specific);
  const r=await scanSymbol(sym,tf,events);r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;r.consensus=decisionConsensus(r,events);
@@ -2691,18 +2754,19 @@ async function authoritativeBestScan(sym,tf,baseEvents){
  const lock=lockInvalid?null:storedLock;
  const final=unifiedFinalVerdict(r.consensus,lock);
  const displayVerdict=final.verdict,displayConf=final.confidence;
- const brain=buildBrain(r,events),dna=makeDNA(r,events,brain);gradePathLearning(r);resolveDuelTape(r);const path=counterPathEngine(r,events,brain,dna),scalp=scalpGodDecision(r,path);
- return {...r,...dg,events,displayVerdict,displayConf,final,lock,lockInvalid,path,scalp};
+ const brain=buildBrain(r,events),dna=makeDNA(r,events,brain);gradePathLearning(r);resolveDuelTape(r);const path=counterPathEngine(r,events,brain,dna),scalp=scalpGodDecision(r,path);r.opportunityDuel=scalp;r.scalpGod=scalp;const fortress=fortressKernel(r,path,{raceCheck:false}),hydra=hydraCourt(r,path),command=executionCommandFromParts(scalp,fortress,hydra);
+ return {...r,...dg,events,displayVerdict,displayConf,final,lock,lockInvalid,path,scalp,fortress,hydra,command};
 }
 $("scanAll").onclick=async()=>{
- const b=$("scanAll");b.disabled=true;b.textContent="RUNNING SCALP GOD...";$("oppList").innerHTML='<div class="item"><p>Ranking continuation, reversal and counter scalp opportunities across the basket…</p></div>';
+ const b=$("scanAll");b.disabled=true;b.textContent="RUNNING SCALP GOD...";scheduleBestNowExpiry(false);$("bestNowBadge").textContent="SCANNING";$("bestNowAction").textContent="WAIT — SCANNING BASKET";$("bestNowAction").className="bestNowAction wait";$("bestNowReason").textContent="Previous basket authority is suspended until every symbol finishes the fresh scan.";$("oppList").innerHTML='<div class="item"><p>Ranking continuation, reversal and counter scalp opportunities across the basket…</p></div>';
  try{
   const base=await ensureEvents(),tf=$("tf").value,basket=["BTC/USD","ETH/USD","XAU/USD","EUR/USD","USD/JPY"],rows=[];
   for(const s of basket){try{rows.push(await authoritativeBestScan(s,tf,base));}catch(e){rows.push({sym:s,error:e.message,displayVerdict:"NO TRADE",displayConf:0,gate:"WAIT"});}await new Promise(r=>setTimeout(r,220));}
   rows.sort(bestNowCompare);
   const shown=rows.filter(x=>!x.error).slice(0,6);
-  $("oppList").innerHTML=(shown.length?shown.map((x,i)=>{const sg=x.scalp||{},act=sg.action||"NO TRADE",cls=act.includes("BUY")?"buy":act.includes("SELL")?"sell":"wait",edge=Math.round((sg.edge||0)*100),parent=sg.parent>0?"BUY":sg.parent<0?"SELL":"WAIT",rankLabel=bestNowRankLabel(x);return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${cls}">${esc(act)}</span></b><small>Rank priority <b>${rankLabel}</b> • Mode ${esc(sg.mode||"NONE")} • parent ${parent}</small><small>setup ${edge}/100 • ${sg.evidence||0} forward / ${sg.effectiveEvidence||0} effective • trigger ${Math.round((sg.trigger?.score||0)*100)}% • R:R ${Number.isFinite(sg.trigger?.rr)?sg.trigger.rr.toFixed(2):"—"}</small></div><div class="right"><b>${rankLabel}</b><small>${edge}% SETUP</small></div></div>`;}).join(""):'<div class="item"><p>No scalp candidates returned.</p></div>')+`<div class="small" style="margin-top:10px">Ranking is execution-readiness first: ENTER → PROOF → RESEARCH ARMED → WATCH → setup score. ENTER appears only when live execution authority has cleared. A lower setup score can rank above a higher one when its trigger state is more mature.</div>`;
- }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`;}finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES";}
+  const live=shown.find(x=>x.command?.liveReady),lead=shown[0]||null;if(live){$("bestNowBadge").textContent="LIVE ENTRY";$("bestNowAction").textContent=`${live.sym} • ${live.command.action}`;$("bestNowAction").className="bestNowAction "+(live.command.direction>0?"buy":"sell");$("bestNowReason").textContent=`Final execution authority cleared. ${live.command.reason}`;}else{$("bestNowBadge").textContent="WAIT";$("bestNowAction").textContent="NO LIVE TRADE RIGHT NOW";$("bestNowAction").className="bestNowAction wait";$("bestNowReason").textContent=lead?`Nearest research candidate: ${lead.sym} • ${bestNowDisplayAction(lead)}. ${lead.command?.reason||lead.scalp?.reason||"No live authority."}`:"No valid basket candidates returned.";}scheduleBestNowExpiry(!!live);
+  $("oppList").innerHTML=(shown.length?shown.map((x,i)=>{const sg=x.scalp||{},act=bestNowDisplayAction(x),cls=x.command?.liveReady?(x.command.direction>0?"buy":"sell"):"wait",edge=Math.round((sg.edge||0)*100),parent=sg.parent>0?"BUY":sg.parent<0?"SELL":"WAIT",rankLabel=bestNowRankLabel(x);return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${cls}">${esc(act)}</span></b><small>Rank priority <b>${esc(rankLabel)}</b> • Mode ${esc(sg.mode||"NONE")} • parent ${parent}</small><small>setup ${edge}/100 • ${sg.evidence||0} forward / ${sg.effectiveEvidence||0} effective • trigger ${Math.round((sg.trigger?.score||0)*100)}% • R:R ${Number.isFinite(sg.trigger?.rr)?sg.trigger.rr.toFixed(2):"—"}</small></div><div class="right"><b>${esc(rankLabel)}</b><small>${edge}% SETUP</small></div></div>`;}).join(""):'<div class="item"><p>No scalp candidates returned.</p></div>')+`<div class="small" style="margin-top:10px">FINAL COMMAND is authoritative: ENTER only when the complete execution stack clears. Every non-live candidate begins with WAIT, even when a research trigger has fired.</div>`;
+ }catch(e){scheduleBestNowExpiry(false);$("bestNowBadge").textContent="HARD BLOCK";$("bestNowAction").textContent="NO LIVE TRADE — SCAN FAILED";$("bestNowAction").className="bestNowAction wait";$("bestNowReason").textContent="Basket scan failed validation. Previous live authority remains suspended until a complete fresh scan succeeds.";$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`;}finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES";}
 }
 
 const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
@@ -2717,7 +2781,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 6.8.2 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 6.9.0 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -2755,7 +2819,7 @@ setInterval(titanAutoMemorySave,20000);
 
 for(const id of ["brokerSpread","commissionLot","slippageMult","tickSize","tickValue"]){const e=$(id);if(e)e.addEventListener("change",()=>persistCostInputs($("symbol")?.value||""))}
 if($("symbol"))$("symbol").addEventListener("change",()=>{loadCostInputs($("symbol").value);renderCircuit($("symbol").value)});loadCostInputs($("symbol")?.value||"");renderCircuit($("symbol")?.value||"");
-if($("exportTruthLedger"))$("exportTruthLedger").onclick=()=>{const blob=new Blob([JSON.stringify({schema:4,appVersion:APEX_APP_VERSION,proofEpoch:APEX_PROOF_EPOCH,exportedAt:new Date().toISOString(),episodes:apexDuelTape},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`APEX_6_8_2_PROOF_LEDGER_${Date.now()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+if($("exportTruthLedger"))$("exportTruthLedger").onclick=()=>{const blob=new Blob([JSON.stringify({schema:4,appVersion:APEX_APP_VERSION,proofEpoch:APEX_PROOF_EPOCH,exportedAt:new Date().toISOString(),episodes:apexDuelTape},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`APEX_6_9_0_PROOF_LEDGER_${Date.now()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 
 if("serviceWorker" in navigator){
  let titanSwReloaded=false;
@@ -2788,22 +2852,25 @@ renderJournal();renderVaultStatus();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("6.8.2")&&APEX_APP_VERSION==="APEX-SCALP-GOD-6.8.2","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
+  req(document.title.includes("6.9.0")&&APEX_APP_VERSION==="APEX-SCALP-GOD-6.9.0","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
   req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
+  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","6.9 single final execution command loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","6.9 live-command freshness expiry loaded");
+  const _cmdWait=executionCommandFromParts({fire:false,state:"PROOF",counter:1,entry:100,target:101,invalid:99},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdWait.liveReady&&_cmdWait.action==="WAIT — NO LIVE TRADE"&&!_cmdWait.showLevels,"PROOF can never masquerade as ENTER");
+  const _cmdLive=executionCommandFromParts({fire:true,state:"FIRE NOW",counter:-1,entry:100,target:99,invalid:101},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(_cmdLive.liveReady&&_cmdLive.action==="ENTER SELL NOW"&&_cmdLive.showLevels,"ENTER requires complete final authority");
   req(pathCostAuthorityLabel({costKnown:true,costPass:true},false).includes("LIVE VETO"),"research proxy cost PASS cannot masquerade as live cost authority");
   const _nr=newsRadarView({news:{items:[{severity:3},{severity:0}]}},[{title:"a"},{title:"b"}]);req(_nr.totalRelevant===2&&_nr.global===2&&_nr.high===1,"canonical news totals use one relevant set");
-  req(bestNowCompare({scalp:{state:"ARMED",edge:.60,trigger:{score:.60}}},{scalp:{state:"WATCH",edge:.90,trigger:{score:.90}}})<0,"BEST NOW readiness-first ranking semantics");
+  req(bestNowCompare({command:{rankTier:2},scalp:{state:"ARMED",edge:.60,trigger:{score:.60}}},{command:{rankTier:3},scalp:{state:"WATCH",edge:.90,trigger:{score:.90}}})<0,"BEST NOW readiness-first ranking semantics");req(bestNowRankLabel({command:{liveReady:false,stage:"PROOF ONLY"},scalp:{state:"FIRE NOW"}})!=="ENTER","BEST NOW cannot display ENTER from scalp state alone");
   req(unifiedFinalVerdict({finalVerdict:"STRONG SELL",confidence:83},{direction:"SELL",verdict:"STRONG SELL",modelScore:83}).verdict==="STRONG SELL","locked STRONG verdict preservation");
   req(typeof vaultSave==="function"&&typeof vaultRecoverIfSafer==="function","Memory Vault loaded");
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
   req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","Counter-First Dual Clock Engine loaded");req(typeof renderMicroCourt==="function","6.2 Flow Proxy Court loaded");req(typeof renderHydraCourt==="function"&&typeof hydraCourt==="function","6.3 Epistemic Hydra loaded");req(typeof renderTimingTrapCourt==="function"&&typeof thesisTimingTrap==="function","6.8 Thesis Timing Trap loaded");req(typeof fortressKernel==="function"&&typeof renderFortress==="function","6.8 Adversarial Fortress loaded");req(typeof opportunityDuel==="function"&&typeof universalTrigger==="function","6.8 Measurement Truth Duel loaded");req(typeof renderHarvestVault==="function"&&typeof harvestEconomics==="function","6.2 Net Edge Harvest Vault loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"6.8.2"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 6.8.2");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"6.9.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 6.9.0");
 })();
 
 (function titanIntegrityCheck(){
- const required=["signal","status","conf","meter","riskBox","covHeadlines","covSources","covThemes","covKeywords",
+ const required=["signal","status","conf","meter","riskBox","commandBadge","commandAction","commandContext","commandEntry","commandInvalid","commandTarget","commandProof","commandReason","bestNowBadge","bestNowAction","bestNowReason","scalpLiveAuth","covHeadlines","covSources","covThemes","covKeywords",
  "proofAuthBadge","proofCodeStatus","proofForwardStatus","proofCostStatus","proofEdgeStatus","proofValidationNarrative","ensBadge","wTech","wNews","wCausal","wTF","scenarioBadge","scBull","scBase","scBear",
  "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote","proofBadge","proofSample","proofHit","proofExp","proofCal","proofDna","proofNarrative","waitAuditBadge","waitAudN","waitSaved","waitMiss","waitShadow","waitNarrative",
  "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","triggerBadge","triggerBias","triggerReady","triggerBlocker","triggerStage","triggerMeter","triggerNarrative","triggerGates","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
@@ -2820,7 +2887,7 @@ renderJournal();renderVaultStatus();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX SCALP GOD 6.8.2 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX SCALP GOD 6.9.0 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
@@ -2842,4 +2909,5 @@ must("importTitan").onclick=()=>{
  }catch(e){must("backupMsg").textContent="Restore failed: "+e.message}
 };
 </script>
-</body></html>
+</body>
+</html>
