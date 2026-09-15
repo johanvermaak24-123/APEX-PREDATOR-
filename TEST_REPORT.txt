@@ -1,44 +1,26 @@
-APEX SCALP GOD 7.0.0 — PRECISION TRADER HUD
-FINAL PACKAGE TEST REPORT
-============================================
+APEX SCALP GOD 7.1.0 — TEST REPORT
+===============================================
 
-UI / PRODUCT
-PASS — Precision View is default.
-PASS — Deep evidence remains in the app but is hidden by default.
-PASS — Top-level new-trade command is limited to ENTER BUY NOW / ENTER SELL NOW / WAIT.
-PASS — Current price, entry, hard exit and take-profit are on the front card.
-PASS — Manual trade tracking supports HOLD / EXIT instructions after "I ENTERED THIS TRADE".
-PASS — BEST NOW cannot surface a research state as ENTER.
+PASS — HTML parsed
+PASS — unique IDs
+PASS — literal DOM refs resolved
+PASS — simple mode default
+PASS — main command jargon-free
+PASS — basket summary jargon-free
+PASS — main action labels present
+PASS — memory/proof architecture present
+PASS — 1M invariant audit passed
+PASS — version consistent
 
-STATIC INTEGRITY
-PASS — JavaScript syntax (node --check).
-PASS — 332 HTML IDs / 332 unique.
-PASS — 288 literal JS DOM references / 0 missing IDs.
-PASS — Inline JavaScript exactly matches app.js.
-PASS — 7.0.0 page/app/self-test version consistency.
-PASS — Existing LocalStorage evidence/memory keys preserved.
+HTML IDs: 336 total / 336 unique
+Literal JS DOM references checked: 300
+Duplicate IDs: none
+Missing literal DOM refs: none
+Forbidden jargon in simple command: none
+Forbidden jargon in basket summary: none
+Critical memory/proof symbols missing: none
+1M scenarios: 1,000,000
+1M failures: 0
+1M result: PASS
 
-1,000,000-SCENARIO DETERMINISTIC STRESS TEST
-PASS — 1,000,000 randomized execution + trade-management scenarios.
-Seed: 0x7000cafe
-Live-authority cases: 25,983
-WAIT cases: 974,017
-Trade-manager HOLD cases: 404,119
-Trade-manager EXIT cases: 555,854
-Trade-manager symbol-switch cases: 40,027
-Invariant failures: 0
-
-CORE INVARIANTS
-PASS — ENTER iff complete final execution authority exists.
-PASS — Every non-live new-trade command is WAIT.
-PASS — No live entry/SL/TP leakage while WAIT.
-PASS — BUY/SELL direction cannot be promoted independently by BEST NOW.
-PASS — Open-trade manager never emits a new ENTER instruction.
-PASS — Target hit forces EXIT / TAKE PROFIT.
-PASS — Hard invalidation forces EXIT NOW.
-PASS — Opposite fully-authorized live direction forces EXIT NOW.
-
-IMPORTANT LIMITATION
-The million-case audit validates software decision invariants and state
-transitions. It is not one million historical/live market trades and does not
-establish a near-100% future win rate or guarantee profitability.
+NOTE: This validates software invariants and UI clarity. It does not prove profitability, forecast accuracy, or a near-100% win rate.

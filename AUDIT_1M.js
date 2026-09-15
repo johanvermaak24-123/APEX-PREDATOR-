@@ -5,11 +5,11 @@ const vm=require('vm');
 const src=fs.readFileSync('app.js','utf8');
 function sliceBetween(a,b){const i=src.indexOf(a),j=src.indexOf(b,i+1);if(i<0||j<0)throw new Error(`Cannot extract ${a}`);return src.slice(i,j)}
 global.fmt=x=>Number.isFinite(+x)?Number(x).toFixed(2):'—';
-vm.runInThisContext(sliceBetween('function executionCommandFromParts','function executionCommandDecision'));
+vm.runInThisContext(sliceBetween('function plainCommandReason','function executionCommandDecision'));
 vm.runInThisContext(sliceBetween('function tradeManagementDecision','function renderManualTradeManager'));
 vm.runInThisContext(sliceBetween('function bestNowStateRank','async function authoritativeBestScan'));
 if(typeof executionCommandFromParts!=='function'||typeof bestNowRankLabel!=='function'||typeof tradeManagementDecision!=='function')throw new Error('Exact-source function extraction failed');
-let seed=0x7000cafe>>>0;
+let seed=0x7100cafe>>>0;
 function rnd(){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296}
 function pick(a){return a[Math.floor(rnd()*a.length)]}
 const N=1_000_000;
@@ -28,7 +28,7 @@ for(let i=0;i<N;i++){
   const expected=!!(fire&&pass===true&&integrityPass===true&&execOK===true&&hydraPass&&geometry&&(dir===1||dir===-1));
   if(out.liveReady!==expected)throw new Error(`liveReady mismatch @${i}`);
   if(out.action.startsWith('ENTER')!==expected)throw new Error(`ENTER iff authority invariant failed @${i}`);
-  if(!expected && out.action!=='WAIT — NO LIVE TRADE')throw new Error(`non-live action ambiguity @${i}`);
+  if(!expected && out.action!=='WAIT — DO NOT ENTER')throw new Error(`non-live action ambiguity @${i}`);
   if(out.showLevels!==expected)throw new Error(`level visibility invariant failed @${i}`);
   if(!expected && (out.entry!==null||out.target!==null||out.invalid!==null))throw new Error(`research leaked live levels @${i}`);
   expected?liveCount++:waitCount++;
@@ -46,10 +46,17 @@ for(let i=0;i<N;i++){
 }
 function assert(c,m){if(!c)throw new Error(m)}
 const H={retired:false,staleEdge:false,toxicity:.1,fragility:.1},F={pass:true,integrityPass:true,execOK:true,reasons:[]};
-let x=executionCommandFromParts({fire:false,state:'PROOF',counter:1,entry:100,target:101,invalid:99},F,H);assert(x.action==='WAIT — NO LIVE TRADE'&&!x.showLevels,'PROOF-only must WAIT');
+let x=executionCommandFromParts({fire:false,state:'PROOF',counter:1,entry:100,target:101,invalid:99},F,H);assert(x.action==='WAIT — DO NOT ENTER'&&!x.showLevels,'PROOF-only must WAIT');
 x=executionCommandFromParts({fire:true,state:'FIRE NOW',counter:-1,entry:100,target:99,invalid:101},F,H);assert(x.liveReady&&x.action==='ENTER SELL NOW','full authority must ENTER SELL');
 let td=tradeManagementDecision({sym:'ETH/USD',direction:1,entry:100,target:102,invalid:98},102.1,{liveReady:false,direction:0},'ETH/USD');assert(td.state==='EXIT'&&td.text.includes('TARGET'),'BUY target must exit');
-td=tradeManagementDecision({sym:'ETH/USD',direction:-1,entry:100,target:98,invalid:102},102.1,{liveReady:false,direction:0},'ETH/USD');assert(td.state==='EXIT'&&td.text.includes('INVALIDATION'),'SELL invalidation must exit');
-td=tradeManagementDecision({sym:'ETH/USD',direction:1,entry:100,target:102,invalid:98},100.5,{liveReady:true,direction:-1},'ETH/USD');assert(td.state==='EXIT'&&td.text.includes('OPPOSITE'),'opposite authority must exit');
-const report={version:'APEX-SCALP-GOD-7.0.0',sourceSha256:crypto.createHash('sha256').update(src).digest('hex'),scenarios:N,seed:'0x7000cafe',elapsedMs:Date.now()-started,passed:true,liveCount,waitCount,tradeHold,tradeExit,tradeSwitch,invariants:['ENTER iff final execution authority is complete','Every non-live new-trade command is WAIT','No entry/SL/TP levels leak while WAIT','BEST NOW cannot create ENTER independently','Open trade manager only emits HOLD / EXIT / SWITCH','Target, hard invalidation and opposite live authority force EXIT']};
+td=tradeManagementDecision({sym:'ETH/USD',direction:-1,entry:100,target:98,invalid:102},102.1,{liveReady:false,direction:0},'ETH/USD');assert(td.state==='EXIT'&&td.text.includes('STOP LOSS'),'SELL invalidation must exit');
+td=tradeManagementDecision({sym:'ETH/USD',direction:1,entry:100,target:102,invalid:98},100.5,{liveReady:true,direction:-1},'ETH/USD');assert(td.state==='EXIT'&&td.text.includes('DIRECTION CHANGED'),'opposite authority must exit');
+
+// Plain-language UI contract: hidden engine terminology must never leak into the front reason.
+for(const stage of ['HARD BLOCK','EXECUTION VETO','HYDRA VETO','PROOF ONLY','RESEARCH ARMED','WATCH','GEOMETRY BLOCK','WAIT']){
+  const msg=plainCommandReason(stage,pick(['BUY','SELL','NONE']));
+  if(/VETO|HYDRA|FORTRESS|PROOF|FDR|BOOTSTRAP|EXECUTION AUTHORITY/i.test(msg))throw new Error(`front-language jargon leak: ${stage} => ${msg}`);
+  if(!/wait|do not enter|not ready|no trade/i.test(msg))throw new Error(`front-language action ambiguity: ${stage} => ${msg}`);
+}
+const report={version:'APEX-SCALP-GOD-7.1.0',sourceSha256:crypto.createHash('sha256').update(src).digest('hex'),scenarios:N,seed:'0x7100cafe',elapsedMs:Date.now()-started,passed:true,liveCount,waitCount,tradeHold,tradeExit,tradeSwitch,invariants:['ENTER iff final execution authority is complete','Every non-live new-trade command is WAIT — DO NOT ENTER','No entry/SL/TP levels leak while WAIT','BEST NOW cannot create ENTER independently','Open trade manager only emits HOLD / EXIT / SWITCH','Target, stop-loss and opposite live direction force EXIT']};
 fs.writeFileSync('AUDIT_1M_REPORT.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

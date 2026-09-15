@@ -1,18 +1,13 @@
 {
-  "name": "APEX SCALP GOD 7.0.0 \u2014 PRECISION TRADER HUD",
-  "short_name": "APEX 7.0.0",
+  "name": "APEX SCALP GOD 7.1.0 — SIMPLE ACTION HUD",
+  "short_name": "APEX 7.1",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#05080c",
   "theme_color": "#071018",
-  "description": "Forward-proof, fail-closed short-horizon market research prototype with one authoritative ENTER BUY / ENTER SELL / WAIT execution command and unambiguous BEST NOW ranking.",
+  "description": "Precision-first market research scanner with a simple front screen: ENTER BUY, ENTER SELL, HOLD, EXIT or WAIT. Deep evidence stays hidden unless requested.",
   "icons": [
-    {
-      "src": "apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    {"src":"apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any maskable"}
   ]
 }

@@ -1,21 +1,21 @@
 {
-  "version": "APEX-SCALP-GOD-7.0.0",
-  "sourceSha256": "83fce6569dd260d02d94268f7dba8ff3aed8bbc7ef0de0c9e5f4b3dcec7a3cb2",
+  "version": "APEX-SCALP-GOD-7.1.0",
+  "sourceSha256": "3174c6827f81ef63ffacc70819ade6a02d09219dd9bdc74cc5e52a3064a89121",
   "scenarios": 1000000,
-  "seed": "0x7000cafe",
-  "elapsedMs": 777,
+  "seed": "0x7100cafe",
+  "elapsedMs": 753,
   "passed": true,
-  "liveCount": 25983,
-  "waitCount": 974017,
-  "tradeHold": 404119,
-  "tradeExit": 555854,
-  "tradeSwitch": 40027,
+  "liveCount": 26037,
+  "waitCount": 973963,
+  "tradeHold": 404158,
+  "tradeExit": 556070,
+  "tradeSwitch": 39772,
   "invariants": [
     "ENTER iff final execution authority is complete",
-    "Every non-live new-trade command is WAIT",
+    "Every non-live new-trade command is WAIT — DO NOT ENTER",
     "No entry/SL/TP levels leak while WAIT",
     "BEST NOW cannot create ENTER independently",
     "Open trade manager only emits HOLD / EXIT / SWITCH",
-    "Target, hard invalidation and opposite live authority force EXIT"
+    "Target, stop-loss and opposite live direction force EXIT"
   ]
 }
