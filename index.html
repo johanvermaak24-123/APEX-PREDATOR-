@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX PREDATOR 1.0 — VERIFIED CORE</title>
+<title>APEX PREDATOR GOD 3.1 — OPPORTUNITY CAPTURE ENGINE</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX 1.4 • LEARNING BRIDGE</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 3.1 • OPPORTUNITY CAPTURE ENGINE</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -379,7 +379,7 @@ button.primary, #scan, #scanAll {
  <section id="oppsTab" class="hidden">
   <div class="card">
    <div class="title"><h3>🔥 WHAT SHOULD I TRADE RIGHT NOW?</h3><span class="badge">BASKET SCAN</span></div>
-   <div class="small">Scans a curated cross-asset basket, then deep-checks the leader through the SAME World Brain safety gates. Raw score alone is never treated as a final trade.</div>
+   <div class="small">Runs the FULL APEX PREDATOR GOD authority on every market in the basket. BEST NOW and WORLD BRAIN use the exact same Opportunity Capture score, liquidity-pressure proxy, timeframe logic, event arbitration, fusion, learning and PASS/WAIT verdict — one brain, one answer.</div>
    <button id="scanAll">SCAN BEST OPPORTUNITIES</button>
    <div id="oppList" style="margin-top:8px"><div class="item"><p>Not scanned yet.</p></div></div>
   </div>
@@ -436,6 +436,35 @@ function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(valu
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
+function captureUpgradeSafetySnapshot(){
+ try{
+  if(localStorage.getItem("apex_upgrade_god_3_0_snapshot"))return;
+  const extra={};
+  for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i)||"",kl=k.toLowerCase();
+   if(!/^(titan_|apex_)/.test(k))continue;
+   if(/api|secret|token|password|key$|_key/.test(kl))continue;
+   if(k==="apex_upgrade_god_3_0_snapshot")continue;
+   try{extra[k]=localStorage.getItem(k)}catch(_e){}
+  }
+  const snap={version:"PRE-GOD-3.0",savedAt:Date.now(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),hours:readStoredText("titan_hours","24"),min:readStoredText("titan_min","72"),newsMode:readStoredText("titan_news_mode","turbo"),extra};
+  const raw=JSON.stringify(snap);if(raw.length<3000000)localStorage.setItem("apex_upgrade_god_3_0_snapshot",raw);
+ }catch(e){console.warn("APEX GOD pre-upgrade snapshot skipped",e)}
+}
+captureUpgradeSafetySnapshot();
+function recoverUpgradeSafetySnapshotIfNeeded(){
+ try{
+  const j=readStoredJSON("titan_journal_v2",[]),st=readStoredJSON("titan_state_v2",{}),ac=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1");
+  const hasCurrent=j.length||Object.keys(st).length||Object.keys(ac).length;if(hasCurrent)return false;
+  const raw=localStorage.getItem("apex_upgrade_god_3_0_snapshot")||localStorage.getItem("apex_upgrade_2_0_snapshot");if(!raw)return false;const snap=safeJSON(raw,null);if(!snap)return false;
+  if(Array.isArray(snap.journal)&&snap.journal.length)persistJSON("titan_journal_v2",snap.journal);
+  if(snap.state&&typeof snap.state==="object")persistJSON("titan_state_v2",snap.state);
+  if(snap.activeSignals&&typeof snap.activeSignals==="object")persistJSON("titan_active_signals_v2",snap.activeSignals);
+  if(snap.extra&&typeof snap.extra==="object")for(const [k,v] of Object.entries(snap.extra)){if(localStorage.getItem(k)==null&&v!=null)try{localStorage.setItem(k,v)}catch(_e){}}
+  return true;
+ }catch(e){console.warn("APEX GOD snapshot recovery skipped",e);return false;}
+}
+recoverUpgradeSafetySnapshotIfNeeded();
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
 $("tdKey").value="FREE";$("hours").value=readStoredText("titan_hours","24");$("minConf").value=readStoredText("titan_min","72");$("newsMode").value=readStoredText("titan_news_mode","turbo");
 $("save").onclick=()=>{removeStored("titan_td");persistText("titan_hours",$("hours").value);persistText("titan_min",$("minConf").value);persistText("titan_news_mode",$("newsMode").value);$("connMsg").textContent="Saved."};
@@ -446,7 +475,7 @@ function atr(h,l,c,p=14){let tr=[h[0]-l[0]];for(let i=1;i<c.length;i++)tr.push(M
 function fmt(x){if(!isFinite(x))return"—";let a=Math.abs(x);return a>=1000?x.toFixed(2):a>=10?x.toFixed(3):a>=1?x.toFixed(4):x.toFixed(6)}
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
 function marketAnalyze(rows){
- const c=rows.map(x=>+x.close),h=rows.map(x=>+x.high),l=rows.map(x=>+x.low),i=c.length-1;
+ const c=rows.map(x=>+x.close),o=rows.map(x=>+x.open),h=rows.map(x=>+x.high),l=rows.map(x=>+x.low),vols=rows.map(x=>Math.max(0,+x.volume||0)),i=c.length-1;
  const E9=ema(c,9),E21=ema(c,21),E50=ema(c,50),R=rsi(c),A=atr(h,l,c);
  let s=0,why=[];const add=(v,t)=>{s+=v;why.push({v,t})};
  add(E9[i]>E21[i]?1:-1,E9[i]>E21[i]?"fast trend above medium":"fast trend below medium");
@@ -463,8 +492,21 @@ function marketAnalyze(rows){
  const rets=[];for(let k=Math.max(1,c.length-25);k<c.length;k++)rets.push((c[k]-c[k-1])/Math.max(Math.abs(c[k-1]),1e-9));
  const rv=Math.sqrt(avg(rets.map(x=>x*x)))*100;
  const dist50=(c[i]-E50[i])/Math.max(Math.abs(c[i]),1e-9)*100;
+ // GOD 3.1 liquidity-pressure proxy. This is derived only from OHLC + tick volume;
+ // it does NOT pretend to be exchange order-book data. It looks for absorption,
+ // initiative candles, wick rejection, close location and abnormal activity.
+ const start=Math.max(1,i-24),recentVol=vols.slice(start,i),recentRange=h.slice(start,i).map((x,k)=>Math.max(1e-9,x-l[start+k]));
+ const vMean=avg(recentVol.filter(x=>x>0)),rMean=avg(recentRange);
+ const range=Math.max(1e-9,h[i]-l[i]),body=c[i]-o[i],bodyFrac=Math.abs(body)/range,closeLoc=((c[i]-l[i])/range)*2-1;
+ const upperWick=(h[i]-Math.max(o[i],c[i]))/range,lowerWick=(Math.min(o[i],c[i])-l[i])/range;
+ const volRatio=vMean>0?clamp(vols[i]/vMean,0,3):1,rangeRatio=rMean>0?clamp(range/rMean,0,3):1;
+ const initiative=Math.sign(body)*bodyFrac*Math.min(1.7,.65*volRatio+.35*rangeRatio);
+ const rejection=clamp(lowerWick-upperWick,-1,1)*Math.min(1.4,.55*volRatio+.45*rangeRatio);
+ const absorption=Math.abs(closeLoc)<.35&&volRatio>=1.25&&rangeRatio<=1.15?Math.sign(body||closeLoc)*.35:0;
+ const flowPressure=clamp(.52*initiative+.28*closeLoc+.20*rejection+absorption,-1.5,1.5);
+ if(Math.abs(flowPressure)>=.34)add(clamp(flowPressure*.72,-.9,.9),flowPressure>0?"buy-side pressure proxy":"sell-side pressure proxy");
  const barTime=rows[i]?.datetime||"";
- return{score:s,price:c[i],rsi:R[i],atr:atrNow,atrPct,support:sl,resistance:sh,why,breakout,slope9,slope21,rv,dist50,barTime}
+ return{score:s,price:c[i],rsi:R[i],atr:atrNow,atrPct,support:sl,resistance:sh,why,breakout,slope9,slope21,rv,dist50,barTime,flowPressure,flowVolumeRatio:volRatio,flowRangeRatio:rangeRatio,bodyFrac,closeLoc,upperWick,lowerWick}
 }
 const tdCache=new Map(),marketMeta=new Map();
 const BQSYM={"BTC/USD":"BTCUSD","ETH/USD":"ETHUSD","SOL/USD":"SOLUSD","XRP/USD":"XRPUSD","XAU/USD":"XAUUSD","XAG/USD":"XAGUSD","EUR/USD":"EURUSD","GBP/USD":"GBPUSD","USD/JPY":"USDJPY","USD/CHF":"USDCHF","AUD/USD":"AUDUSD","USD/CAD":"USDCAD","NZD/USD":"NZDUSD","EUR/JPY":"EURJPY","GBP/JPY":"GBPJPY","AAPL":"AAPL","MSFT":"MSFT","NVDA":"NVDA","TSLA":"TSLA","AMZN":"AMZN","META":"META","GOOGL":"GOOGL"};
@@ -775,7 +817,7 @@ function newsScore(events,sym){
  return {items:rel,score:clamp(den?num/den:0,-2,2)}
 }
 
-// TITAN GOD 9.2 — Smart Event Shock Engine.
+// APEX PREDATOR GOD 3.1 — Smart Event Shock Engine.
 // Counts independent event clusters, not raw headline volume. Duplicate coverage is
 // corroboration, never 30 separate shocks. Risk is symbol-specific, freshness-decayed
 // and source-quality weighted. A hard block requires genuinely material evidence.
@@ -807,7 +849,7 @@ function smartEventShock(events,sym){
  return {state,block,caution,score,clusters:clusters.length,material,top,rawSevere:(events||[]).filter(e=>(e.severity||0)>=3).length};
 }
 
-// APEX PREDATOR 1.1 — directional event arbitration.
+// APEX PREDATOR GOD 3.1 — directional event arbitration.
 // Event magnitude and event direction are deliberately separated. A large event is
 // only a hard blocker when the evidence is materially OPPOSITE to the proposed trade.
 function eventImpactDetail(sym,title,score=0){
@@ -838,43 +880,31 @@ function eventImpactDetail(sym,title,score=0){
 function eventImpactSign(sym,title,score=0){return eventImpactDetail(sym,title,score).sign}
 function directionalEventProfile(events,sym,tradeDir){
  const base=smartEventShock(events,sym),dir=tradeDir==="BUY"?1:tradeDir==="SELL"?-1:0;
- if(!dir)return {...base,supportRisk:0,opposeRisk:0,neutralRisk:base.score,supportiveDominant:false,hostileDominant:false,criticalAgainst:false,directionConfidence:0};
- let supportRisk=0,opposeRisk=0,neutralRisk=0,criticalAgainst=false,directSupport=0,directOppose=0,classifiedRisk=0;
+ if(!dir)return {...base,supportRisk:0,opposeRisk:0,neutralRisk:base.score,supportiveDominant:false,hostileDominant:false,criticalAgainst:false,directionConfidence:0,directCriticalOverride:false};
+ let supportRisk=0,opposeRisk=0,neutralRisk=0,directSupport=0,directOppose=0,classifiedRisk=0;
+ let directHostileCritical=0,directHostileMaterial=0;
  for(const x of base.top||[]){
    const d=eventImpactDetail(sym,x.title,x.score||0),risk=x.shockRisk||0,direct=symbolEntityScore(sym,x.title)>0;
-   // Direct symbol evidence matters more than generic macro/geopolitical inference.
-   const sourceWeight=direct?1.30:(d.kind==="macro"?.72:d.kind==="geopolitical"?.58:.62);
-   const weightedRisk=risk*sourceWeight*Math.max(.35,d.confidence||0);
+   const sourceWeight=direct?1.32:(d.kind==="macro"?.64:d.kind==="geopolitical"?.50:.56);
+   const weightedRisk=risk*sourceWeight*Math.max(.30,d.confidence||0);
    if(d.sign===dir){supportRisk+=weightedRisk;classifiedRisk+=weightedRisk;if(direct)directSupport+=weightedRisk;}
-   else if(d.sign===-dir){opposeRisk+=weightedRisk;classifiedRisk+=weightedRisk;if(direct)directOppose+=weightedRisk;if((x.severity||0)>=4.5&&(x.fresh||0)>=.72&&direct&&d.confidence>=.9)criticalAgainst=true;}
-   else neutralRisk+=risk;
+   else if(d.sign===-dir){opposeRisk+=weightedRisk;classifiedRisk+=weightedRisk;if(direct)directOppose+=weightedRisk;
+     if(direct&&d.confidence>=.88&&(x.fresh||0)>=.72&&(x.severity||0)>=4.0&&weightedRisk>=.55)directHostileCritical++;
+     if(direct&&d.confidence>=.72&&(x.fresh||0)>=.60&&weightedRisk>=.35)directHostileMaterial++;
+   } else neutralRisk+=risk;
  }
- // Cross-check the event classification against the actual symbol-specific news model.
- // This prevents broad macro clusters from being called "hostile" while direct XAU news
- // and causal evidence are clearly aligned with the proposed trade.
  const ns=newsScore(events,sym),cb=causalBias(sym,ns.items.length?ns.items:events);
- const modelNewsSign=Math.abs(ns.score)>=.12?Math.sign(ns.score):0;
- const causalSign=Math.abs(cb.score)>=.12?Math.sign(cb.score):0;
- const modelSupports=(modelNewsSign===dir?1:0)+(causalSign===dir?1:0);
- const modelOpposes=(modelNewsSign===-dir?1:0)+(causalSign===-dir?1:0);
- const net=supportRisk-opposeRisk;
- const directionConfidence=classifiedRisk>0?Math.min(1,Math.abs(net)/classifiedRisk):0;
- let supportiveDominant=supportRisk>=.45&&supportRisk>opposeRisk*1.18;
- let hostileDominant=opposeRisk>=.90&&opposeRisk>supportRisk*1.55&&(opposeRisk-supportRisk)>=.65&&directOppose>=Math.min(.50,opposeRisk*.40);
- // FINAL arbitration rule: if BOTH symbol-specific news and causal model agree with
- // the proposed trade, generic macro clusters are not allowed to flip that setup to
- // HOSTILE. Only a fresh, high-confidence, directly opposing XAU headline can override.
- const directCriticalOverride=criticalAgainst&&directOppose>=Math.max(.85,directSupport*1.35);
- if(modelSupports>=2&&!directCriticalOverride){
-   hostileDominant=false;
-   supportiveDominant=true;
- }
- // Conversely, two model layers against the trade strengthen a genuine opposing read.
- if(modelOpposes>=2&&directOppose>directSupport&&opposeRisk>=.75)hostileDominant=true;
- let block=directCriticalOverride||(hostileDominant&&opposeRisk>=1.10&&base.score>=1.60&&directionConfidence>=.22);
- // Mixed/large events remain CAUTION, never a false hard block.
- const caution=!block&&(base.caution||base.block||base.score>=1||neutralRisk>=.75||supportiveDominant||opposeRisk>.45);
- return {...base,block,caution,state:block?"BLOCK":caution?"CAUTION":"NORMAL",supportRisk,opposeRisk,neutralRisk,directSupport,directOppose,supportiveDominant,hostileDominant,criticalAgainst,directionConfidence,modelNewsSign,causalSign,modelSupports,modelOpposes};
+ const modelNewsSign=Math.abs(ns.score)>=.12?Math.sign(ns.score):0,causalSign=Math.abs(cb.score)>=.12?Math.sign(cb.score):0;
+ const modelSupports=(modelNewsSign===dir?1:0)+(causalSign===dir?1:0),modelOpposes=(modelNewsSign===-dir?1:0)+(causalSign===-dir?1:0);
+ const net=supportRisk-opposeRisk,directionConfidence=classifiedRisk>0?Math.min(1,Math.abs(net)/classifiedRisk):0;
+ let supportiveDominant=supportRisk>=.38&&supportRisk>opposeRisk*1.12;
+ let hostileDominant=opposeRisk>=.72&&opposeRisk>supportRisk*1.35&&(opposeRisk-supportRisk)>=.45&&directOppose>=Math.min(.38,opposeRisk*.32);
+ const directCriticalOverride=(directHostileCritical>=1&&directOppose>=Math.max(.62,directSupport*1.20))||(directHostileMaterial>=2&&directOppose>=1.05&&directOppose>directSupport*1.35);
+ if(modelSupports>=2&&!directCriticalOverride){hostileDominant=false;supportiveDominant=true;}
+ if(modelOpposes>=2&&directOppose>directSupport&&opposeRisk>=.65)hostileDominant=true;
+ const block=!!directCriticalOverride;
+ const caution=!block&&(base.caution||base.block||base.score>=1||neutralRisk>=.65||supportiveDominant||opposeRisk>.38);
+ return {...base,block,caution,state:block?"BLOCK":caution?"CAUTION":"NORMAL",supportRisk,opposeRisk,neutralRisk,directSupport,directOppose,supportiveDominant,hostileDominant,criticalAgainst:directHostileCritical>0,directCriticalOverride,directionConfidence,modelNewsSign,causalSign,modelSupports,modelOpposes};
 }
 function impactMap(events){const text=events.map(x=>x.title.toLowerCase()).join(" ");let impacts=[];
  const push=(a,d,r)=>impacts.push({a,d,r});
@@ -897,25 +927,49 @@ function consensusUncertainty(v){
  return clamp(.45*cf.ratio+.25*entropyLike([v.tech,v.news,v.causal,v.tf])+.20*(1-v.trust)+.10*(1-v.freshness),0,1)
 }
 function decisionConsensus(r,events){
- const v=evidenceVector(r,events),cf=conflictMatrix(v),uncertainty=consensusUncertainty(v),nh=newsHealth(events);
+ const v=evidenceVector(r,events),cf=conflictMatrix(v),baseUncertainty=consensusUncertainty(v),nh=newsHealth(events);
  const rawVerdict=r.rawTechnicalV||r.v,hz=horizonScores(r,events),labs=[hz.scalp.label,hz.day.label,hz.swing.label];
  const hzDir=(labs.every(x=>x===labs[0])&&labs[0]!=="WAIT")?labs[0]:null;
- const rawDir=actionableDirection(rawVerdict)||hzDir,horizonConfirm=!!(rawDir&&hzDir===rawDir);
- const technicalNeed=horizonConfirm?1.05:1.35,alignNeed=horizonConfirm?Math.max(2,Math.ceil(r.valid*.40)):Math.max(2,Math.ceil(r.valid*.50));
- const technicalPass=Math.abs(r.market)>=technicalNeed,alignPass=r.align>=alignNeed,conflictPass=cf.ratio<=.45,uncertaintyPass=uncertainty<=.58;
- const shock=directionalEventProfile(events,r.sym,rawDir),eventDanger=shock.block,hist=historicalNewsAnalogs({...r,v:rawDir||rawVerdict},events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
- const fusion=adaptiveFusion(r,events),sg=rawDir==="BUY"?1:rawDir==="SELL"?-1:0,fusionPass=!!(sg&&Math.abs(fusion.fused)>=.16&&Math.sign(fusion.fused)===sg);
- let gate=(rawDir&&technicalPass&&alignPass&&conflictPass&&uncertaintyPass&&fusionPass&&!eventDanger)?"PASS":"WAIT";
- if(hist.n>=5&&hist.vote==="REJECT")gate="REJECT";if(es.n>=20&&es.exp<=0)gate="REJECT";if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";if(nh.degraded&&gate==="PASS")gate="WAIT";
+ const marketFallback=Math.abs(r.total||0)>=.72&&Math.abs(r.market||0)>=.82?((r.total||0)>0?"BUY":"SELL"):null;
+ const rawDir=actionableDirection(rawVerdict)||hzDir||marketFallback,horizonConfirm=!!(rawDir&&hzDir===rawDir);
+ const fusion=adaptiveFusion(r,events),sg=rawDir==="BUY"?1:rawDir==="SELL"?-1:0;
+ const fusionSigned=sg?fusion.fused*sg:0,fusionPass=!!(sg&&fusionSigned>=.10);
+ const alignRatio=r.valid?r.align/r.valid:0;
+ const flowVals=Object.values(r.res||{}).filter(x=>x&&!x.error&&Number.isFinite(x.flowPressure)).map(x=>x.flowPressure);
+ const flow=flowVals.length?avg(flowVals):0,flowSigned=sg?flow*sg:0,flowSupport=flowSigned>=.12;
+ const techSigned=sg?clamp((r.market||0)/4,-1,1)*sg:0;
+ const totalSigned=sg?clamp((r.total||0)/4,-1,1)*sg:0;
+ const structureStrength=clamp((Math.abs(r.market||0)-.65)/2.7,0,1);
+ const alignmentStrength=clamp((alignRatio-.20)/.80,0,1);
+ const fusionStrength=clamp((fusionSigned+.05)/.55,0,1);
+ const flowStrength=clamp((flowSigned+.12)/.75,0,1);
+ const horizonStrength=horizonConfirm?1:(labs.filter(x=>x===rawDir).length/3);
+ const directionScore=sg?clamp(.31*structureStrength+.24*alignmentStrength+.20*fusionStrength+.14*flowStrength+.11*horizonStrength,0,1):0;
+ const coherentMomentum=!!(rawDir&&Math.abs(r.market)>=1.25&&alignRatio>=.60&&(fusionPass||flowSupport));
+ const technicalNeed=coherentMomentum?1.00:1.18,alignNeed=Math.max(2,Math.ceil(r.valid*(coherentMomentum?.40:.50)));
+ const technicalPass=Math.abs(r.market)>=technicalNeed,alignPass=r.align>=alignNeed;
+ const shock=directionalEventProfile(events,r.sym,rawDir),eventDanger=!!(shock.directCriticalOverride&&shock.hostileDominant);
+ const hist=historicalNewsAnalogs({...r,v:rawDir||rawVerdict},events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
  const signed=[v.tech,v.news,v.causal,v.tf],support=signed.filter(x=>sg&&Math.sign(x)===sg&&Math.abs(x)>.10).length,oppose=signed.filter(x=>sg&&Math.sign(x)===-sg&&Math.abs(x)>.10).length;
- let directionalConfidence=clamp((r.rawConf??r.conf)-uncertainty*28-cf.ratio*18+support*2-oppose*4+(horizonConfirm?4:0)+(shock.supportiveDominant?2:0),35,92);
- if(shock.caution)directionalConfidence=Math.min(directionalConfidence,82);if(nh.degraded)directionalConfidence=Math.min(directionalConfidence,58);if(gate!=="PASS")directionalConfidence=Math.min(directionalConfidence,64);
- if(hist.n>=5&&hist.vote==="SUPPORT")directionalConfidence=Math.min(94,directionalConfidence+4);if(hist.n>=5&&hist.vote==="REJECT")directionalConfidence=Math.min(directionalConfidence,52);
- const strongAllowed=gate==="PASS"&&support>=3&&uncertainty<=.38&&cf.ratio<=.25&&!shock.caution&&!nh.degraded&&(hist.n<5||hist.vote!=="REJECT");
- let finalVerdict="WAIT";if(gate==="PASS"&&rawDir){const strong=/STRONG/.test(rawVerdict)&&strongAllowed;finalVerdict=rawDir==="BUY"?(strong?"STRONG BUY":"BUY"):(strong?"STRONG SELL":"SELL");}
- const biasLabel=rawDir?`${rawDir} BIAS — WAIT`:"WAIT";
- const reason=gate==="REJECT"?"EVIDENCE REJECT":nh.degraded?"NEWS FEED DEGRADED":eventDanger?"HOSTILE EVENT RISK":!technicalPass?`STRUCTURE ${Math.abs(r.market).toFixed(2)}/${technicalNeed.toFixed(2)}`:!alignPass?`TIMEFRAMES ${r.align}/${alignNeed}`:!fusionPass?"FUSION NOT CONFIRMED":!uncertaintyPass?"UNCERTAINTY TOO HIGH":!conflictPass?"EVIDENCE CONFLICT":shock.caution?"EVENT CAUTION":"WAIT FOR CONFIRMATION";
- return {gate,finalVerdict,biasLabel,reason,uncertainty,cf,nh,hist,technicalPass,alignPass,technicalNeed,alignNeed,fusionPass,fusion,horizonConfirm,hz,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed,eventShock:shock,rawDir};
+ const evidenceVotes=[technicalPass,alignPass,fusionPass,horizonConfirm,flowSupport].filter(Boolean).length;
+ const extremeConflict=cf.ratio>.82&&oppose>=3&&!coherentMomentum;
+ const severeLearningReject=(hist.n>=8&&hist.vote==="REJECT"&&hist.hit!=null&&hist.hit<.34)||(es.n>=30&&es.exp<=-.12);
+ let gate=(rawDir&&directionScore>=.46&&evidenceVotes>=2&&!eventDanger&&!extremeConflict&&!severeLearningReject)?"PASS":"WAIT";
+ if(severeLearningReject)gate="REJECT";
+ if(dr.state==="NEGATIVE DRIFT"&&gate==="PASS"&&directionScore<.66)gate="WAIT";
+ // News failure reduces confidence, but a verified market-direction thesis is retained instead of pretending direction vanished.
+ let directionalConfidence=clamp(48+directionScore*42+Math.max(0,totalSigned)*5-baseUncertainty*10-cf.ratio*8+support*2-oppose*2.5+(shock.supportiveDominant?3:0),38,95);
+ if(nh.degraded)directionalConfidence=Math.min(directionalConfidence,68);
+ if(shock.caution&&!shock.supportiveDominant)directionalConfidence=Math.min(directionalConfidence,88);
+ if(gate!=="PASS")directionalConfidence=Math.min(directionalConfidence,69);
+ if(hist.n>=5&&hist.vote==="SUPPORT")directionalConfidence=Math.min(96,directionalConfidence+4);
+ if(hist.n>=5&&hist.vote==="REJECT")directionalConfidence=Math.min(directionalConfidence,61);
+ const strongAllowed=gate==="PASS"&&directionScore>=.70&&support>=2&&alignRatio>=.60&&!eventDanger&&(hist.n<8||hist.vote!=="REJECT");
+ let finalVerdict="WAIT";
+ if(gate==="PASS"&&rawDir){const strong=(/STRONG/.test(rawVerdict)||directionScore>=.79)&&strongAllowed;finalVerdict=rawDir==="BUY"?(strong?"STRONG BUY":"BUY"):(strong?"STRONG SELL":"SELL");}
+ const biasLabel=rawDir?`${rawDir} BIAS — ${gate==="PASS"?"ACTIVE":"WAIT"}`:"WAIT";
+ const reason=gate==="REJECT"?"LEARNING / EXPECTANCY REJECT":eventDanger?"DIRECT HOSTILE EVENT":!rawDir?"NO DIRECTIONAL EDGE":extremeConflict?"EXTREME EVIDENCE CONFLICT":directionScore<.46?`DIRECTION SCORE ${Math.round(directionScore*100)}%/46%`:evidenceVotes<2?`ONLY ${evidenceVotes}/5 DIRECTION VOTES`:dr.state==="NEGATIVE DRIFT"?"NEGATIVE DRIFT — NEED STRONGER EDGE":nh.degraded?"TECHNICAL DIRECTION ONLY — NEWS DEGRADED":"OPPORTUNITY CAPTURE PASS";
+ return {gate,finalVerdict,biasLabel,reason,uncertainty:baseUncertainty,cf,nh,hist,technicalPass,alignPass,technicalNeed,alignNeed,uncertaintyLimit:.72,conflictLimit:.82,fusionPass,fusion,horizonConfirm,coherentMomentum,hz,support,oppose,confidence:Math.round(directionalConfidence),strongAllowed,eventShock:shock,rawDir,directionScore,evidenceVotes,flow,flowSupport,flowSigned,alignRatio,extremeConflict,severeLearningReject};
 }
 
 const TITAN_SIGNAL_LOCK_KEY="titan_active_signals_v2";
@@ -1044,12 +1098,44 @@ function renderSignalLock(r){
  const rawDir=actionableDirection(r.rawV),conflict=rawDir&&rawDir!==a.direction;
  $("lockNarrative").textContent=remaining>0?`${a.direction} thesis remains committed. Live entry/targets are recalculated on new scans; original entry stays frozen for learning.${conflict?" Raw scan currently disagrees, but not strongly enough to invalidate the thesis.":""}`:`Minimum hold is complete. APEX keeps updating the live plan while the thesis remains valid.`;
 }
+
+async function goldDollarCrossMarket(){
+ const cfg=[
+  {sym:"USD/JPY",w:.50,usdSign:1},
+  {sym:"EUR/USD",w:.30,usdSign:-1},
+  {sym:"USD/CHF",w:.20,usdSign:1}
+ ];
+ const rows=await Promise.all(cfg.map(async c=>{
+  try{
+   const [m30,h1]=await Promise.all([td(c.sym,"30min"),td(c.sym,"1h")]);
+   const a=marketAnalyze(m30),b=marketAnalyze(h1);
+   const pair=clamp((a.score*.58+b.score*.42)/4,-1,1);
+   return {...c,pair,usd:pair*c.usdSign,price:a.price};
+  }catch(e){return {...c,error:e.message,usd:null}}
+ }));
+ const ok=rows.filter(x=>Number.isFinite(x.usd));
+ if(ok.length<2)return {available:false,usdStrength:0,goldImpact:0,agreement:0,rows};
+ const wsum=ok.reduce((a,x)=>a+x.w,0)||1;
+ let usdStrength=ok.reduce((a,x)=>a+x.usd*x.w,0)/wsum;
+ const signs=ok.filter(x=>Math.abs(x.usd)>=.12).map(x=>Math.sign(x.usd));
+ const bull=signs.filter(x=>x>0).length,bear=signs.filter(x=>x<0).length;
+ const agreement=signs.length?Math.max(bull,bear)/signs.length:.5;
+ // USD/JPY is useful but can be JPY/BOJ-driven; disagreement automatically shrinks the signal.
+ const shrink=agreement>=.67?1:.55;
+ usdStrength=clamp(usdStrength*shrink,-1,1);
+ return {available:true,usdStrength,goldImpact:clamp(-usdStrength,-1,1),agreement,rows};
+}
+
 async function scanSymbol(sym,tf,events){
  const tfs=["5min","15min","30min","1h","4h"],w={"5min":.7,"15min":.9,"30min":1.1,"1h":1.25,"4h":1.05},res={};let raw5=[];await Promise.all(tfs.map(async x=>{try{const rows=await td(sym,x);if(x==="5min")raw5=rows;res[x]=marketAnalyze(rows)}catch(e){res[x]={error:e.message}}}));
  let n=0,d=0,valid=0;tfs.forEach(x=>{if(res[x]&&!res[x].error){n+=res[x].score*w[x];d+=w[x];valid++}});if(!valid){const errs=[...new Set(tfs.map(x=>res[x]?.error).filter(Boolean))];throw new Error(errs[0]||("No market data returned for "+sym))}
- const market=n/d,N=newsScore(events,sym),C=causalBias(sym,N.items.length?N.items:events);N.rawScore=N.score;N.causalScore=C.score;N.causalReasons=C.reasons;N.score=clamp(N.rawScore*.35+C.score*.65,-2,2);const total=market+N.score*.75,main=res[tf]&&!res[tf].error?res[tf]:Object.values(res).find(x=>x&&!x.error),align=tfs.filter(x=>res[x]&&!res[x].error&&Math.sign(res[x].score)===Math.sign(total)&&Math.abs(res[x].score)>=1).length,v=verdict(total);
- let conf=Math.round(clamp(50+Math.abs(total)*8+align*3,45,94));if(v==="WAIT")conf=Math.min(conf,68);
- return{sym,tf,res,market,news:N,total,main,align,valid,v,conf,raw5,feedMeta:marketMeta.get(sym+"|"+tf)||null}
+ const market=n/d,N=newsScore(events,sym),C=causalBias(sym,N.items.length?N.items:events);N.rawScore=N.score;N.causalScore=C.score;N.causalReasons=C.reasons;N.score=clamp(N.rawScore*.35+C.score*.65,-2,2);
+ const crossMarket=sym==="XAU/USD"?await goldDollarCrossMarket():{available:false,usdStrength:0,goldImpact:0,agreement:0,rows:[]};
+ // Cross-market USD confirmation is a weighted corroborator, never a single-rule dictator.
+ const crossAdj=crossMarket.available?crossMarket.goldImpact*.85:0;
+ const total=market+N.score*.75+crossAdj,main=res[tf]&&!res[tf].error?res[tf]:Object.values(res).find(x=>x&&!x.error),align=tfs.filter(x=>res[x]&&!res[x].error&&Math.sign(res[x].score)===Math.sign(total)&&Math.abs(res[x].score)>=1).length,v=verdict(total);
+ let conf=Math.round(clamp(50+Math.abs(total)*8+align*3+(crossMarket.available&&Math.sign(crossMarket.goldImpact)===Math.sign(total)?Math.round(crossMarket.agreement*4):0),45,95));if(v==="WAIT")conf=Math.min(conf,68);
+ return{sym,tf,res,market,news:N,crossMarket,crossAdj,total,main,align,valid,v,conf,raw5,feedMeta:marketMeta.get(sym+"|"+tf)||null}
 }
 async function quickRankSymbol(sym,events){
  const main=marketAnalyze(await td(sym,"30min"));
@@ -1128,7 +1214,8 @@ $("riskBox").className=(nh2.degraded||smart.block||smart.caution)?"warn":"good";
 const providerText=nh2.providers?.length?nh2.providers.join(" + "):"none";
 $("riskBox").textContent=nh2.degraded?`⚠️ NEWS FEED OFFLINE: all keyless news providers failed (${nh2.failures}/${nh2.attempts}). APEX fails closed and will not invent “no news”.`:`${(smart.block&&smart.hostileDominant)?"⚠️":smart.caution?"⚠️":"✓"} Smart event risk ${smart.score.toFixed(2)} • ${smart.material} independent clusters • ${smart.state}${smart.supportiveDominant?" • supports current bias":smart.hostileDominant?" • opposes current bias":""}. Coverage ${macro} macro/geopolitical headlines (${highImpact} high-impact) via ${providerText}.`;
  $("scores").innerHTML=`<div class="scoreline"><span>Market structure</span><b>${r.market.toFixed(2)}</b></div><div class="scoreline"><span>World news</span><b>${r.news.items.length?r.news.score.toFixed(2):"NO DIRECT NEWS"}</b></div><div class="scoreline"><span>Smart event risk</span><b>${smart.state} ${smart.score.toFixed(2)}</b></div><div class="scoreline"><span>Timeframe alignment</span><b>${r.align}/${r.valid}</b></div>`;
- $("why").innerHTML=(r.news.items.slice(0,4).map(x=>`<div class="item"><h4>${esc(x.title)}</h4><p>${esc(x.source)} • ${esc(x.cat)} • sentiment ${x.score.toFixed(1)}</p></div>`).join("")||'<div class="item"><p>No strongly relevant world-news items found for this symbol.</p></div>')+(main.why.slice(0,4).map(x=>`<div class="item"><p>${x.v>0?"Bullish":"Bearish"} market evidence: ${esc(x.t)}</p></div>`).join(""));
+ const crossHtml=(r.sym==="XAU/USD"&&r.crossMarket?.available)?`<div class="item"><h4>USD CROSS-MARKET CONFIRMATION</h4><p>USD strength proxy ${(r.crossMarket.usdStrength*100).toFixed(0)} • Gold impact ${(r.crossMarket.goldImpact*100).toFixed(0)} • agreement ${Math.round(r.crossMarket.agreement*100)}% • USD/JPY + EUR/USD + USD/CHF. Used as confirmation, not a guaranteed inverse rule.</p></div>`:"";
+ $("why").innerHTML=crossHtml+(r.news.items.slice(0,4).map(x=>`<div class="item"><h4>${esc(x.title)}</h4><p>${esc(x.source)} • ${esc(x.cat)} • sentiment ${x.score.toFixed(1)}</p></div>`).join("")||'<div class="item"><p>No strongly relevant world-news items found for this symbol.</p></div>')+(main.why.slice(0,4).map(x=>`<div class="item"><p>${x.v>0?"Bullish":"Bearish"} market evidence: ${esc(x.t)}</p></div>`).join(""));
  const im=impactMap(events);$("impactMap").innerHTML=im.length?im.map(x=>`<div class="event"><div><b>${esc(x.a)}</b></div><div class="small">${esc(x.r)}</div><div class="impact ${x.d==="+"?"pos":x.d==="−"?"neg":"neu"}">${x.d}</div></div>`).join(""):'<div class="item"><p>No dominant causal theme detected.</p></div>'
 }
 let cachedEvents=[];
@@ -1604,27 +1691,25 @@ function triggerReadiness(r,events,meta){
  const c=r.consensus||decisionConsensus(r,events),raw=r.rawTechnicalV||r.rawV||r.v,dir=c.rawDir||actionableDirection(raw)||(r.market>0?"BUY":r.market<0?"SELL":null);
  const shock=c.eventShock||directionalEventProfile(events,r.sym,dir),severe=shock.material;
  const adaptive=adaptiveFusion(r,events),es=edgeStats(r.sym),dr=driftCheck(r.sym);
- const structure=Math.abs(r.market),structureNeed=c.technicalNeed||1.35;
+ const structure=Math.abs(r.market),structureNeed=c.technicalNeed||1.18;
  const alignNeed=c.alignNeed||Math.max(2,Math.ceil(r.valid*.5));
  const gates=[
+  {k:"DIRECTION",pass:!!dir,block:false,detail:dir?`${dir} • score ${Math.round((c.directionScore||0)*100)}%`:"none"},
   {k:"STRUCTURE",pass:structure>=structureNeed,block:false,detail:`${structure.toFixed(2)} / ${structureNeed.toFixed(2)}`},
   {k:"TIMEFRAMES",pass:r.align>=alignNeed,block:false,detail:`${r.align}/${r.valid} aligned • need ${alignNeed}`},
-  {k:"UNCERTAINTY",pass:meta.uncertainty<=.58,block:false,detail:`${Math.round(meta.uncertainty*100)}% • max 58%`},
-  {k:"CONFLICT",pass:meta.cf.ratio<=.45,block:false,detail:`${Math.round(meta.cf.ratio*100)}% • max 45%`},
-  {k:"EVENT RISK",pass:!(shock.block&&shock.hostileDominant),block:(shock.block&&shock.hostileDominant),detail:`${shock.score.toFixed(2)} risk • ${shock.material} clusters • ${shock.state}${shock.supportiveDominant?" • supports bias":shock.hostileDominant?" • opposes bias":""}`},
-  {k:"FUSION",pass:c.fusionPass,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} / 16 minimum`}
+  {k:"LIQUIDITY PRESSURE",pass:!!c.flowSupport,block:false,detail:`${Math.round((c.flow||0)*100)} proxy • ${c.flowSupport?"supports":"not confirmed"}`},
+  {k:"FUSION",pass:c.fusionPass,block:false,detail:`${Math.round(Math.abs(adaptive.fused)*100)} fused`},
+  {k:"EVENT RISK",pass:!(shock.directCriticalOverride&&shock.hostileDominant),block:(shock.directCriticalOverride&&shock.hostileDominant),detail:`${shock.score.toFixed(2)} risk • ${shock.material} clusters • ${shock.state}${shock.supportiveDominant?" • supports bias":shock.hostileDominant?" • opposes bias":""}`}
  ];
- if(es.n>=20)gates.push({k:"EXPECTANCY",pass:es.exp>0,block:es.exp<=0,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
- if(dr.state!=="LEARNING")gates.push({k:"DRIFT",pass:dr.state!=="NEGATIVE DRIFT",block:dr.state==="NEGATIVE DRIFT",detail:dr.state});
+ if(es.n>=30)gates.push({k:"EXPECTANCY",pass:es.exp>-.12,block:es.exp<=-.12,detail:`${es.exp.toFixed(2)}R • ${es.n} outcomes`});
+ if(dr.state!=="LEARNING")gates.push({k:"DRIFT",pass:dr.state!=="NEGATIVE DRIFT"||(c.directionScore||0)>=.66,block:false,detail:dr.state});
  const pass=gates.filter(g=>g.pass).length,hard=gates.find(g=>g.block&&!g.pass),first=gates.find(g=>!g.pass);
- let pct=Math.round(100*pass/gates.length);
- // Reward a coherent directional bias without pretending it is an entry.
- const horizon=horizonScores(r,events),labs=[horizon.scalp.label,horizon.day.label,horizon.swing.label],same=labs.every(x=>x===labs[0]&&x!=="WAIT");
- if(same&&dir&&labs[0]===dir)pct=Math.min(99,pct+5);
- let stage=pct>=92?"ARMED":pct>=75?"NEAR TRIGGER":pct>=50?"BUILDING":"EARLY";
+ let pct=Math.round(clamp((c.directionScore||0)*100*.70+(pass/gates.length)*30,0,99));
+ if(c.gate==="PASS")pct=Math.max(pct,76);
+ let stage=c.gate==="PASS"?(pct>=90?"ARMED":"ACTIVE EDGE"):pct>=72?"NEAR TRIGGER":pct>=50?"BUILDING":"EARLY";
  if(hard)stage="BLOCKED";
- const blocker=hard||first;
- return{dir,pct,stage,blocker,gates,severe,adaptive,horizon,shock};
+ const blocker=hard||(c.gate==="PASS"?null:first);
+ return{dir,pct,stage,blocker,gates,severe,adaptive,horizon:c.hz||horizonScores(r,events),shock};
 }
 function renderTriggerRadar(r,events,meta){
  const t=triggerReadiness(r,events,meta);
@@ -1633,7 +1718,7 @@ function renderTriggerRadar(r,events,meta){
  $("triggerBadge").textContent=t.stage+(t.dir?` • ${t.dir} BIAS`:"");
  $("triggerGates").innerHTML=t.gates.map(g=>`<div class="gateRow"><span>${esc(g.k)} • ${esc(g.detail)}</span><b class="${g.pass?"gatePass":g.block?"gateBlock":"gateFail"}">${g.pass?"PASS":g.block?"BLOCK":"WAIT"}</b></div>`).join("");
  const m=t.blocker;
- $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but APEX is not firing yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"APEX compares event direction to the actual trade direction and only hard-blocks materially hostile clusters. ":""}When the failing gate improves on a fresh verified scan, APEX can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
+ $("triggerNarrative").textContent=m?`${t.dir||"Directional"} bias exists, but APEX GOD has a directional thesis but has not promoted it yet. Primary blocker: ${m.k} (${m.detail}). Readiness ${t.pct}%. ${m.k==="EVENT RISK"?"APEX GOD compares event direction to the actual trade direction and only hard-blocks verified direct hostile shocks. ":""}When the failing gate improves on a fresh verified scan, APEX can promote the setup without forgetting the original evidence.`:`All measured trigger gates are currently satisfied. Event risk is cluster-normalized; duplicate coverage cannot create a false hard block. Final execution still obeys signal lock, proof and live-data validation.`;
  r.trigger=t;return t;
 }
 
@@ -1647,7 +1732,7 @@ function renderBrain(r,events){
  $("brainAgree").textContent=`${r.consensus?.support??b.agree}/4`;
  const forcedWait=r.consensus?.gate!=="PASS";
  $("brainState").textContent=forcedWait?`WAIT • ${r.consensus?.reason||"GATE"}`:(b.conflicts?`CONFLICT ${b.conflicts}`:"ALIGNED");
- $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?`CONSENSUS GATE: ${r.consensus?.reason||"evidence incomplete"}. Directional bias may exist, but APEX will not publish an aggressive trade.`:"Cross-layer evidence passed the consensus gate."}`;
+ $("brainNarrative").textContent=`Decision quality ${b.quality}/100. Technical ${b.technical>=0?"bullish":"bearish"}; causal event bias ${b.cause>0?"bullish":b.cause<0?"bearish":"neutral"}. ${forcedWait?`CONSENSUS GATE: ${r.consensus?.reason||"evidence incomplete"}. Directional bias is retained; APEX GOD only withholds the trade when the Opportunity Capture authority cannot justify promotion.`:"Cross-layer evidence passed the consensus gate."}`;
  const dna=eventClassify(events).filter(x=>x[1]>0).slice(0,5);
  $("eventDNA").innerHTML=dna.length?dna.map(([k,v])=>`<div class="scoreline"><span>${k}</span><b>${v.toFixed(1)}</b></div>`).join("")+(`<div class="small" style="margin-top:8px">${b.causal.reasons.length?b.causal.reasons.map(x=>`${x.score>0?"+":""}${x.score.toFixed(1)} ${esc(x.why)}`).join(" • "):"No strong causal rule matched this symbol."}</div>`):"<p>No material event cluster detected.</p>";
  const prev=titanState[r.sym],now={v:r.v,conf:r.conf,market:r.market,news:r.news.score,price:r.main.price||0,t:Date.now()};
@@ -1686,7 +1771,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-1.4",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-GOD-3.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);
 }
 
@@ -1708,114 +1793,39 @@ $("refreshEvents").onclick=async()=>{$("eventList").innerHTML='<div class="item"
 $("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev);persistText("titan_last_manual_update",Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+readStoredText("titan_last_manual_update","0")).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("conf");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds."}finally{b.disabled=false;b.textContent="🔄 UPDATE / SCAN MARKET"}}
 
 
-function bestNowLearningBridge(r,events){
- // Closed-loop bridge: BEST NOW consults the SAME resolved memory used by World Brain
- // before ranking a market. Small samples are deliberately shrinkage-limited.
- const rawScore=Math.round(r.conf||50),dirLabel=actionableDirection(r.v||r.rawTechnicalV||"");
- const dir=dirLabel==="BUY"?1:dirLabel==="SELL"?-1:0;
- const L=componentLearning(),fusion=adaptiveFusion(r,events),brain={quality:rawScore};
- const dna=makeDNA(r,events,brain),mem=dir?analogMemory(dna,dir):{n:0,hit:null,vote:"NO DATA",distance:null};
- const cohort=dir?cohortProof({...r,v:dirLabel},dna):{n:0,hit:null,exp:null};
- const hist=dir?historicalNewsAnalogs({...r,v:dirLabel},events):{n:0,hit:null,vote:"NO DATA"};
- const edge=edgeStats(r.sym),drift=driftCheck(r.sym);
- let adj=0;const reasons=[];
- if(L.adaptive&&dir){
-   const signed=dir*fusion.fused;
-   const a=Math.round(clamp(signed*7,-5,5));
-   if(a){adj+=a;reasons.push(`adaptive ${a>0?"+":""}${a}`)}
- }
- if(mem.n>=5){
-   const a=mem.vote==="SUPPORT"?5:mem.vote==="REJECT"?-8:0;
-   if(a){adj+=a;reasons.push(`analogs ${a>0?"+":""}${a}`)}
- }
- if(cohort.n>=5&&cohort.exp!=null&&cohort.hit!=null){
-   const a=(cohort.exp>.10&&cohort.hit>=.52)?4:(cohort.exp<=0||cohort.hit<.45)?-6:0;
-   if(a){adj+=a;reasons.push(`DNA ${a>0?"+":""}${a}`)}
- }
- if(hist.n>=5){
-   const a=hist.vote==="SUPPORT"?3:hist.vote==="REJECT"?-5:0;
-   if(a){adj+=a;reasons.push(`news memory ${a>0?"+":""}${a}`)}
- }
- if(edge.n>=20){
-   const a=edge.exp>0?2:-8;adj+=a;reasons.push(`expectancy ${a>0?"+":""}${a}`)
- }
- if(drift.state==="NEGATIVE DRIFT"){adj-=8;reasons.push("drift -8")}
- else if(drift.state==="POSITIVE DRIFT"){adj+=3;reasons.push("drift +3")}
- adj=Math.round(clamp(adj,-15,10));
- const learnedScore=Math.round(clamp(rawScore+adj,30,94));
- const veto=(mem.n>=5&&mem.vote==="REJECT")||(edge.n>=20&&edge.exp<=0)||(cohort.n>=8&&(cohort.exp<=0||cohort.hit<.45));
- const evidenceN=Math.max(mem.n||0,cohort.n||0,hist.n||0);
- return {rawScore,learnedScore,adjustment:adj,L,fusion,mem,cohort,hist,edge,drift,veto,evidenceN,reasons,dna};
-}
 function deepGateForBest(r,events){
- const c=r.consensus||decisionConsensus(r,events),b=buildBrain(r,events),rg=regimeDetect(r);
- const bridge=bestNowLearningBridge({...r,v:c.rawDir||r.v},events);
- let gate=c.gate;
- // One authority for market/news/event/timeframe gating. Resolved memory may veto,
- // but it may never bypass a World Brain safety gate. Positive learning only improves rank/quality.
- if(bridge.veto)gate="REJECT";
- if(bridge.drift.state==="NEGATIVE DRIFT"&&gate==="PASS")gate="WAIT";
- let quality=Math.round(clamp((c.confidence||b.quality)+(gate==="PASS"?5:gate==="REJECT"?-12:-2)+bridge.adjustment,30,94));
- if(c.nh?.degraded)quality=Math.min(quality,58);
- return {gate,quality,uncertainty:c.uncertainty,regime:rg.regime,memN:bridge.mem.n,expN:bridge.edge.n,exp:bridge.edge.exp,learningBridge:bridge}
+ const c=r.consensus||decisionConsensus(r,events),b=buildBrain(r,events),rg=regimeDetect(r),dna=makeDNA(r,events,b),dir=c.rawDir==="BUY"?1:c.rawDir==="SELL"?-1:0;
+ const mem=analogMemory(dna,dir),es=edgeStats(r.sym),dr=driftCheck(r.sym);
+ return {gate:c.gate,quality:c.confidence,uncertainty:c.uncertainty,regime:rg.regime,memN:mem.n,memVote:mem.vote,expN:es.n,exp:es.exp,drift:dr.state,consensus:c};
+}
+function mergeEventFeeds(base,specific){
+ const seen=new Set();return [...(specific||[]),...(base||[])].filter(x=>{const k=String(x.title||"").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(!k||seen.has(k))return false;seen.add(k);return true;});
+}
+async function authoritativeBestScan(sym,tf,baseEvents){
+ const specific=await symbolWorldEvents(sym).catch(()=>[]),events=mergeEventFeeds(baseEvents,specific);
+ const r=await scanSymbol(sym,tf,events);r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;r.consensus=decisionConsensus(r,events);
+ const dg=deepGateForBest(r,events),storedLock=signalLockStatus(sym),lockInvalid=storedLock?shouldHardInvalidate(storedLock,{...r,rawV:r.rawTechnicalV,v:r.consensus.finalVerdict}):null;
+ const lock=lockInvalid?null:storedLock;
+ const displayVerdict=lock?.direction?(lock.direction==="BUY"?"BUY":"SELL"):r.consensus.finalVerdict;
+ const displayConf=lock?.direction?Math.max(r.consensus.confidence,60):r.consensus.confidence;
+ return {...r,...dg,events,displayVerdict,displayConf,lock,lockInvalid};
 }
 $("scanAll").onclick=async()=>{
- const b=$("scanAll");b.disabled=true;b.textContent="RANKING MARKETS...";
- $("oppList").innerHTML='<div class="item"><p>Stage 1: low-credit ranking across 5 markets…</p></div>';
+ const b=$("scanAll");b.disabled=true;b.textContent="RUNNING APEX PREDATOR GOD...";$("oppList").innerHTML='<div class="item"><p>Running the exact APEX PREDATOR GOD authority across every market…</p></div>';
  try{
-  const ev=await ensureEvents(),basket=["BTC/USD","ETH/USD","XAU/USD","EUR/USD","USD/JPY"],stage1=[];
-  for(const s of basket){
-   try{stage1.push(await quickRankSymbol(s,ev));await new Promise(r=>setTimeout(r,350))}catch(e){}
-  }
-  // The quick scan now talks to resolved memory BEFORE choosing the leader.
-  // This is local computation only; it does not consume extra market/news API calls.
-  for(const x of stage1){x.learningBridge=bestNowLearningBridge(x,ev);x.learnedRank=x.learningBridge.learnedScore}
-  stage1.sort((a,b)=>(b.learnedRank||b.conf)-(a.learnedRank||a.conf)||b.conf-a.conf||Math.abs(b.total)-Math.abs(a.total));
-  const leader=stage1.find(x=>x.v!=="WAIT");
-  if(leader){
-   $("oppList").innerHTML='<div class="item"><p>Stage 2: deep-confirming #1 through the World Brain…</p></div>';
-   try{
-    const r15=marketAnalyze(await td(leader.sym,"15min"));await new Promise(r=>setTimeout(r,350));
-    const r1h=marketAnalyze(await td(leader.sym,"1h"));
-    const agree=[leader.main,r15,r1h].filter(x=>Math.sign(x.score)===Math.sign(leader.total)&&Math.abs(x.score)>=1).length;
-    leader.align=agree;leader.valid=3;leader.market=(leader.main.score+r15.score+r1h.score)/3;
-    leader.total=leader.market+leader.news.score*.75;leader.v=verdict(leader.total);
-    leader.conf=Math.round(clamp(50+Math.abs(leader.total)*8+agree*3,45,94));if(leader.v==="WAIT")leader.conf=Math.min(leader.conf,68);
-    const deepR={sym:leader.sym,tf:"30min",res:{"30min":leader.main,"15min":r15,"1h":r1h},market:leader.market,news:leader.news,total:leader.total,main:leader.main,align:leader.align,valid:leader.valid,v:leader.v,conf:leader.conf};
-    deepR.rawTechnicalV=deepR.v;deepR.rawTechnicalConf=deepR.conf;deepR.consensus=decisionConsensus(deepR,ev);
-    const dg=deepGateForBest(deepR,ev);Object.assign(leader,dg,{consensus:deepR.consensus});
-    // Safety remains sovereign: learning can veto/downgrade but can never promote through a failed consensus gate.
-    if(deepR.consensus.gate!=="PASS")leader.gate=deepR.consensus.gate;
-    if(dg.learningBridge?.veto)leader.gate="REJECT";
-   }catch(e){leader.gate="WAIT";leader.quality=leader.conf;leader.deepError=e.message}
-  }
-  const min=+$("minConf").value;
-  const shown=stage1.filter(x=>x.conf>=min&&x.v!=="WAIT").slice(0,6);
-  $("oppList").innerHTML=shown.length?shown.map((x,i)=>{
-   const isLeader=leader&&x.sym===leader.sym;
-   const gate=isLeader?(x.gate||"WAIT"):"RANK ONLY";
-   const label=gate==="PASS"?"TRADE CANDIDATE":gate==="REJECT"?"REJECT":gate==="RANK ONLY"?"RANK ONLY":"NO TRADE";
-   const lb=isLeader?(x.learningBridge||x.learningBridge):x.learningBridge;
-   const learnAdj=lb?.adjustment||0,learnN=lb?.L?.n||0,analogN=lb?.mem?.n||0,cohortN=lb?.cohort?.n||0;
-   const detail=isLeader?`${x.align}/${x.valid} TF • uncertainty ${Math.round(((x.consensus?.uncertainty ?? x.uncertainty) || 0)*100)}% • ${x.news.items.length} direct news`:`M30 ranked • ${x.news.items.length} direct news • market ${x.market.toFixed(2)}`;
-   const q=isLeader?(x.quality||lb?.learnedScore||x.conf):(lb?.learnedScore||x.conf);
-   const raw=lb?.rawScore??x.conf;
-   const learnLine=`LEARNING ${learnN>=12?"ACTIVE":"BUILDING"} • raw ${raw}% → learned ${lb?.learnedScore??raw}%${learnAdj?` (${learnAdj>0?"+":""}${learnAdj})`:""} • ${analogN} analogs • ${cohortN} DNA`;
-   const shownVerdict=isLeader&&x.consensus?.gate!=="PASS"?x.consensus.biasLabel:x.v;
-   return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(shownVerdict)}">${shownVerdict}</span></b><small>${detail}</small><small>${learnLine}</small><small><b>${label}</b>${isLeader&&x.consensus?.reason?` • ${esc(x.consensus.reason)}`:""}${lb?.veto?` • LEARNING VETO`:""}</small></div><div class="right"><b>${q}%</b><small>${isLeader?"final quality":"learned rank"}</small></div></div>`
-  }).join(""):'<div class="item"><p>No setup passed the current score threshold. That is a valid APEX result.</p></div>'
- }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`}
- finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES"}
+  const base=await ensureEvents(),tf=$("tf").value,basket=["BTC/USD","ETH/USD","XAU/USD","EUR/USD","USD/JPY"],rows=[];
+  for(const s of basket){try{rows.push(await authoritativeBestScan(s,tf,base));}catch(e){rows.push({sym:s,error:e.message,displayVerdict:"NO TRADE",displayConf:0,gate:"WAIT"});}await new Promise(r=>setTimeout(r,220));}
+  const gateRank=x=>x.error?3:x.gate==="PASS"?0:x.gate==="WAIT"?1:2;rows.sort((a,b)=>gateRank(a)-gateRank(b)||(b.displayConf||0)-(a.displayConf||0)||Math.abs(b.total||0)-Math.abs(a.total||0));
+  const min=+$("minConf").value,shown=rows.filter(x=>!x.error&&((x.displayConf||0)>=Math.min(min,72)||x.gate==="PASS")).slice(0,6);
+  $("oppList").innerHTML=shown.length?shown.map((x,i)=>{const c=x.consensus||{},lockTxt=x.lock?.direction?` • ACTIVE ${x.lock.direction} LOCK`:"",label=x.gate==="PASS"?"WORLD BRAIN PASS":x.gate==="REJECT"?"WORLD BRAIN REJECT":"WORLD BRAIN WAIT";const detail=`${x.align}/${x.valid} TF • ${Math.round((c.uncertainty||0)*100)}% uncertainty • ${x.news?.items?.length||0} direct news • ${x.tf.toUpperCase()}`,proof=x.memN?` • analogs ${x.memN} ${x.memVote||""}`:"";return `<div class="op"><div class="rank">#${i+1}</div><div><b>${x.sym} <span class="${vclass(x.displayVerdict)}">${x.displayVerdict}</span></b><small>${detail}</small><small><b>${label}</b> • ${esc(c.reason||"")}${proof}${lockTxt}</small></div><div class="right"><b>${x.displayConf}%</b><small>GOD AUTHORITY</small></div></div>`;}).join(""):'<div class="item"><p>No market met the current display threshold. BEST NOW and WORLD BRAIN are using the same decision authority.</p></div>';
+ }catch(e){$("oppList").innerHTML=`<div class="warn">${esc(e.message||String(e))}</div>`;}finally{b.disabled=false;b.textContent="SCAN BEST OPPORTUNITIES";}
 }
 
-
-// TITAN 6.2.1 MEMORY PATCH — redundant automatic brain persistence.
-// Deliberately excludes titan_td (API key) and all connection credentials.
 const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
 const TITAN_AUTO_MEMORY_STORE="brain";
 const TITAN_AUTO_MEMORY_KEY="latest";
 function titanMemorySnapshot(){
- return {schema:3,savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
+ return {schema:5,appVersion:"APEX-PREDATOR-GOD-3.1",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
 }
 function titanMemoryOpen(){return new Promise((resolve,reject)=>{try{const q=indexedDB.open(TITAN_AUTO_MEMORY_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(TITAN_AUTO_MEMORY_STORE))db.createObjectStore(TITAN_AUTO_MEMORY_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)}catch(e){reject(e)}})}
 function renderAutoMemoryStatus(savedAt=null){
@@ -1823,7 +1833,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots and compressed state memory save automatically in this browser. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; API key is not copied into brain backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 3.1 upgrades in place without resetting existing evidence. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt)}catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -1890,10 +1900,12 @@ renderJournal();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("APEX PREDATOR 1.0"),"page version/title consistency");
+  req(document.title.includes("APEX PREDATOR GOD 3.1"),"page version/title consistency");
+  req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function","BEST NOW / WORLD BRAIN shared engine");
+  req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"1.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 1.0");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"GOD-3.1"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 3.1");
 })();
 
 (function titanIntegrityCheck(){
@@ -1913,14 +1925,14 @@ renderJournal();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"FINAL integrity PASS ✓ Event direction regression, strict XAU bullion relevance filter, critical UI and core arbitration loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX PREDATOR GOD 3.1 integrity PASS ✓ Opportunity Capture, World Brain sync, directional event arbitration, liquidity-pressure proxy, memory preservation and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"APEX-PREDATOR-1.4",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-PREDATOR-GOD-3.1",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };

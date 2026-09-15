@@ -1,3 +1,13 @@
+APEX PREDATOR 2.0 — WORLD BRAIN SYNC
+
+UPGRADE NOTES
+- Deploy over the SAME existing site/origin to retain all browser memory automatically.
+- Existing keys are unchanged: titan_journal_v2, titan_state_v2, titan_active_signals_v2 and IndexedDB titan_world_brain_memory.
+- APEX creates a pre-2.0 safety snapshot on first launch when browser storage allows it.
+- BEST NOW now runs the same full World Brain engine per symbol; it no longer uses a separate ranking decision path.
+- Event risk is directional: broad macro/geopolitical clusters can cause caution, but a hard block requires fresh direct symbol-specific hostile evidence.
+- No trading model can guarantee accuracy or profit. Validate on paper/demo and compare resolved outcomes before increasing risk.
+
 APEX PREDATOR 1.2 — FINAL CORE
 
 This build contains the final surgical event-direction repair and PWA icon integration.
@@ -31,12 +41,17 @@ APEX 1.3 FINAL NEWS FILTER:
 - Decision/event/learning architecture otherwise unchanged to preserve continuity and browser memory.
 
 
-APEX 1.4 LEARNING BRIDGE:
-- BEST NOW now consults the same resolved local memory BEFORE selecting the #1 market.
-- Raw rank score is converted into a bounded learned rank using adaptive ensemble evidence, close-DNA analogs, historical news analogs, resolved expectancy and drift.
-- Small samples are shrinkage-limited; no wild self-rewrite is allowed.
-- Positive learning may improve ranking/quality only. It can NEVER bypass World Brain safety gates.
-- Negative resolved evidence can veto/downgrade a candidate.
-- BEST NOW visibly shows raw score -> learned score, learning sample count, analog count, DNA count and LEARNING VETO when applicable.
-- No extra market/news API requests are used for the learning bridge; it reads the browser-local resolved memory.
-- Existing APEX 1.3 journal/state/active-signal storage keys are preserved so upgrades retain memory.
+APEX PREDATOR GOD 3.1
+=====================
+This is an in-place upgrade from APEX PREDATOR 2.0. Deploy it over the SAME site/domain to retain browser storage.
+
+Major changes:
+- One authoritative decision engine for WORLD BRAIN and BEST NOW.
+- Opportunity Capture scoring prioritizes directional evidence instead of default WAIT behavior.
+- OHLC/tick-volume liquidity-pressure proxy estimates initiative, rejection and absorption without pretending to be true exchange order-book data.
+- Event risk only hard-blocks a verified, direct hostile shock against the proposed trade direction.
+- Uncertainty/conflict reduce confidence; they are not automatic vetoes unless evidence is extreme.
+- Existing titan_journal_v2, titan_state_v2, titan_active_signals_v2, learning history, settings and IndexedDB memory are preserved.
+- A pre-upgrade GOD 3.0 safety snapshot is created before migration. API keys/secrets are excluded.
+
+Trading risk: this software can improve decision consistency but cannot guarantee profit or eliminate losses.
