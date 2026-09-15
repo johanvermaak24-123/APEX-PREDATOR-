@@ -1,0 +1,19 @@
+APEX SCALP GOD 6.1 — RESEARCH BASIS
+
+Public/legal research only. No stolen/private/dark-web information was used.
+
+Key design findings:
+1. Order-flow imbalance carries short-horizon price information; Chinese soybean futures evidence finds OFI more informative than trade imbalance/volume, with predictability decaying at longer horizons.
+2. Limit-order-book imbalance is useful but nuanced; imbalance can also be an endogenous response to price moves, so it should not be treated as a one-way oracle.
+3. Cross-asset/order-flow effects decay quickly, supporting short-horizon execution rather than multi-hour extrapolation.
+4. Crypto order flow contains both transitory reversal and more permanent components; separating these regimes matters.
+5. Market-quality deterioration and spoof-like distortions are strongest around wide spreads/open-close/illiquidity, so spread stress and chase vetoes remain critical.
+6. CPCV/DSR-style anti-overfit logic remains preferable to naive single walk-forward validation.
+
+6.1 implementation:
+- MICRO-ENTRY SNIPER: counter thesis must wait for fresh price-action confirmation.
+- 7 trigger checks: wick rejection, counter candle, reclaim, higher-low/lower-high, deceleration, flow-proxy flip, persistence cooling.
+- Tight structural invalidation capped at 0.34 ATR and floored at 0.12 ATR.
+- Reward/risk and payoff-implied break-even probability must improve before TRIGGERED.
+- Chase veto blocks entries after an already-extended counter move without rejection.
+- Even CONFIRMED/GOD EDGE setups require TRIGGERED micro-entry state before live authority.

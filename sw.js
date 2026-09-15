@@ -1,4 +1,4 @@
-const CACHE="apex-scalp-god-5.3-microstructure-adversary-monster";
+const CACHE="apex-scalp-god-6.4-adversarial-fortress";
 const STATIC=["./","./index.html","./manifest.webmanifest","./apple-touch-icon.png","./icon-192.png","./icon-512.png"];
 self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self.skipWaiting()});
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));self.skipWaiting()});

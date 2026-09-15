@@ -1,0 +1,7 @@
+version: APEX-SCALP-GOD-6.4
+dom_ids: 289
+duplicate_ids: []
+js_refs: 242
+missing_refs: []
+fortress_present: True
+node_syntax: PASS

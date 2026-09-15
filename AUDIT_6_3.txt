@@ -1,0 +1,17 @@
+APEX SCALP GOD 6.3 — STATIC / ADVERSARIAL AUDIT
+
+{
+  "version": "6.3",
+  "dom_ids": 278,
+  "js_dom_refs": 295,
+  "missing_refs": [],
+  "duplicate_ids": [],
+  "manifest_json": true,
+  "timing_panel": true,
+  "timing_functions": true,
+  "parent_context_only": true,
+  "journal_timing": true,
+  "notes": "Static/invariant QA does not prove live profitability, broker execution quality, or absence of all runtime/network edge cases."
+}
+
+FUZZ: 1,000,000 timing-trap invariant cases, 0 failures.

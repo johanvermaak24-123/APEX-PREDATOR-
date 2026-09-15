@@ -1,0 +1,18 @@
+{
+  "version": "6.2",
+  "cases": 10000000,
+  "failures": {
+    "decision_not_above_state": false,
+    "decision_bounds": false,
+    "god_without_confirmed_minima": false,
+    "confirmed_bypass": false,
+    "hydra_toxicity_bypass": false,
+    "hydra_fragility_bypass": false,
+    "hydra_retired_bypass": false,
+    "live_without_promoted": false,
+    "live_without_trigger": false,
+    "live_without_hydra": false
+  },
+  "passed": true,
+  "seconds": 5.77536153793335
+}

@@ -1,0 +1,8 @@
+{
+  "tests": 10000000,
+  "failures": 0,
+  "dom_ids": 252,
+  "js_refs": 217,
+  "missing_refs": [],
+  "duplicate_ids": []
+}

@@ -1,0 +1,17 @@
+APEX SCALP GOD 6.2 — STATIC / ADVERSARIAL AUDIT
+
+Version banner: PASS
+Epistemic Hydra panel: PASS
+State-first prior: PASS
+Uncertainty tax: PASS
+Recency decay: PASS
+Hydra execution veto: PASS
+DOM ids: 267 total / 267 unique
+JS DOM refs: 241
+Missing refs: 0 []
+Duplicate ids: 0 []
+10M invariant fuzz: PASS (10,000,000 cases, 0 failures)
+
+The fuzz suite checks probability bounds, promotion minima, loss/safety gating, toxicity veto, fragility veto, retirement veto, and live-entry dependence on both statistical promotion and a valid micro trigger/Hydra pass.
+
+LIMITATION: These tests do not prove profitability, broker compatibility, fill quality, or correctness of third-party market/news data.

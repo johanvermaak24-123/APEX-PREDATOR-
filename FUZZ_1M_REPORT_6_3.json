@@ -1,0 +1,11 @@
+{
+  "version": "6.3",
+  "tests": 1000000,
+  "failures": 0,
+  "pass": true,
+  "focus": [
+    "timing-veto mutual exclusion",
+    "shock veto",
+    "adverse/recovery non-negative"
+  ]
+}

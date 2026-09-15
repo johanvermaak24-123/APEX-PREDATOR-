@@ -1,0 +1,10 @@
+APEX SCALP GOD 6.3 — RESEARCH BASIS
+
+1. Boudt & Petitjean, Journal of Financial Markets: intraday jumps coincide with higher trading costs and demand for immediacy; order imbalance is especially informative for price discovery after news.
+2. Sobti (2025), International Review of Financial Analysis: gold intraday jumps are linked to US macro news, order imbalance, trading activity and transaction costs; liquidity costs can stay elevated after jumps.
+3. Awartani et al. (2024), International Review of Financial Analysis: gold price and volatility adjustments after FOMC shocks can persist beyond five minutes.
+4. Macro-news jump literature: news-related jumps are larger and more persistent than ordinary jumps, so fading them blindly is dangerous.
+5. Adverse-selection literature: the apparent spread/short-horizon edge can be consumed by informed-flow drift; execution quality matters as much as directional prediction.
+6. Recent HFT imbalance research warns that imbalance can be endogenous to price moves, so 6.3 never treats a single flow proxy as independent proof.
+
+Design consequence: 6.3 separates direction from activation timing. It explicitly measures how far a locked thesis moves against itself before the market begins to recover in the thesis direction. The inverse scalp is allowed only through the full evidence/cost/microstructure/sniper stack, and is vetoed once parent activation is detected.

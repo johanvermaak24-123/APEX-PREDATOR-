@@ -1,0 +1,28 @@
+APEX SCALP GOD 6.2 — EPISTEMIC HYDRA
+RESEARCH BASIS — 15 Sep 2026
+
+WHAT CHANGED
+- State-first inference: microstructure state sets a prior before path/flow evidence is credited.
+- Epistemic uncertainty tax: small samples, unknown costs, unstable holdouts, evidence conflict and drift reduce decision probability.
+- Recency-decayed analog memory: older crypto paths decay faster than recent paths; stale evidence cannot dominate forever.
+- Flow/depth toxicity proxy: available OHLC/tick-volume pressure is judged relative to absorption/rejection and liquidity fragility. This is explicitly NOT direct L2 depth.
+- Alpha retirement: recent negative empirical expectancy or the existing loss firewall can retire an edge rather than keep averaging into it.
+- Edge half-life: the UI reports a short validity horizon by state so old scalp signals are not treated as timeless.
+- Hydra execution veto: statistically promoted setups still cannot execute if toxicity/fragility state is unsafe.
+
+PUBLIC RESEARCH THEMES USED
+1. State-dependent L2 liquidity transition work (2026) supports a state-first design: pre-event liquidity state can matter before order flow; incremental flow value is conditional and not always robust cross-symbol.
+2. BTC L2 / passive-buy toxicity work (2026) reports that pressure relative to near-touch absorption capacity and liquidity fragility can be more informative than raw flow alone.
+3. Hawkes + LOB research (2026) reinforces event-time modeling for Bitcoin and the importance of LOB state rather than price-only features.
+4. A 2026 BTC/USDT OFI study found the out-of-sample result reversed as the sample grew. This is a strong warning against trusting early samples.
+5. CSI 300 futures research (2025) models OFI impact as state/regime dependent and horizon dependent, supporting short edge half-lives and conditional screening.
+6. A pre-registered 2026 index-futures null found touch OFI / queue depletion did not beat the cost-adjusted break-even base rate. This argues for hard economic gates rather than feature worship.
+7. Crypto validation research (2026) reports high false-positive rates for accuracy/AUC-only validation and highlights CPCV/PBO/DSR style safeguards.
+8. Backtest-overfitting research finds CPCV superior to ordinary walk-forward in a controlled non-stationary setting.
+9. Calibrated uncertainty research (2026) shows financial predictive distributions can be overconfident and that conformal-style recalibration can improve reliability. 6.2 therefore penalizes weakly-supported probability rather than treating raw scores as truth.
+
+IMPORTANT LIMITATIONS
+- Current MT5/manual feed does not expose full exchange L2/L3 order books for all instruments. Hydra toxicity/absorption fields are proxies from available price, range, tick-volume, spread and path state.
+- Static/fuzz tests prove software invariants, not future profitability.
+- Small-sample SCOUT/RESEARCH signals are not statistically proven live edges.
+- Exact USD P&L depends on broker symbol contract size, tick value, lot size, spread, commission and slippage.
