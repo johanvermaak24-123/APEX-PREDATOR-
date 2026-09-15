@@ -1,23 +1,21 @@
 {
-  "version": "APEX-SCALP-GOD-6.9.0",
-  "sourceSha256": "42f64ee668ecd67bb616feb58ed826605c41ac119db6922e888e32d1a565f778",
+  "version": "APEX-SCALP-GOD-7.0.0",
+  "sourceSha256": "83fce6569dd260d02d94268f7dba8ff3aed8bbc7ef0de0c9e5f4b3dcec7a3cb2",
   "scenarios": 1000000,
-  "seed": "0x69c0ffee",
-  "elapsedMs": 446,
+  "seed": "0x7000cafe",
+  "elapsedMs": 777,
   "passed": true,
-  "liveCount": 26364,
-  "waitCount": 973636,
-  "invalidGeom": 500248,
-  "hydraVeto": 526410,
-  "costVeto": 220420,
-  "dataVeto": 179971,
-  "proofCases": 199746,
+  "liveCount": 25983,
+  "waitCount": 974017,
+  "tradeHold": 404119,
+  "tradeExit": 555854,
+  "tradeSwitch": 40027,
   "invariants": [
     "ENTER iff final execution authority is complete",
-    "Every non-live command is WAIT — NO LIVE TRADE",
-    "No live entry/SL/TP levels leak while WAIT",
-    "BUY/SELL text matches authorized direction",
-    "BEST NOW can never label ENTER from scalp state alone",
-    "Every non-live BEST NOW row begins with WAIT"
+    "Every non-live new-trade command is WAIT",
+    "No entry/SL/TP levels leak while WAIT",
+    "BEST NOW cannot create ENTER independently",
+    "Open trade manager only emits HOLD / EXIT / SWITCH",
+    "Target, hard invalidation and opposite live authority force EXIT"
   ]
 }

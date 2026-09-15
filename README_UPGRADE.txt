@@ -1,88 +1,70 @@
-APEX SCALP GOD 6.9.0 — EXECUTION COMMAND
-=========================================
+APEX SCALP GOD 7.0.0 — PRECISION TRADER HUD
+================================================
 
 PURPOSE
-6.9.0 fixes the ambiguity visible in 6.8.2 where a research trigger such as
-"TRIGGERED — PROOF ONLY — COUNTER BUY SCALP" could visually look like a trade
-instruction even while Execution Authority said NO LIVE ENTRY.
+-------
+7.0.0 simplifies the front of APEX without deleting the underlying engines.
+The default view now answers the practical questions first:
 
-THE RULE NOW
-Only one layer is allowed to issue a live trade instruction:
+1. ENTER BUY NOW / ENTER SELL NOW / WAIT — DO NOT ENTER
+2. Current price
+3. Exact entry when live authority exists
+4. Hard exit / invalidation
+5. Take-profit / exit level
+6. HOLD / EXIT management after the user confirms "I ENTERED THIS TRADE"
 
-  ENTER BUY NOW
-  ENTER SELL NOW
-  WAIT — NO LIVE TRADE
+DEEP EVIDENCE IS STILL THERE
+----------------------------
+Fortress, Hydra, proof statistics, news, timing traps, market-flow proxies,
+learning, journals, causal maps and the rest of the evidence stack remain in
+the DOM and continue running. They are hidden by default in Precision View.
+Tap SHOW DEEP EVIDENCE to expose them.
 
-Everything else is research/context and cannot override the final command.
+TRADE MANAGEMENT
+----------------
+A live ENTER command does not automatically assume the user actually placed a
+trade. If filled, tap I ENTERED THIS TRADE. APEX stores the entry plan locally.
+On future fresh scans the top panel can show:
+- HOLD
+- EXIT / TAKE PROFIT NOW — TARGET HIT
+- EXIT NOW — HARD INVALIDATION HIT
+- EXIT NOW — OPPOSITE LIVE AUTHORITY
+- SWITCH TO <symbol> AND SCAN TO MANAGE
 
-WHAT CHANGED
-1. NEW APEX EXECUTION COMMAND CARD
-   - Placed near the top of WORLD BRAIN.
-   - ENTER is shown only after the complete final authority stack passes.
-   - While WAIT, live entry / invalidation / target fields are hidden as "—".
+Tap TRADE CLOSED after closing the position.
 
-2. BEST NOW IS FAIL-CLOSED
-   - New FINAL BASKET COMMAND summary.
-   - If no symbol has complete live authority it says:
-       NO LIVE TRADE RIGHT NOW
-   - Every non-live candidate begins with WAIT, including PROOF, RESEARCH ARMED
-     and WATCH states.
-   - A scalp FIRE/trigger state alone can no longer create an ENTER label.
+IMPORTANT ACCURACY NOTE
+-----------------------
+No market system can honestly guarantee or engineer a near-100% future win
+rate. 7.0.0 therefore optimizes the user experience for selectivity: WAIT is
+the default and ENTER is allowed only when the existing proof, data, broker-
+cost, Fortress, Hydra and geometry gates all clear. The million-case audit is
+a software invariant stress test, not one million historical or live trades.
 
-3. SINGLE SOURCE OF TRUTH
-   - executionCommandFromParts() is now the final arbiter used by the main
-     execution card and BEST NOW ranking.
-   - Required for ENTER: proof promotion, verified execution geometry/cost,
-     Fortress pass, Hydra pass, valid direction and complete live price geometry.
-
-4. SUBORDINATE PANELS CANNOT OVERRIDE FINAL AUTHORITY
-   - SCALP COMMAND CENTER cannot display green ENTER unless the final arbiter
-     also authorizes it.
-   - Micro-Harvest / lot sizing cannot issue a live lot when Fortress/Hydra/final
-     authority has not cleared.
-   - Candidate promotion wording was changed from "LIVE ENTRY authorized" to
-     "FINAL GATE CHECK" until the final execution stack passes.
-
-5. STALE LIVE COMMANDS AUTO-EXPIRE
-   - A live ENTER command expires after the 120-second freshness window in manual
-     mode and becomes WAIT — RESCAN REQUIRED.
-   - Entry/SL/TP fields are cleared on expiry.
-   - Returning to the app after backgrounding also performs the freshness check.
-   - Starting a new market scan immediately suspends the previous live command.
-
-6. BEST NOW SCAN SAFETY
-   - Starting a basket scan immediately suspends the previous basket authority.
-   - Failed basket scans fail closed and cannot leave a stale ENTER on screen.
-   - BEST NOW no longer mutates the normal live-scan duplicate/race guard while
-     comparing different symbols.
-
-MEMORY / PROOF PRESERVATION
-No reset was introduced.
-The existing storage/proof architecture remains on the same keys, including:
-- apex_memory_vault_v4_0
-- apex_path_ledger_v4
-- apex_6_8_forward_proof_epoch
-- titan_active_signals_v2
-- titan_world_brain_memory
-
-The 6.8 forward proof epoch and 6.8_FORWARD proof rows are deliberately retained.
-Deploying 6.9.0 over the SAME GitHub Pages origin preserves browser LocalStorage /
-IndexedDB data. Do not delete site data if you want to retain the learned memory.
-
-DEPLOY OVER THE CURRENT GITHUB PAGES BUILD
-1. Keep the same repository and the same GitHub Pages URL.
-2. Replace index.html, manifest.webmanifest, sw.js and apple-touch-icon.png.
-3. app.js is included as the exact readable copy of the JavaScript embedded in
-   index.html; index.html is self-contained and does not depend on app.js.
-4. Commit/push and allow GitHub Pages to redeploy.
-5. Re-open the same site. The 6.9 service-worker cache name forces old app-cache
-   cleanup without changing the browser storage keys that contain APEX memory.
+MEMORY / UPGRADE SAFETY
+-----------------------
+Existing evidence, journal, signal-lock, path-ledger and Memory Vault storage
+keys are preserved. Deploying over the same origin should retain LocalStorage.
+Do not clear browser/site data during the upgrade.
 
 AUDIT
-See TEST_REPORT.txt and AUDIT_1M_REPORT.json.
-AUDIT_1M.js extracts the exact final arbiter/ranking functions from app.js and
-runs a deterministic one-million-scenario property test.
+-----
+- JavaScript syntax: PASS
+- 332 unique HTML IDs: PASS
+- 288 literal JS DOM references, 0 missing IDs: PASS
+- Inline JavaScript matches app.js: PASS
+- 1,000,000 deterministic randomized execution + management scenarios: PASS
+- ENTER can only occur with complete final execution authority: PASS
+- Non-live candidate cannot leak entry/SL/TP as live instruction: PASS
+- Open-trade manager never emits a new ENTER: PASS
+- Target, invalidation and opposite live authority force EXIT: PASS
 
-IMPORTANT
-The audit verifies code/decision invariants. It is not one million live market
-trades and it does not prove future profitability or market-direction accuracy.
+FILES
+-----
+index.html              Main single-page app
+app.js                  Exact extracted inline JavaScript for audit/review
+AUDIT_1M.js              Reproducible deterministic stress test
+AUDIT_1M_REPORT.json     Audit result
+TEST_REPORT.txt          Package checks
+manifest.webmanifest     PWA manifest
+sw.js                    Service worker with new 7.0 cache namespace

@@ -1,80 +1,44 @@
-APEX SCALP GOD 6.9.0 — EXECUTION COMMAND
-FINAL AUDIT REPORT — 15 September 2026
-========================================
+APEX SCALP GOD 7.0.0 — PRECISION TRADER HUD
+FINAL PACKAGE TEST REPORT
+============================================
 
-RESULT: PASS
+UI / PRODUCT
+PASS — Precision View is default.
+PASS — Deep evidence remains in the app but is hidden by default.
+PASS — Top-level new-trade command is limited to ENTER BUY NOW / ENTER SELL NOW / WAIT.
+PASS — Current price, entry, hard exit and take-profit are on the front card.
+PASS — Manual trade tracking supports HOLD / EXIT instructions after "I ENTERED THIS TRADE".
+PASS — BEST NOW cannot surface a research state as ENTER.
 
-A. 1,000,000-SCENARIO EXECUTION-AUTHORITY AUDIT
-------------------------------------------------
-Exact source tested: executionCommandFromParts() and BEST NOW display/ranking
-functions extracted directly from app.js.
+STATIC INTEGRITY
+PASS — JavaScript syntax (node --check).
+PASS — 332 HTML IDs / 332 unique.
+PASS — 288 literal JS DOM references / 0 missing IDs.
+PASS — Inline JavaScript exactly matches app.js.
+PASS — 7.0.0 page/app/self-test version consistency.
+PASS — Existing LocalStorage evidence/memory keys preserved.
 
-Scenarios:                 1,000,000
-Deterministic seed:        0x69c0ffee
-Result:                    PASS
-Live-authorized cases:     26,364
-WAIT cases:                973,636
-Invalid-geometry cases:    500,248
-Hydra-veto cases:          526,410
-Execution/cost-veto cases: 220,420
-Data-integrity-veto cases: 179,971
-PROOF-state cases:         199,746
+1,000,000-SCENARIO DETERMINISTIC STRESS TEST
+PASS — 1,000,000 randomized execution + trade-management scenarios.
+Seed: 0x7000cafe
+Live-authority cases: 25,983
+WAIT cases: 974,017
+Trade-manager HOLD cases: 404,119
+Trade-manager EXIT cases: 555,854
+Trade-manager symbol-switch cases: 40,027
+Invariant failures: 0
 
-Properties asserted on every scenario:
-- ENTER exists if and only if complete final execution authority is true.
-- Every non-live final command is WAIT — NO LIVE TRADE.
-- Non-live states cannot leak live entry / SL / TP levels.
-- BUY/SELL wording always matches the authorized direction.
-- BEST NOW cannot label ENTER from scalp/FIRE state alone.
-- Every non-live BEST NOW row begins with WAIT.
+CORE INVARIANTS
+PASS — ENTER iff complete final execution authority exists.
+PASS — Every non-live new-trade command is WAIT.
+PASS — No live entry/SL/TP leakage while WAIT.
+PASS — BUY/SELL direction cannot be promoted independently by BEST NOW.
+PASS — Open-trade manager never emits a new ENTER instruction.
+PASS — Target hit forces EXIT / TAKE PROFIT.
+PASS — Hard invalidation forces EXIT NOW.
+PASS — Opposite fully-authorized live direction forces EXIT NOW.
 
-Targeted regressions also passed:
-- PROOF-only + otherwise healthy inputs => WAIT.
-- Cost/execution veto => WAIT.
-- Hydra veto => WAIT.
-- Complete SELL authority => ENTER SELL NOW.
-
-B. STATIC / PACKAGE INTEGRITY
------------------------------
-PASS — node --check app.js
-PASS — node --check embedded index.html JavaScript
-PASS — node --check sw.js
-PASS — manifest.webmanifest parses as valid JSON
-PASS — 326 HTML IDs / 326 unique / 0 duplicate IDs
-PASS — 290 literal JavaScript DOM references / 0 missing IDs
-PASS — embedded index.html JavaScript exactly matches app.js
-PASS — no 6.8.2 version references remain in the deployed source
-PASS — 6.9.0 page/app version consistency
-
-C. MEMORY / PROOF COMPATIBILITY
--------------------------------
-PASS — storage-like key set unchanged versus 6.8.2 (23 old / 23 new;
-       0 removed / 0 added)
-PASS — apex_memory_vault_v4_0 unchanged
-PASS — apex_path_ledger_v4 unchanged
-PASS — apex_6_8_forward_proof_epoch unchanged
-PASS — titan_active_signals_v2 unchanged
-PASS — titan_world_brain_memory unchanged
-PASS — 6.8_FORWARD proof eligibility remains in place
-
-D. FAIL-CLOSED UI / AUTHORITY REGRESSIONS
------------------------------------------
-PASS — main APEX EXECUTION COMMAND is the only final ENTER/WAIT authority
-PASS — SCALP COMMAND CENTER cannot show ENTER unless final arbiter passes
-PASS — lot sizing cannot issue live lot unless final arbiter passes
-PASS — Harvest ENTRY READY additionally requires Fortress pass
-PASS — BEST NOW stale/failed scans cannot leave a previous ENTER visible
-PASS — starting any fresh scan suspends the previous live command
-PASS — live ENTER command expires after the 120-second freshness window
-PASS — return-from-background freshness check demotes stale live command
-PASS — BEST NOW comparison does not mutate the normal scan race guard
-
-SOURCE SHA256 USED BY THE 1M AUDIT
-42f64ee668ecd67bb616feb58ed826605c41ac119db6922e888e32d1a565f778  app.js
-
-LIMITATION / TRUTH STATEMENT
-This is a one-million-scenario software logic/property audit, not one million
-real trades or one million external market-data requests. It verifies that the
-application cannot display ENTER when its own final authority requirements are
-not met. It does not prove trading profitability, future price direction, feed
-availability, or broker execution quality.
+IMPORTANT LIMITATION
+The million-case audit validates software decision invariants and state
+transitions. It is not one million historical/live market trades and does not
+establish a near-100% future win rate or guarantee profitability.

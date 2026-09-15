@@ -8,7 +8,7 @@ function persistJSON(key,value){
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
-const APEX_APP_VERSION="APEX-SCALP-GOD-6.9.0";
+const APEX_APP_VERSION="APEX-SCALP-GOD-7.0.0";
 const APEX_VAULT_KEY="apex_memory_vault_v4_0";
 const APEX_VAULT_MAX=2;
 const APEX_VAULT_CLEAR_KEY="apex_memory_vault_intentional_clear_ms";
@@ -96,6 +96,10 @@ recoverUpgradeSafetySnapshotIfNeeded();
 vaultRecoverIfSafer();
 vaultSave("STARTUP-4.0");
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
+setSimpleMode(readStoredText("apex_simple_mode_v1","1")!=="0");
+must("simpleModeToggle").onclick=()=>setSimpleMode(!document.body.classList.contains("simpleMode"));
+must("commandEntered").onclick=()=>{const x=window.__apexLastCommandSnapshot;if(!x?.liveReady)return;saveManualTrade({sym:x.sym,direction:x.direction,entry:x.entry,target:x.target,invalid:x.invalid,openedAt:Date.now()});const r=window.__apexLastRenderedResult;if(r)renderManualTradeManager(r,r.executionCommand||executionCommandDecision(r,r.pathEngine||null));};
+must("commandClosed").onclick=()=>{saveManualTrade(null);const r=window.__apexLastRenderedResult;if(r)renderManualTradeManager(r,r.executionCommand||executionCommandDecision(r,r.pathEngine||null));else{must("commandTradeStatus").textContent="NO OPEN TRADE";must("commandExitAction").textContent="WAIT — NO OPEN TRADE TO MANAGE";must("commandExitAction").className="commandExitAction wait";must("commandClosed").style.display="none";}};
 $("tdKey").value="FREE";$("hours").value=readStoredText("titan_hours","24");$("minConf").value=readStoredText("titan_min","72");$("newsMode").value=readStoredText("titan_news_mode","turbo");
 $("save").onclick=()=>{removeStored("titan_td");persistText("titan_hours",$("hours").value);persistText("titan_min",$("minConf").value);persistText("titan_news_mode",$("newsMode").value);$("connMsg").textContent="Saved."};
 
@@ -844,7 +848,7 @@ function renderNewsRadar(r,events){
  const v=newsRadarView(r,events),state=v.state,rel=v.shown,high=v.high,bias=(r.news?.score||0)>.2?"BULLISH":(r.news?.score||0)<-.2?"BEARISH":"NEUTRAL",nh=newsHealth(state.events);
  $("newsLiveBadge").textContent=nh.degraded?"NEWS FEED OFFLINE":`NEWS CONTEXT • ${v.totalRelevant} RELEVANT / ${v.global} GLOBAL`;$("newsLiveCount").textContent=String(v.totalRelevant);$("newsLiveBias").textContent=bias;$("newsLiveHigh").textContent=String(high);$("newsLiveTime").textContent=new Date(state.updatedAt||Date.now()).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});$("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • priority ${Number(x.priority||1).toFixed(2)}× • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join("")+((v.totalRelevant>rel.length)?`<div class="item"><p>Showing top ${rel.length} of ${v.totalRelevant} canonical symbol-relevant headlines. All ${v.totalRelevant} are included in the news score.</p></div>`:""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — APEX could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>Canonical global feed has ${state.events.length} headline(s), but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`
 }
-function render(r,events){
+function render(r,events){window.__apexLastRenderedResult=r;
  r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;
  r.consensus=decisionConsensus(r,events);
  r.v=r.consensus.finalVerdict;r.conf=r.consensus.confidence;
@@ -1444,7 +1448,7 @@ function renderPathEngine(r,events,b,dna){
   $("pathTradeBox").innerHTML=`<b>${p.state}: ${dirText(p.counterDir)} first</b><p>${confidence}. Counter reference ${fmt(r.main.price)} • target ${fmt(p.tp)} • invalidation ${fmt(p.invalid)} • expected capture ${p.targetATR.toFixed(2)} ATR • FAST CLOCK 0–30m • ${cost}. Larger ${dirText(p.finalDir)} thesis is ${p.thesisFollowReady?"still eligible after a fresh trigger":"NOT approved for follow-through yet"}.</p>`;
  }else $("pathTradeBox").innerHTML=`<b>${esc(p.state||"NO COUNTER EDGE")}</b><p>${p.finalDir?`Medium-term thesis ${dirText(p.finalDir)} is NOT the same as an immediate entry.`:"No actionable larger-direction thesis yet."}</p>`;
  const n=p.mem?.n||0,why=[];if(n<8)why.push(`path sample still small (${n}/8)`);if(Number.isFinite(p.benchExpATR)&&p.benchExpATR<=0)why.push(`historical counter benchmark expectancy ${p.benchExpATR.toFixed(3)} ATR is not positive`);if(p.criticalShockBlock)why.push("critical event shock favors continuation; inverse fade blocked");if(Number.isFinite(p.decisionP)&&p.decisionP<.60)why.push(`0–30m decision score ${Math.round(p.decisionP*100)}% below YES threshold`);if(Number.isFinite(p.expectedAdvATR)&&p.expectedAdvATR<.20)why.push("expected adverse excursion too small");if(p.costPass===false)why.push("spread consumes too much of target");if(!p.liveConfirm)why.push("no live short-horizon opposition confirmation");if(!p.thesisFollowReady)why.push("larger thesis recovery is weak — do not automatically flip back into the original thesis");
- $("pathNarrative").textContent=`SCALP GOD 6.9.0: LEGACY COUNTER CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; state-fused decision score ${Math.round((p.decisionP??p.fastCounterP??.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR; counter benchmark ${Number.isFinite(p.benchExpATR)?p.benchExpATR.toFixed(3)+" ATR/trade":"learning"}; conservative win floor ${Math.round((p.benchLCB||0)*100)}%.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
+ $("pathNarrative").textContent=`SCALP GOD 7.0.0: LEGACY COUNTER CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; state-fused decision score ${Math.round((p.decisionP??p.fastCounterP??.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR; counter benchmark ${Number.isFinite(p.benchExpATR)?p.benchExpATR.toFixed(3)+" ATR/trade":"learning"}; conservative win floor ${Math.round((p.benchLCB||0)*100)}%.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
  return p;
 }
 
@@ -1754,6 +1758,26 @@ function resolvedFirstHitCount(sym){
  // Count every resolved outcome, including SL-first losses. The old predicate counted wins only.
  return titanJournal.filter(x=>x.sym===sym&&x.firstHit?.resolved).length;
 }
+const APEX_MANUAL_TRADE_KEY="apex_manual_trade_v1";
+function readManualTrade(){return readStoredJSON(APEX_MANUAL_TRADE_KEY,null)}
+function saveManualTrade(t){if(t)persistJSON(APEX_MANUAL_TRADE_KEY,t);else removeStored(APEX_MANUAL_TRADE_KEY)}
+function setSimpleMode(on){document.body.classList.toggle("simpleMode",!!on);persistText("apex_simple_mode_v1",on?"1":"0");const b=$("simpleModeToggle");if(b)b.textContent=on?"SHOW DEEP EVIDENCE":"HIDE DEEP EVIDENCE"}
+function tradeManagementDecision(trade,p,c,sym){
+ if(!trade)return{state:c?.liveReady?"READY":"WAIT",status:c?.liveReady?"READY TO ENTER":"NO OPEN TRADE",text:c?.liveReady?`IF FILLED: HOLD TO ${fmt(c.target)} • HARD EXIT ${fmt(c.invalid)}`:"WAIT — NO OPEN TRADE TO MANAGE",klass:c?.liveReady?(c.direction>0?"buy":"sell"):"wait"};
+ const dir=Math.sign(Number(trade.direction)||0);
+ if(trade.sym!==sym)return{state:"SWITCH",status:`OPEN ${trade.sym} ${dir>0?"BUY":"SELL"}`,text:`SWITCH TO ${trade.sym} AND SCAN TO MANAGE`,klass:"wait"};
+ const target=Number(trade.target),invalid=Number(trade.invalid),targetHit=Number.isFinite(p)&&Number.isFinite(target)&&(dir>0?p>=target:p<=target),invalidHit=Number.isFinite(p)&&Number.isFinite(invalid)&&(dir>0?p<=invalid:p>=invalid),opposite=!!(c?.liveReady&&Math.sign(c.direction)===-dir);
+ if(invalidHit)return{state:"EXIT",status:`OPEN ${dir>0?"BUY":"SELL"} @ ${fmt(trade.entry)}`,text:"EXIT NOW — HARD INVALIDATION HIT",klass:"sell"};
+ if(targetHit)return{state:"EXIT",status:`OPEN ${dir>0?"BUY":"SELL"} @ ${fmt(trade.entry)}`,text:"EXIT / TAKE PROFIT NOW — TARGET HIT",klass:"buy"};
+ if(opposite)return{state:"EXIT",status:`OPEN ${dir>0?"BUY":"SELL"} @ ${fmt(trade.entry)}`,text:"EXIT NOW — OPPOSITE LIVE AUTHORITY",klass:"sell"};
+ return{state:"HOLD",status:`OPEN ${dir>0?"BUY":"SELL"} @ ${fmt(trade.entry)}`,text:`HOLD • TARGET ${fmt(target)} • HARD EXIT ${fmt(invalid)}`,klass:dir>0?"buy":"sell"};
+}
+function renderManualTradeManager(r,c){
+ const p=Number(r?.main?.price),sym=r?.sym||$("symbol")?.value||"",trade=readManualTrade(),status=$("commandTradeStatus"),exit=$("commandExitAction"),entered=$("commandEntered"),closed=$("commandClosed");
+ if($("commandLivePrice"))$("commandLivePrice").textContent=Number.isFinite(p)?fmt(p):"—";
+ if(!status||!exit)return;const d=tradeManagementDecision(trade,p,c,sym);status.textContent=d.status;exit.textContent=d.text;exit.className="commandExitAction "+d.klass;
+ if(entered)entered.style.display=!trade&&c?.liveReady?"block":"none";if(closed)closed.style.display=trade?"block":"none";
+}
 function executionCommandFromParts(sg,fortress,hydra){
  const f=fortress||{},h=hydra||{},dir=Math.sign(Number(sg?.counter)||0),geometryReady=[sg?.entry,sg?.target,sg?.invalid].every(x=>Number.isFinite(+x)&&+x>0),hydraPass=!h.retired&&!h.staleEdge&&Number(h.toxicity)<.78&&Number(h.fragility)<.84;
  const liveReady=!!(sg?.fire===true&&f.pass===true&&f.integrityPass===true&&f.execOK===true&&hydraPass&&geometryReady&&(dir===1||dir===-1));
@@ -1776,7 +1800,7 @@ function executionCommandDecision(r,p,sgOverride=null,fortressOverride=null,hydr
 }
 let APEX_COMMAND_EXPIRY_TIMER=null,APEX_BESTNOW_EXPIRY_TIMER=null;
 function expireLiveCommandUI(reason='Freshness window expired — run UPDATE / SCAN MARKET again.'){
- const a=$("commandAction"),b=$("commandBadge");if(a){a.textContent='WAIT — RESCAN REQUIRED';a.className='commandAction wait'}if(b)b.textContent='STALE';for(const id of ['commandEntry','commandInvalid','commandTarget']){const e=$(id);if(e)e.textContent='—'}const c=$("commandContext");if(c)c.textContent='Previous live authority expired • manual mode requires a fresh scan';const n=$("commandReason");if(n)n.textContent=reason;const ea=$("execAction");if(ea)ea.textContent='WAIT — NO LIVE TRADE';const eb=$("execBadge");if(eb)eb.textContent='STALE — RESCAN';const sa=$("scalpAction");if(sa){sa.textContent='WAIT — RESCAN REQUIRED';sa.className='sig wait'}const sb=$("scalpBadge");if(sb)sb.textContent='STALE';const sl=$("scalpLiveAuth");if(sl)sl.textContent='EXPIRED — RESCAN';window.__apexLiveCommandIssuedAt=0;
+ const a=$("commandAction"),b=$("commandBadge");if(a){a.textContent='WAIT — RESCAN REQUIRED';a.className='commandAction wait'}if(b)b.textContent='STALE';for(const id of ['commandEntry','commandInvalid','commandTarget']){const e=$(id);if(e)e.textContent='—'}const c=$("commandContext");if(c)c.textContent='Previous live authority expired • manual mode requires a fresh scan';const n=$("commandReason");if(n)n.textContent=reason;const ea=$("execAction");if(ea)ea.textContent='WAIT — NO LIVE TRADE';const eb=$("execBadge");if(eb)eb.textContent='STALE — RESCAN';const sa=$("scalpAction");if(sa){sa.textContent='WAIT — RESCAN REQUIRED';sa.className='sig wait'}const sb=$("scalpBadge");if(sb)sb.textContent='STALE';const sl=$("scalpLiveAuth");if(sl)sl.textContent='EXPIRED — RESCAN';const mt=readManualTrade();const ts=$("commandTradeStatus");const ex=$("commandExitAction");if(mt&&ts&&ex){ts.textContent=`OPEN ${mt.sym} ${mt.direction>0?'BUY':'SELL'}`;ex.textContent='RESCAN NOW TO UPDATE HOLD / EXIT';ex.className='commandExitAction wait'}window.__apexLiveCommandIssuedAt=0;
 }
 function scheduleLiveCommandExpiry(liveReady){
  if(APEX_COMMAND_EXPIRY_TIMER){clearTimeout(APEX_COMMAND_EXPIRY_TIMER);APEX_COMMAND_EXPIRY_TIMER=null}if(!liveReady){window.__apexLiveCommandIssuedAt=0;return}window.__apexLiveCommandIssuedAt=Date.now();APEX_COMMAND_EXPIRY_TIMER=setTimeout(()=>expireLiveCommandUI(),121000);
@@ -1789,7 +1813,7 @@ function renderExecutionCommand(r,p,cmd=null){
  a.textContent=c.action;a.className='commandAction '+(c.liveReady?(c.direction>0?'buy':'sell'):'wait');b.textContent=c.liveReady?'LIVE ENTRY AUTHORIZED':c.stage;
  $("commandContext").textContent=`Parent ${sg.parent>0?'BUY':sg.parent<0?'SELL':'WAIT'} • Candidate ${c.descriptor} • ${c.stage}`;
  $("commandEntry").textContent=c.showLevels?fmt(c.entry):'—';$("commandInvalid").textContent=c.showLevels?fmt(c.invalid):'—';$("commandTarget").textContent=c.showLevels?fmt(c.target):'—';$("commandProof").textContent=`${sg.evidence||0} forward / ${sg.effectiveEvidence||0} effective`;
- $("commandReason").textContent=c.liveReady?`${c.reason} Live levels below are executable model levels; lot/risk authority remains separate.`:`${c.reason} APEX will not display live entry/SL/TP levels here until every execution gate clears.`;scheduleLiveCommandExpiry(c.liveReady);
+ $("commandReason").textContent=c.liveReady?`${c.reason} If you are filled, tap I ENTERED THIS TRADE so APEX can show HOLD / EXIT on future fresh scans.`:`${c.reason} Deep evidence stays in the background; WAIT means do not open a new trade.`;window.__apexLastCommandSnapshot={sym:r?.sym||'',direction:c.direction,entry:c.entry,target:c.target,invalid:c.invalid,liveReady:c.liveReady,t:Date.now()};renderManualTradeManager(r,c);scheduleLiveCommandExpiry(c.liveReady);
  return c;
 }
 function executionAuthority(r,p){
@@ -2084,7 +2108,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 6.9.0 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 7.0.0 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -2155,9 +2179,9 @@ renderJournal();renderVaultStatus();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("6.9.0")&&APEX_APP_VERSION==="APEX-SCALP-GOD-6.9.0","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
+  req(document.title.includes("7.0.0")&&APEX_APP_VERSION==="APEX-SCALP-GOD-7.0.0","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
   req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
-  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","6.9 single final execution command loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","6.9 live-command freshness expiry loaded");
+  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","7.0 single final execution command loaded");req(typeof renderManualTradeManager==="function"&&typeof tradeManagementDecision==="function"&&typeof setSimpleMode==="function","7.0 precision HUD + trade manager loaded");req(!!document.getElementById("commandExitAction")&&!!document.getElementById("commandEntered")&&!!document.getElementById("simpleModeToggle"),"7.0 simple HUD controls loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","7.0 live-command freshness expiry loaded");
   const _cmdWait=executionCommandFromParts({fire:false,state:"PROOF",counter:1,entry:100,target:101,invalid:99},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdWait.liveReady&&_cmdWait.action==="WAIT — NO LIVE TRADE"&&!_cmdWait.showLevels,"PROOF can never masquerade as ENTER");
   const _cmdLive=executionCommandFromParts({fire:true,state:"FIRE NOW",counter:-1,entry:100,target:99,invalid:101},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(_cmdLive.liveReady&&_cmdLive.action==="ENTER SELL NOW"&&_cmdLive.showLevels,"ENTER requires complete final authority");
   req(pathCostAuthorityLabel({costKnown:true,costPass:true},false).includes("LIVE VETO"),"research proxy cost PASS cannot masquerade as live cost authority");
@@ -2168,8 +2192,8 @@ renderJournal();renderVaultStatus();
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
   req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","Counter-First Dual Clock Engine loaded");req(typeof renderMicroCourt==="function","6.2 Flow Proxy Court loaded");req(typeof renderHydraCourt==="function"&&typeof hydraCourt==="function","6.3 Epistemic Hydra loaded");req(typeof renderTimingTrapCourt==="function"&&typeof thesisTimingTrap==="function","6.8 Thesis Timing Trap loaded");req(typeof fortressKernel==="function"&&typeof renderFortress==="function","6.8 Adversarial Fortress loaded");req(typeof opportunityDuel==="function"&&typeof universalTrigger==="function","6.8 Measurement Truth Duel loaded");req(typeof renderHarvestVault==="function"&&typeof harvestEconomics==="function","6.2 Net Edge Harvest Vault loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"6.9.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 6.9.0");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"7.0.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 7.0.0");
 })();
 
 (function titanIntegrityCheck(){
@@ -2190,7 +2214,7 @@ renderJournal();renderVaultStatus();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX SCALP GOD 6.9.0 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX SCALP GOD 7.0.0 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);

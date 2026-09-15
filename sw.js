@@ -1,4 +1,4 @@
-const CACHE='apex-scalp-god-6-9-0-execution-command-v1';
+const CACHE='apex-scalp-god-7-0-0-precision-hud-v1';
 const CORE=['./','./index.html','./manifest.webmanifest','./apple-touch-icon.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
