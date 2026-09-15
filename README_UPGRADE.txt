@@ -1,4 +1,11 @@
-APEX SCALP GOD 6.8 — PROOF ENGINE
+APEX SCALP GOD 6.8.1 — CONSISTENCY HOTFIX
+
+HOTFIX SCOPE
+- No memory reset. Existing 6.8 forward-proof epoch, truth ledger, signal locks and stored research are preserved.
+- SCALP EDGE ENGINE legacy path-cost display can no longer show a bare PASS when broker costs are unverified. It now distinguishes RESEARCH PROXY from LIVE VERIFIED authority and explicitly shows LIVE VETO when appropriate.
+- LIVE NEWS RADAR now uses one canonical relevant-headline total for the badge, count, high-impact tally and score. The list may show the top six while clearly stating the full relevant total.
+- BEST NOW ranking is explicitly readiness-first: FIRE > PROOF > ARMED > WATCH > setup score. Each row shows its rank priority so a lower setup score cannot look like a sorting bug.
+- Added regression self-tests for cost-authority semantics, canonical news counts and BEST NOW ranking semantics.
 
 DEPLOY OVER YOUR CURRENT GITHUB PAGES BUILD
 1. Keep the same repository/site. Do NOT delete browser storage.

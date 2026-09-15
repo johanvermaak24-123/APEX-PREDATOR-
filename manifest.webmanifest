@@ -1,13 +1,18 @@
 {
-  "name": "APEX SCALP GOD 6.8 — PROOF ENGINE",
-  "short_name": "APEX 6.8",
+  "name": "APEX SCALP GOD 6.8.1 — CONSISTENCY HOTFIX",
+  "short_name": "APEX 6.8.1",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#05080c",
   "theme_color": "#071018",
-  "description": "Forward-proof, fail-closed short-horizon market research and execution-discipline prototype.",
+  "description": "Forward-proof, fail-closed short-horizon market research prototype with canonical news, explicit cost authority, and readiness-first ranking.",
   "icons": [
-    {"src":"apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

@@ -1,31 +1,30 @@
-APEX SCALP GOD 6.8 — PROOF ENGINE
-BUILD VALIDATION REPORT
+APEX SCALP GOD 6.8.1 — CONSISTENCY HOTFIX
+TEST REPORT — 15 September 2026
 
-Static validation
-- index.html JavaScript extracted and passed Node.js syntax check.
-- sw.js passed Node.js syntax check.
-- manifest.webmanifest parsed as valid JSON.
-- HTML duplicate ID check: 0 duplicates.
-- Legacy visible "PROVEN EDGE" claim count: 0.
-- Legacy visible "MARKET MICROSTRUCTURE COURT" heading count: 0.
+HOTFIX TARGETS
+1. COST AUTHORITY CONSISTENCY
+   PASS — legacy 0–30m path-cost proxy no longer displays a bare PASS when broker costs are unverified.
+   PASS — research proxy pass is explicitly labeled "RESEARCH PROXY PASS • LIVE VETO".
+   PASS — only verified broker-cost inputs can display LIVE VERIFIED PASS.
 
-Browser runtime validation
-- Loaded the full page in headless Chromium with an isolated storage shim.
-- window.APEX_SELF_TEST: PASS, 0 failures, version 6.8.
-- UI integrity check: PASS.
-- Runtime JavaScript page errors: 0 during initialization.
-- New Proof Status card and required UI IDs present.
+2. CANONICAL NEWS COUNT CONSISTENCY
+   PASS — LIVE NEWS RADAR badge and Relevant News field use the same canonical symbol-relevant total.
+   PASS — High Impact count is calculated over the full canonical relevant set, not only the six displayed headlines.
+   PASS — if more than six relevant headlines exist, UI says how many are displayed and confirms all are included in scoring.
 
-Targeted 6.8 logic checks
-1. Broker-cost fail-closed
-   - Broker spread=0, tick size=0, tick value=0 -> costVerified=false; source=FEED PROXY • RESEARCH ONLY.
-   - Broker spread=0.25, tick size=0.01, tick value=1 -> costVerified=true; source=BROKER VERIFIED + BUFFER.
-2. Canonical news state
-   - Synthetic 30-headline / 5-source merged set rendered coherently as 30 headlines and 5 sources from one canonical state.
-3. Effective-sample penalty
-   - A 30-row synthetic clustered sample was reduced to an effective N of 8, demonstrating that nominal count cannot automatically satisfy the 20-effective-episode FIRE gate.
-4. Forward-proof isolation
-   - One 6.8_FORWARD row + one 6.8_SHADOW row + one legacy row -> forward proof bucket counted only the 6.8_FORWARD row.
+3. BEST NOW RANKING CONSISTENCY
+   PASS — ranking comparator is explicitly readiness-first: FIRE > PROOF > ARMED > WATCH > setup score.
+   PASS — regression test confirms ARMED 60 outranks WATCH 90.
+   PASS — within the same readiness state, higher setup score ranks first.
+   PASS — UI now displays each candidate's rank priority and explains the ranking rule.
 
-Interpretation
-These tests verify implementation behavior and fail-closed invariants. They do NOT prove trading profitability or future market edge. That distinction is intentionally enforced in the 6.8 UI.
+STATIC / PACKAGE CHECKS
+PASS — node --check app.js
+PASS — node --check sw.js
+PASS — manifest.webmanifest parses as valid JSON
+PASS — 313 unique HTML IDs; 0 duplicate IDs
+PASS — 260 literal JS DOM references checked; 0 missing IDs
+PASS — proof-era/storage keys preserved so 6.8 forward evidence and existing browser memory are not reset by this hotfix
+
+IMPORTANT
+These tests verify implementation consistency and fail-closed semantics. They do not prove trading profitability or future market direction.
