@@ -1,13 +1,14 @@
-APEX PREDATOR GOD 3.2 — UNIFIED TRUTH ENGINE
+APEX PREDATOR GOD 3.3 — STABILITY + MEMORY LOCK
 
-Deploy over the SAME existing GitHub/Netlify site/origin to preserve browser-stored learning data.
-Do not clear site data/local storage if you want to retain the current journal, state and signal-lock memory.
+Deploy these files over the SAME existing GitHub/Netlify site/domain.
+Do NOT create a new domain if you want browser-local learning/memory to remain available.
 
-3.2 focuses on decision coherence:
-- WORLD BRAIN / BEST NOW use one authority.
-- Meta-Brain cannot issue a contradictory WAIT after master PASS.
-- Scenario Tree follows the active BUY/SELL thesis while still showing uncertainty.
-- Liquidity pressure is a confirmation layer, not an accidental hard veto.
-- Event-risk directional arbitration and USD/Gold cross-market confirmation remain intact.
+3.3 changes:
+- BEST NOW and WORLD BRAIN use one Unified Final Verdict helper, including STRONG BUY/STRONG SELL labels and lock-adjusted confidence.
+- Added Memory Vault with rolling versioned snapshots.
+- Startup checks stronger historical snapshots before accepting suspiciously empty browser state.
+- Existing titan_journal_v2, titan_state_v2, titan_active_signals_v2 and IndexedDB auto-memory are retained.
+- Manual clear is respected and will not be silently undone by auto-recovery.
+- Existing 3.2 decision logic, USD/Gold cross-market confirmation, event arbitration and scenario logic are preserved.
 
-See AUDIT_3_2.txt for verification notes.
+No paid API key is required for the core scanner.

@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX PREDATOR GOD 3.1 — OPPORTUNITY CAPTURE ENGINE</title>
+<title>APEX PREDATOR GOD 3.3 — STABILITY + MEMORY LOCK</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 3.2 • UNIFIED TRUTH ENGINE</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX PREDATOR GOD 3.3 • STABILITY + MEMORY LOCK</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -417,6 +417,20 @@ button.primary, #scan, #scanAll {
     <div id="autoMemNarrative" class="small" style="margin-top:9px">APEX keeps a redundant brain snapshot inside this browser. API credentials are excluded.</div>
    </div>
    <div class="card" style="margin-top:14px;padding:14px">
+    <div class="title"><h3>🔐 MEMORY VAULT</h3><span id="vaultBadge" class="badge">CHECKING</span></div>
+    <div class="grid4">
+     <div class="k"><span>Journal</span><b id="vaultJournal">0</b></div>
+     <div class="k"><span>Resolved</span><b id="vaultResolved">0</b></div>
+     <div class="k"><span>Signal locks</span><b id="vaultLocks">0</b></div>
+     <div class="k"><span>Snapshots</span><b id="vaultSnapshots">0</b></div>
+    </div>
+    <div class="grid2" style="margin-top:8px">
+     <div class="k"><span>Last vault save</span><b id="vaultLast">—</b></div>
+     <div class="k"><span>Storage health</span><b id="vaultHealth">CHECKING</b></div>
+    </div>
+    <div id="vaultNarrative" class="small" style="margin-top:9px">3.3 validates browser memory before accepting an empty state and keeps rolling versioned snapshots.</div>
+   </div>
+   <div class="card" style="margin-top:14px;padding:14px">
     <div class="title"><h3>💾 APEX BACKUP</h3><span class="badge">MEMORY SAFE</span></div>
     <button id="exportTitan" class="secondary">EXPORT APEX MEMORY</button>
     <textarea id="importTitanText" placeholder="Paste an APEX backup here to restore…" style="width:100%;min-height:90px;margin-top:10px"></textarea>
@@ -436,6 +450,59 @@ function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(valu
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
+const APEX_APP_VERSION="APEX-PREDATOR-GOD-3.3";
+const APEX_VAULT_KEY="apex_memory_vault_v3_3";
+const APEX_VAULT_MAX=4;
+const APEX_VAULT_CLEAR_KEY="apex_memory_vault_intentional_clear_ms";
+function memoryDigest(journal,state,locks){
+ const j=Array.isArray(journal)?journal:[],s=state&&typeof state==="object"?state:{},a=locks&&typeof locks==="object"?locks:{};
+ const resolved=j.filter(x=>x?.firstHit?.resolved||x?.outcome?.snapshots?.["2h"]||x?.shadowFirstHit?.resolved).length;
+ const newest=j.reduce((m,x)=>Math.max(m,Number(x?.t)||0),0);
+ return{journal:j.length,resolved,state:Object.keys(s).length,locks:Object.keys(a).length,newest};
+}
+function vaultRead(){
+ try{const v=safeJSON(localStorage.getItem(APEX_VAULT_KEY),null);return v&&Array.isArray(v.snapshots)?v:{schema:1,snapshots:[]}}catch(_e){return{schema:1,snapshots:[]}}
+}
+function vaultSnapshot(reason="AUTO"){
+ const journal=readStoredJSON("titan_journal_v2",[]),state=readStoredJSON("titan_state_v2",{}),activeSignals=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1");
+ return{schema:1,appVersion:APEX_APP_VERSION,savedAt:Date.now(),reason,journal,state,activeSignals,digest:memoryDigest(journal,state,activeSignals)};
+}
+function vaultSave(reason="AUTO"){
+ try{
+  const snap=vaultSnapshot(reason),v=vaultRead(),last=v.snapshots[0];
+  const materiallyNew=!last||last.digest?.journal!==snap.digest.journal||last.digest?.resolved!==snap.digest.resolved||last.digest?.locks!==snap.digest.locks||snap.savedAt-Number(last.savedAt||0)>60000;
+  if(materiallyNew)v.snapshots.unshift(snap);else v.snapshots[0]=snap;
+  v.schema=1;v.snapshots=v.snapshots.slice(0,APEX_VAULT_MAX);localStorage.setItem(APEX_VAULT_KEY,JSON.stringify(v));renderVaultStatus();return true;
+ }catch(e){console.warn("APEX Memory Vault save failed",e);renderVaultStatus("WARNING");return false}
+}
+function snapshotStrength(s){const d=s?.digest||memoryDigest(s?.journal,s?.state,s?.activeSignals);return (d.journal||0)*100+(d.resolved||0)*20+(d.state||0)*3+(d.locks||0)*5+(d.newest?1:0)}
+function bestRecoverySnapshot(){
+ const c=[];const v=vaultRead();for(const x of v.snapshots||[])if(x)c.push(x);
+ for(const key of ["apex_upgrade_god_3_0_snapshot","apex_upgrade_2_0_snapshot"]){try{const x=safeJSON(localStorage.getItem(key),null);if(x)c.push(x)}catch(_e){}}
+ return c.filter(x=>Array.isArray(x?.journal)&&x?.state&&typeof x.state==="object").sort((a,b)=>snapshotStrength(b)-snapshotStrength(a)||Number(b.savedAt||0)-Number(a.savedAt||0))[0]||null;
+}
+function mergeJournalSafe(a,b){
+ const map=new Map();for(const x of [...(Array.isArray(a)?a:[]),...(Array.isArray(b)?b:[])]){const k=x?.id||`${x?.sym||""}|${x?.t||0}|${x?.v||""}`;const p=map.get(k);if(!p||Number(x?.t||0)>=Number(p?.t||0))map.set(k,x)}
+ return [...map.values()].sort((x,y)=>Number(y?.t||0)-Number(x?.t||0));
+}
+function vaultRecoverIfSafer(){
+ try{
+  const current={journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1")};current.digest=memoryDigest(current.journal,current.state,current.activeSignals);
+  const best=bestRecoverySnapshot();if(!best)return false;const bd=best.digest||memoryDigest(best.journal,best.state,best.activeSignals);
+  const clearAt=Number(readStoredText(APEX_VAULT_CLEAR_KEY,"0"))||0;
+  const intentionalEmpty=clearAt&&current.digest.journal===0&&clearAt>=Number(best.savedAt||0);
+  if(intentionalEmpty)return false;
+  const suspiciousLoss=(bd.journal>current.digest.journal+1)||(bd.resolved>current.digest.resolved)||(bd.state>current.digest.state+2)||(bd.locks>current.digest.locks&&current.digest.locks===0);
+  if(!suspiciousLoss)return false;
+  const merged=mergeJournalSafe(best.journal,current.journal),nextState={...(best.state||{}),...(current.state||{})},nextLocks={...(best.activeSignals||{}),...(current.activeSignals||{})};
+  persistJSON("titan_journal_v2",merged);persistJSON("titan_state_v2",nextState);persistJSON("titan_active_signals_v2",nextLocks);vaultSave("AUTO-RECOVERY");return true;
+ }catch(e){console.warn("APEX Memory Vault recovery failed",e);return false}
+}
+function renderVaultStatus(force=null){
+ const v=vaultRead(),j=readStoredJSON("titan_journal_v2",[]),st=readStoredJSON("titan_state_v2",{}),lk=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),d=memoryDigest(j,st,lk),last=v.snapshots?.[0];
+ const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};set("vaultJournal",d.journal);set("vaultResolved",d.resolved);set("vaultLocks",d.locks);set("vaultSnapshots",v.snapshots?.length||0);set("vaultLast",last?.savedAt?new Date(last.savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—");set("vaultHealth",force||"OK");set("vaultBadge",force==="WARNING"?"SAVE WARNING":"LOCKED + VERSIONED");
+ const n=document.getElementById("vaultNarrative");if(n)n.textContent=`Memory Vault sees ${d.journal} journal records, ${d.resolved} resolved outcomes, ${d.locks} active locks and ${v.snapshots?.length||0} rolling snapshots. Empty/newer-looking storage cannot silently overwrite a stronger historical snapshot.`;
+}
 function captureUpgradeSafetySnapshot(){
  try{
   if(localStorage.getItem("apex_upgrade_god_3_0_snapshot"))return;
@@ -465,6 +532,8 @@ function recoverUpgradeSafetySnapshotIfNeeded(){
  }catch(e){console.warn("APEX GOD snapshot recovery skipped",e);return false;}
 }
 recoverUpgradeSafetySnapshotIfNeeded();
+vaultRecoverIfSafer();
+vaultSave("STARTUP-3.3");
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["brain","opps","events","settings"].forEach(t=>$(t+"Tab").classList.toggle("hidden",t!==b.dataset.tab))});
 $("tdKey").value="FREE";$("hours").value=readStoredText("titan_hours","24");$("minConf").value=readStoredText("titan_min","72");$("newsMode").value=readStoredText("titan_news_mode","turbo");
 $("save").onclick=()=>{removeStored("titan_td");persistText("titan_hours",$("hours").value);persistText("titan_min",$("minConf").value);persistText("titan_news_mode",$("newsMode").value);$("connMsg").textContent="Saved."};
@@ -988,7 +1057,7 @@ function humanDuration(ms){
 }
 function actionableDirection(v){return /BUY/.test(v)?"BUY":/SELL/.test(v)?"SELL":null}
 function signalLockStatus(sym){return titanActiveSignals[sym]||null}
-function saveSignalLocks(){persistJSON(TITAN_SIGNAL_LOCK_KEY,titanActiveSignals);removeStored("titan_active_signals_v1")}
+function saveSignalLocks(){persistJSON(TITAN_SIGNAL_LOCK_KEY,titanActiveSignals);removeStored("titan_active_signals_v1");setTimeout(()=>vaultSave("SIGNAL-LOCK"),0)}
 function clearSignalLock(sym,reason="MANUAL"){
  if(titanActiveSignals[sym]){
   titanActiveSignals[sym].closedAt=Date.now();
@@ -1771,7 +1840,7 @@ function renderBrain(r,events){
   if(Math.sign(prev.market)!==Math.sign(now.market))changes.push("Market structure changed direction");
   $("changedBox").innerHTML=changes.length?changes.map(x=>`<p>⚡ ${esc(x)}</p>`).join(""):"<p>No material state change since the previous scan.</p>";
  }
- titanState[r.sym]=now;persistJSON("titan_state_v2",titanState);
+ titanState[r.sym]=now;persistJSON("titan_state_v2",titanState);setTimeout(()=>vaultSave("STATE"),0);
  const mg=renderMemoryAndGate(r,events,b,meta); r._dna=mg.dna; r._gate=mg.gate; renderProofEngine(r,events,b,meta,mg); recordJournal(r,b);renderJournal();
 }
 function waitStateFingerprint(r){
@@ -1798,8 +1867,8 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-GOD-3.1",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
- titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-PREDATOR-GOD-3.3",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);setTimeout(()=>vaultSave("JOURNAL"),0);
 }
 
 function renderJournal(){
@@ -1828,14 +1897,24 @@ function deepGateForBest(r,events){
 function mergeEventFeeds(base,specific){
  const seen=new Set();return [...(specific||[]),...(base||[])].filter(x=>{const k=String(x.title||"").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(!k||seen.has(k))return false;seen.add(k);return true;});
 }
+function unifiedFinalVerdict(consensus,lock=null){
+ const c=consensus||{},active=lock?.direction?lock:null;
+ if(active){
+  const baseVerdict=String(active.verdict||"");
+  const verdict=active.direction==="BUY"?(baseVerdict.includes("STRONG")?"STRONG BUY":"BUY"):(baseVerdict.includes("STRONG")?"STRONG SELL":"SELL");
+  const conf=Math.max(55,Math.round(((Number(active.modelScore)||Number(c.confidence)||55)*.65)+((Number(c.confidence)||55)*.35)));
+  return{verdict,confidence:conf,direction:active.direction,source:"SIGNAL LOCK",locked:true};
+ }
+ return{verdict:c.finalVerdict||"WAIT",confidence:Number(c.confidence)||0,direction:actionableDirection(c.finalVerdict||""),source:"MASTER CONSENSUS",locked:false};
+}
 async function authoritativeBestScan(sym,tf,baseEvents){
  const specific=await symbolWorldEvents(sym).catch(()=>[]),events=mergeEventFeeds(baseEvents,specific);
  const r=await scanSymbol(sym,tf,events);r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;r.consensus=decisionConsensus(r,events);
  const dg=deepGateForBest(r,events),storedLock=signalLockStatus(sym),lockInvalid=storedLock?shouldHardInvalidate(storedLock,{...r,rawV:r.rawTechnicalV,v:r.consensus.finalVerdict}):null;
  const lock=lockInvalid?null:storedLock;
- const displayVerdict=lock?.direction?(lock.direction==="BUY"?"BUY":"SELL"):r.consensus.finalVerdict;
- const displayConf=lock?.direction?Math.max(r.consensus.confidence,60):r.consensus.confidence;
- return {...r,...dg,events,displayVerdict,displayConf,lock,lockInvalid};
+ const final=unifiedFinalVerdict(r.consensus,lock);
+ const displayVerdict=final.verdict,displayConf=final.confidence;
+ return {...r,...dg,events,displayVerdict,displayConf,final,lock,lockInvalid};
 }
 $("scanAll").onclick=async()=>{
  const b=$("scanAll");b.disabled=true;b.textContent="RUNNING APEX PREDATOR GOD...";$("oppList").innerHTML='<div class="item"><p>Running the exact APEX PREDATOR GOD authority across every market…</p></div>';
@@ -1852,7 +1931,7 @@ const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
 const TITAN_AUTO_MEMORY_STORE="brain";
 const TITAN_AUTO_MEMORY_KEY="latest";
 function titanMemorySnapshot(){
- return {schema:5,appVersion:"APEX-PREDATOR-GOD-3.1",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
+ return {schema:5,appVersion:"APEX-PREDATOR-GOD-3.3",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,learning:componentLearning()};
 }
 function titanMemoryOpen(){return new Promise((resolve,reject)=>{try{const q=indexedDB.open(TITAN_AUTO_MEMORY_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(TITAN_AUTO_MEMORY_STORE))db.createObjectStore(TITAN_AUTO_MEMORY_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)}catch(e){reject(e)}})}
 function renderAutoMemoryStatus(savedAt=null){
@@ -1860,10 +1939,10 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 3.1 upgrades in place without resetting existing evidence. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX PREDATOR GOD 3.3 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
- try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt)}catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
+ try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
 }
 async function titanAutoMemoryRecover(){
  try{const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readonly");const req=tx.objectStore(TITAN_AUTO_MEMORY_STORE).get(TITAN_AUTO_MEMORY_KEY);const snap=await new Promise((res,rej)=>{req.onsuccess=()=>res(req.result);req.onerror=()=>rej(req.error)});db.close();
@@ -1902,8 +1981,8 @@ if("serviceWorker" in navigator){
  window.addEventListener("load",()=>{try{sessionStorage.removeItem("titan_sw_reloaded")}catch(_e){}navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{reg.update().catch(()=>{});if(reg.waiting)reg.waiting.postMessage({type:"SKIP_WAITING"});reg.addEventListener("updatefound",()=>{const w=reg.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)w.postMessage({type:"SKIP_WAITING"})})})}).catch(e=>console.warn("APEX service worker unavailable",e))});
 }
 
-must("clearJournal").onclick=()=>{titanJournal=[];persistJSON("titan_journal_v2",[]);renderJournal();titanAutoMemorySave().catch(()=>{})};
-renderJournal();
+must("clearJournal").onclick=()=>{vaultSave("BEFORE-MANUAL-CLEAR");persistText(APEX_VAULT_CLEAR_KEY,Date.now());titanJournal=[];persistJSON("titan_journal_v2",[]);renderJournal();titanAutoMemorySave().catch(()=>{});vaultSave("AFTER-MANUAL-CLEAR")};
+renderJournal();renderVaultStatus();
 
 (function titanCoreSelfTest(){
  const failures=[];
@@ -1927,12 +2006,14 @@ renderJournal();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("APEX PREDATOR GOD 3.1"),"page version/title consistency");
-  req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function","BEST NOW / WORLD BRAIN shared engine");
+  req(document.title.includes("APEX PREDATOR GOD 3.3"),"page version/title consistency");
+  req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
+  req(unifiedFinalVerdict({finalVerdict:"STRONG SELL",confidence:83},{direction:"SELL",verdict:"STRONG SELL",modelScore:83}).verdict==="STRONG SELL","locked STRONG verdict preservation");
+  req(typeof vaultSave==="function"&&typeof vaultRecoverIfSafer==="function","Memory Vault loaded");
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"GOD-3.1"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 3.1");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"GOD-3.3"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS GOD 3.3");
 })();
 
 (function titanIntegrityCheck(){
@@ -1942,7 +2023,7 @@ renderJournal();
  "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","triggerBadge","triggerBias","triggerReady","triggerBlocker","triggerStage","triggerMeter","triggerNarrative","triggerGates","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
  "hzScalp","hzDay","hzSwing","hzConsensus","brainState","brainTech","brainNews","brainRisk","brainAgree",
  "changedBox","eventDNA","histNewsBadge","histNewsN","histNewsHit","histNewsMove","histNewsVote","histNewsList","newsLiveBadge","newsLiveCount","newsLiveBias","newsLiveHigh","newsLiveTime","newsLiveList","origEntry","entry","entryState","planUpdated","sl","tp1","tp2","tp3","grade","scores","why","impactMap",
- "jCount","jBuy","jSell","jWait","journalList","clearJournal","autoMemBadge","autoMemStatus","autoMemLast","autoMemRecords","autoLearnN","autoMemNarrative","exportTitan","importTitan","importTitanText","backupMsg"];
+ "jCount","jBuy","jSell","jWait","journalList","clearJournal","vaultBadge","vaultJournal","vaultResolved","vaultLocks","vaultSnapshots","vaultLast","vaultHealth","vaultNarrative","autoMemBadge","autoMemStatus","autoMemLast","autoMemRecords","autoLearnN","autoMemNarrative","exportTitan","importTitan","importTitanText","backupMsg"];
  const missing=required.filter(id=>!document.getElementById(id));
  const box=document.getElementById("integrityBox");
  if(box){
@@ -1952,14 +2033,14 @@ renderJournal();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX PREDATOR GOD 3.2 integrity PASS ✓ Unified Truth Engine, World Brain/Best Now sync, scenario coherence, directional event arbitration, liquidity proxy, memory preservation and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX PREDATOR GOD 3.3 integrity PASS ✓ Unified Final Verdict, Memory Vault, scenario coherence, directional event arbitration, liquidity proxy and critical UI loaded.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);
 })();
 
 must("exportTitan").onclick=()=>{
- const payload={version:"APEX-PREDATOR-GOD-3.1",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
+ const payload={version:"APEX-PREDATOR-GOD-3.3",exportedAt:new Date().toISOString(),journal:readStoredJSON("titan_journal_v2",[]),state:readStoredJSON("titan_state_v2",{}),activeSignals:readStoredJSON(TITAN_SIGNAL_LOCK_KEY,{}),learning:componentLearning(),apiKeyIncluded:false};
  const text=JSON.stringify(payload);must("importTitanText").value=text;navigator.clipboard?.writeText(text).catch(()=>{});
  must("backupMsg").textContent="Backup generated. It was also copied where the browser allows it.";
 };
@@ -1969,7 +2050,7 @@ must("importTitan").onclick=()=>{
   if(!p||!Array.isArray(p.journal)||typeof p.state!=="object")throw new Error("Invalid APEX backup");
   p.journal=pruneJournalSmart(p.journal);persistJSON("titan_journal_v2",p.journal);persistJSON("titan_state_v2",p.state);persistJSON(TITAN_SIGNAL_LOCK_KEY,p.activeSignals||{});removeStored("titan_active_signals_v1");
   titanJournal=p.journal;Object.keys(titanState).forEach(k=>delete titanState[k]);Object.assign(titanState,p.state);titanActiveSignals=p.activeSignals||{};renderJournal();
-  titanAutoMemorySave();must("backupMsg").textContent=`Restore complete: ${p.journal.length} signals loaded and auto-saved.`;
+  titanAutoMemorySave();vaultSave("MANUAL-RESTORE");must("backupMsg").textContent=`Restore complete: ${p.journal.length} signals loaded and auto-saved.`;
  }catch(e){must("backupMsg").textContent="Restore failed: "+e.message}
 };
 </script>
