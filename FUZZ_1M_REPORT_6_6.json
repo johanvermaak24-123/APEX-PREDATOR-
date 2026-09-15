@@ -1,0 +1,23 @@
+{
+  "version": "APEX SCALP GOD 6.6 \u2014 ECONOMIC FIRE ENGINE",
+  "cases": 1000000,
+  "seed": 6602026,
+  "elapsed_seconds": 3.536,
+  "fire_cases": 1089,
+  "armed_cases": 30321,
+  "watch_cases": 408353,
+  "invariant_failures": 0,
+  "checks": {
+    "fire_score": 0,
+    "fire_trigger": 0,
+    "fire_cost": 0,
+    "fire_rr": 0,
+    "fire_history": 0,
+    "veto_fire": 0,
+    "unknown_spread_fire": 0,
+    "bad_friction_fire": 0,
+    "resolved_count_semantics": 0
+  },
+  "result": "PASS",
+  "note": "Randomized logic/invariant audit; does not establish future profitability."
+}

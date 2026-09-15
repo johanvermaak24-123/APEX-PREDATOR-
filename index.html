@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX SCALP GOD 6.5 — OPPORTUNITY DUEL FORTRESS</title>
+<title>APEX SCALP GOD 6.6 — ECONOMIC FIRE ENGINE</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -124,7 +124,7 @@ button.primary, #scan, #scanAll {
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 6.5 • OPPORTUNITY DUEL FORTRESS</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 6.6 • OPPORTUNITY DUEL FORTRESS</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WORLD BRAIN</button>
    <button data-tab="opps">BEST NOW</button>
@@ -642,7 +642,7 @@ function persistJSON(key,value){try{localStorage.setItem(key,JSON.stringify(valu
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
-const APEX_APP_VERSION="APEX-SCALP-GOD-6.5";
+const APEX_APP_VERSION="APEX-SCALP-GOD-6.6";
 const APEX_VAULT_KEY="apex_memory_vault_v4_0";
 const APEX_VAULT_MAX=4;
 const APEX_VAULT_CLEAR_KEY="apex_memory_vault_intentional_clear_ms";
@@ -2074,11 +2074,11 @@ function renderPathEngine(r,events,b,dna){
   $("pathTradeBox").innerHTML=`<b>${p.state}: ${dirText(p.counterDir)} first</b><p>${confidence}. Counter reference ${fmt(r.main.price)} • target ${fmt(p.tp)} • invalidation ${fmt(p.invalid)} • expected capture ${p.targetATR.toFixed(2)} ATR • FAST CLOCK 0–30m • ${cost}. Larger ${dirText(p.finalDir)} thesis is ${p.thesisFollowReady?"still eligible after a fresh trigger":"NOT approved for follow-through yet"}.</p>`;
  }else $("pathTradeBox").innerHTML=`<b>${esc(p.state||"NO COUNTER EDGE")}</b><p>${p.finalDir?`Medium-term thesis ${dirText(p.finalDir)} is NOT the same as an immediate entry.`:"No actionable larger-direction thesis yet."}</p>`;
  const n=p.mem?.n||0,why=[];if(n<8)why.push(`path sample still small (${n}/8)`);if(Number.isFinite(p.benchExpATR)&&p.benchExpATR<=0)why.push(`historical counter benchmark expectancy ${p.benchExpATR.toFixed(3)} ATR is not positive`);if(p.criticalShockBlock)why.push("critical event shock favors continuation; inverse fade blocked");if(Number.isFinite(p.decisionP)&&p.decisionP<.60)why.push(`0–30m decision score ${Math.round(p.decisionP*100)}% below YES threshold`);if(Number.isFinite(p.expectedAdvATR)&&p.expectedAdvATR<.20)why.push("expected adverse excursion too small");if(p.costPass===false)why.push("spread consumes too much of target");if(!p.liveConfirm)why.push("no live short-horizon opposition confirmation");if(!p.thesisFollowReady)why.push("larger thesis recovery is weak — do not automatically flip back into the original thesis");
- $("pathNarrative").textContent=`SCALP GOD 6.5: LEGACY COUNTER CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; state-fused decision score ${Math.round((p.decisionP??p.fastCounterP??.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR; counter benchmark ${Number.isFinite(p.benchExpATR)?p.benchExpATR.toFixed(3)+" ATR/trade":"learning"}; conservative win floor ${Math.round((p.benchLCB||0)*100)}%.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
+ $("pathNarrative").textContent=`SCALP GOD 6.6: LEGACY COUNTER CLOCK 0–30m now has its own authority and is NOT blocked by weak 30–Parent recovery by 180m. ${n?`${n} close DNA path(s); 30m opposite-first ${Number.isFinite(p.mem?.pOpp30)?Math.round(p.mem.pOpp30*100)+"%":"learning"}; live counter pressure ${Math.round((p.liveOpp||.5)*100)}%; state-fused decision score ${Math.round((p.decisionP??p.fastCounterP??.5)*100)}%; expected adverse excursion ${p.expectedAdvATR.toFixed(2)} ATR; counter benchmark ${Number.isFinite(p.benchExpATR)?p.benchExpATR.toFixed(3)+" ATR/trade":"learning"}; conservative win floor ${Math.round((p.benchLCB||0)*100)}%.`:`No mature history yet; live evidence is shrinkage-limited.`} ${why.length?`Notes: ${why.join("; ")}.`:"Counter conditions passed."}`;
  return p;
 }
 
-// APEX SCALP GOD 6.5 — PARENT-OPTIONAL OPPORTUNITY DUEL -------------------------
+// APEX SCALP GOD 6.6 — PARENT-OPTIONAL OPPORTUNITY DUEL -------------------------
 const APEX_DUEL_TAPE_KEY="apex_opportunity_tape_v65";
 let apexDuelTape=readStoredJSON(APEX_DUEL_TAPE_KEY,[]);
 function duelTapeSave(){if(apexDuelTape.length>1600)apexDuelTape=apexDuelTape.slice(0,1600);persistJSON(APEX_DUEL_TAPE_KEY,apexDuelTape)}
@@ -2115,11 +2115,21 @@ function universalTrigger(r,c){
  const modeOK=c.mode==="CONTINUATION"?(impulse&&persist&&(+m.continuationFitness||0)>=.55):(c.mode.includes("REVERSAL")||c.mode.includes("COUNTER"))?reversalOK:true;
  const confirms=[candle,closeStrong,flow,modeOK,c.mode==="CONTINUATION"?pathEff:wick>=.18,c.mode==="CONTINUATION"?persist:(+m.reversalFitness||0)>=.50,Math.abs(+cur.close-+prev.close)>=Math.abs(+prev.close-+prev2.close)*.35].filter(Boolean).length;
  const score=clamp(.44*c.score+.08*(candle?1:0)+.08*(closeStrong?1:0)+.08*(flow?1:0)+.12*(modeOK?1:0)+.10*(persist?1:0)+.10*(c.mode==="CONTINUATION"?(+m.continuationFitness||0):(+m.reversalFitness||0)),0,1);
- const targetATR=clamp(c.mode==="CONTINUATION"?.20+.22*c.score:.18+.20*c.score,.18,.42),stopATR=clamp(targetATR/(1.20+.45*c.score),.11,.30),rawSpread=r.feedMeta?.spread,spread=Number(rawSpread),spreadKnown=rawSpread!==null&&rawSpread!==undefined&&Number.isFinite(spread)&&spread>=0,spreadATR=spreadKnown?spread/atr:null,rr=targetATR/Math.max(stopATR,1e-9),costPass=spreadKnown&&(spreadATR/Math.max(targetATR,1e-9)<=.18);
+ const rawSpread=r.feedMeta?.spread,spread=Number(rawSpread),spreadKnown=rawSpread!==null&&rawSpread!==undefined&&Number.isFinite(spread)&&spread>=0,spreadATR=spreadKnown?spread/atr:null;
+ // 6.6 ECONOMIC GEOMETRY: do not reject an otherwise strong setup merely because a tiny fixed target
+ // is uneconomic. Expand the capture horizon enough to clear friction, but cap it so a scalp is not
+ // silently converted into a swing trade. If spread is too large even for the cap, fail closed.
+ const baseTargetATR=clamp(c.mode==="CONTINUATION"?.20+.22*c.score:.18+.20*c.score,.18,.42);
+ const frictionTargetATR=spreadKnown?spreadATR/.15:baseTargetATR;
+ const targetCapATR=clamp(.48+.16*(+m.volBurst||1)+.10*c.score,.55,.78);
+ const targetATR=clamp(Math.max(baseTargetATR,frictionTargetATR),.18,targetCapATR);
+ const desiredRR=1.28+.42*c.score,stopATR=clamp(targetATR/desiredRR,.11,.42),rr=targetATR/Math.max(stopATR,1e-9);
+ const frictionShare=spreadKnown?spreadATR/Math.max(targetATR,1e-9):null;
+ const costPass=spreadKnown&&frictionTargetATR<=targetCapATR&&frictionShare<=.18;
  const target=price+dir*targetATR*atr,stop=price-dir*stopATR*atr;
  const chase=Math.abs(+cur.close-+prev.close)>atr*.55&&wick<.10;
  let state="WAIT";if(c.score>=.64&&!chase&&costPass)state="ARMED";if(state==="ARMED"&&score>=.70&&confirms>=4&&rr>=1.20)state="TRIGGERED";
- return{state,score,confirmations:confirms,entry:price,target,stop,targetATR,stopATR,rr,costPass,spreadATR,chase,wick,reason:state==="TRIGGERED"?"Fresh market trigger + asymmetric geometry confirmed.":state==="ARMED"?"Opportunity exists; waiting for one more execution-quality confirmation.":chase?"Move is extended; do not chase.":"No fresh execution trigger yet."};
+ return{state,score,confirmations:confirms,entry:price,target,stop,targetATR,stopATR,rr,costPass,spreadATR,frictionShare,targetCapATR,chase,wick,reason:state==="TRIGGERED"?"Fresh market trigger + asymmetric geometry confirmed.":state==="ARMED"?"Opportunity exists; waiting for one more execution-quality confirmation.":chase?"Move is extended; do not chase.":"No fresh execution trigger yet."};
 }
 function opportunityDuel(r,p){
  const m=r.main||{},imp=Math.sign(m.impulseDir||r.total||m.score||0),tech=Math.sign(r.total||m.score||0),flow=Math.sign(m.flowPressure||0),parent=p?.finalDir||0,candidates=[];
@@ -2269,7 +2279,7 @@ function renderHarvestVault(r,p,d){
  $("harvestEV").textContent=Number.isFinite(h.ev)?((h.ev>=0?"+":"")+h.ev.toFixed(3)+" ATR/trade"):"—";$("harvestRR").textContent=Number.isFinite(h.rr)?h.rr.toFixed(2)+"R":"—";
  $("harvestRisk").textContent="$"+h.maxLoss.toFixed(2)+" ref";$("harvestPriceTarget").textContent=Number.isFinite(h.target)&&h.target?fmt(h.target):"—";$("harvestFriction").textContent=Number.isFinite(h.friction)?Math.round(h.friction*100)+"% of target":"UNVERIFIED";$("harvestAuthority").textContent=h.authority;
  const msg=h.verdict==="HARVEST READY"?`The short-horizon opportunity passed the live trigger, geometry and cost checks. Account objective $${h.goal.toFixed(2)} on $${h.bal.toFixed(2)} (${(h.goalPct*100).toFixed(2)}%). Do not force the dollar goal if the model target is smaller.`:h.verdict==="PAPER SCOUT"?`Interesting first-path pressure, but it has not earned live authority. Collect the outcome; do not size a $${h.bal.toFixed(2)} account from a scout signal.`:`No harvest authority. The model must first clear market-state, trigger, geometry, cost and integrity gates.`;
- $("harvestNarrative").innerHTML=`<b>${esc(h.verdict)}</b><p>${esc(msg)} Exact dollar P&amp;L requires the broker's contract/tick value and chosen lot size; GOD 6.5 will not invent that mapping.</p>`;
+ $("harvestNarrative").innerHTML=`<b>${esc(h.verdict)}</b><p>${esc(msg)} Exact dollar P&amp;L requires the broker's contract/tick value and chosen lot size; GOD 6.6 will not invent that mapping.</p>`;
  return h;
 }
 
@@ -2305,7 +2315,7 @@ function renderScalpGod(r,p){
 // --------------------------------------------------------------------------
 
 
-// GOD 6.5 OPPORTUNITY DUEL FORTRESS / FAIL-CLOSED KERNEL ------------------------
+// GOD 6.6 OPPORTUNITY DUEL FORTRESS / FAIL-CLOSED KERNEL ------------------------
 const APEX_SCAN_GUARD={lastKey:"",lastAt:0};
 function finiteN(x){return typeof x==="number"&&Number.isFinite(x)}
 function fortressKernel(r,p){
@@ -2330,7 +2340,8 @@ function renderFortress(r,p){
 
 // GOD 4.2 CAPITAL DEFENSE EXECUTION AUTHORITY ------------------------------
 function resolvedFirstHitCount(sym){
- return titanJournal.filter(x=>x.sym===sym&&x.firstHit?.hit).length;
+ // Count every resolved outcome, including SL-first losses. The old predicate counted wins only.
+ return titanJournal.filter(x=>x.sym===sym&&x.firstHit?.resolved).length;
 }
 function executionAuthority(r,p){
  const sg=r.opportunityDuel||scalpGodDecision(r,p),fortress=r.fortress||fortressKernel(r,p),resolved=resolvedFirstHitCount(r.sym),n=sg?.evidence||0;
@@ -2568,7 +2579,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-SCALP-GOD-6.5",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,scalpAtDecision:r.scalpGod?{state:r.scalpGod.state,action:r.scalpGod.action,edge:r.scalpGod.edge,parent:r.scalpGod.parent,counter:r.scalpGod.counter,evidence:r.scalpGod.evidence,target:r.scalpGod.target,invalid:r.scalpGod.invalid}:null,timingAtDecision:r.timingTrap?{state:r.timingTrap.state,adverseATR:r.timingTrap.adverseATR,maxAdverseATR:r.timingTrap.maxAdverseATR,recoveryATR:r.timingTrap.recoveryATR,counterWindow:r.timingTrap.counterWindow,parentActivating:r.timingTrap.parentActivating}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:"APEX-SCALP-GOD-6.6",t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,scalpAtDecision:r.scalpGod?{state:r.scalpGod.state,action:r.scalpGod.action,edge:r.scalpGod.edge,parent:r.scalpGod.parent,counter:r.scalpGod.counter,evidence:r.scalpGod.evidence,target:r.scalpGod.target,invalid:r.scalpGod.invalid}:null,timingAtDecision:r.timingTrap?{state:r.timingTrap.state,adverseATR:r.timingTrap.adverseATR,maxAdverseATR:r.timingTrap.maxAdverseATR,recoveryATR:r.timingTrap.recoveryATR,counterWindow:r.timingTrap.counterWindow,parentActivating:r.timingTrap.parentActivating}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);setTimeout(()=>vaultSave("JOURNAL"),0);
 }
 
@@ -2633,7 +2644,7 @@ const TITAN_AUTO_MEMORY_DB="titan_world_brain_memory";
 const TITAN_AUTO_MEMORY_STORE="brain";
 const TITAN_AUTO_MEMORY_KEY="latest";
 function titanMemorySnapshot(){
- return {schema:6,appVersion:"APEX-SCALP-GOD-6.5",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,pathLedger:apexPathLedger,learning:componentLearning()};
+ return {schema:6,appVersion:"APEX-SCALP-GOD-6.6",savedAt:Date.now(),journal:titanJournal,state:titanState,activeSignals:titanActiveSignals,pathLedger:apexPathLedger,learning:componentLearning()};
 }
 function titanMemoryOpen(){return new Promise((resolve,reject)=>{try{const q=indexedDB.open(TITAN_AUTO_MEMORY_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(TITAN_AUTO_MEMORY_STORE))db.createObjectStore(TITAN_AUTO_MEMORY_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)}catch(e){reject(e)}})}
 function renderAutoMemoryStatus(savedAt=null){
@@ -2641,7 +2652,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 6.5 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 6.6 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}

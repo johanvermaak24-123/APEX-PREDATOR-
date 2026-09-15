@@ -1,0 +1,18 @@
+APEX SCALP GOD 6.6 — ECONOMIC FIRE ENGINE
+
+FIXES
+1. Cost-aware target geometry: strong opportunities no longer fail solely because the original fixed micro-target is too small relative to spread. Target horizon expands only enough to clear friction, with a strict scalp cap; excessive spread still fails closed.
+2. FIRE remains conditional on: candidate score >= 0.74, fresh TRIGGERED state, >=4 confirmations, R:R >=1.20, known/passing spread economics, no market-state veto, and history or exceptional structural score.
+3. Fixed resolved-outcome accounting bug: resolvedFirstHitCount previously counted only first-hit winners; it now counts wins AND losses where firstHit.resolved=true.
+4. Existing storage keys and accumulated memory are preserved. No reset/migration of the user's learning data.
+5. Unknown spread still cannot FIRE. Hydra and Fortress vetoes remain authoritative.
+
+AUDIT
+- JavaScript syntax: PASS
+- DOM duplicate IDs: PASS
+- DOM referenced IDs: PASS
+- Randomized adversarial invariant cases: 1,000,000
+- Invariant failures: 0
+
+IMPORTANT
+The 1,000,000-case audit tests decision invariants and failure states. It does not prove profitability or make FIRE NOW safe for all-in account sizing.
