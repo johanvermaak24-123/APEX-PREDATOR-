@@ -1,0 +1,25 @@
+{
+  "version": "6.7",
+  "test": "1,000,000-case software invariant stress test",
+  "seed": 6702026,
+  "cases": 1000000,
+  "failures_total": 0,
+  "failures": {
+    "fire_with_n_lt_20": 0,
+    "fire_lcb_lt_52": 0,
+    "fire_nonpositive_expectancy": 0,
+    "fire_recent_deterioration": 0,
+    "fire_score_below_74": 0,
+    "fire_without_trigger": 0,
+    "fire_without_costpass": 0,
+    "fire_netrr_below_1_20": 0,
+    "fire_with_veto": 0,
+    "fortress_pass_stale_open": 0,
+    "fortress_pass_closed": 0,
+    "fortress_pass_unknown_quote": 0,
+    "fortress_pass_storage_fail": 0,
+    "lot_suggested_above_budget": 0,
+    "lot_below_min": 0
+  },
+  "note": "Validates coded invariants only; does not prove profitability or future market edge."
+}

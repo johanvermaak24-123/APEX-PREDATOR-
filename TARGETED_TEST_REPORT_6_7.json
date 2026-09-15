@@ -1,0 +1,16 @@
+{
+  "version": "6.7",
+  "status": "PASS",
+  "tests": {
+    "zero_history_trigger_is_proof_only": true,
+    "mature_mode_specific_evidence_can_fire": true,
+    "unknown_spread_blocks_fire": true,
+    "m5_continuity_gap_abandons_outcome": true,
+    "same_bar_tp_and_sl_is_conservative_sl_first": true,
+    "stale_open_feed_hard_blocks": true,
+    "closed_market_hard_blocks": true,
+    "storage_degraded_hard_blocks": true,
+    "suggested_lot_does_not_exceed_configured_risk_budget": true
+  },
+  "note": "Runtime logic tests validate implementation behavior only. They do not prove profitability."
+}

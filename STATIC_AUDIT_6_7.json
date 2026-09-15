@@ -1,0 +1,22 @@
+{
+  "version": "6.7",
+  "js_syntax": "PASS",
+  "service_worker_syntax": "PASS",
+  "manifest_json": "PASS",
+  "dom_ids": 297,
+  "unique_dom_ids": 297,
+  "duplicate_dom_ids": [],
+  "js_dom_refs": 250,
+  "missing_dom_refs": [],
+  "critical_source_checks": {
+    "closed_m5_bars": true,
+    "allow_stale_true_for_controlled_state_handling": true,
+    "market_state_not_hardcoded": true,
+    "truth_ledger_v67": true,
+    "no_zero_history_score_bypass": true,
+    "net_rr_fire_gate": true,
+    "continuity_guard": true,
+    "storage_fail_closed": true,
+    "bounded_lot_authority": true
+  }
+}
