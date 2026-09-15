@@ -1,24 +1,13 @@
 {
-  "name": "APEX SCALP GOD 6.7 \u2014 TRUTH ENGINE",
-  "short_name": "APEX 6.7.1",
+  "name": "APEX SCALP GOD 6.8 — PROOF ENGINE",
+  "short_name": "APEX 6.8",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#05080c",
   "theme_color": "#071018",
+  "description": "Forward-proof, fail-closed short-horizon market research and execution-discipline prototype.",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "description": "APEX SCALP GOD 6.7.1 Measurement Truth: closed-M5 execution, exact first-hit evidence, net cost geometry, fail-closed integrity and bounded lot authority."
+    {"src":"apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any maskable"}
+  ]
 }

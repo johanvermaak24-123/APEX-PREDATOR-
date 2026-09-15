@@ -1,0 +1,31 @@
+APEX SCALP GOD 6.8 — PROOF ENGINE
+BUILD VALIDATION REPORT
+
+Static validation
+- index.html JavaScript extracted and passed Node.js syntax check.
+- sw.js passed Node.js syntax check.
+- manifest.webmanifest parsed as valid JSON.
+- HTML duplicate ID check: 0 duplicates.
+- Legacy visible "PROVEN EDGE" claim count: 0.
+- Legacy visible "MARKET MICROSTRUCTURE COURT" heading count: 0.
+
+Browser runtime validation
+- Loaded the full page in headless Chromium with an isolated storage shim.
+- window.APEX_SELF_TEST: PASS, 0 failures, version 6.8.
+- UI integrity check: PASS.
+- Runtime JavaScript page errors: 0 during initialization.
+- New Proof Status card and required UI IDs present.
+
+Targeted 6.8 logic checks
+1. Broker-cost fail-closed
+   - Broker spread=0, tick size=0, tick value=0 -> costVerified=false; source=FEED PROXY • RESEARCH ONLY.
+   - Broker spread=0.25, tick size=0.01, tick value=1 -> costVerified=true; source=BROKER VERIFIED + BUFFER.
+2. Canonical news state
+   - Synthetic 30-headline / 5-source merged set rendered coherently as 30 headlines and 5 sources from one canonical state.
+3. Effective-sample penalty
+   - A 30-row synthetic clustered sample was reduced to an effective N of 8, demonstrating that nominal count cannot automatically satisfy the 20-effective-episode FIRE gate.
+4. Forward-proof isolation
+   - One 6.8_FORWARD row + one 6.8_SHADOW row + one legacy row -> forward proof bucket counted only the 6.8_FORWARD row.
+
+Interpretation
+These tests verify implementation behavior and fail-closed invariants. They do NOT prove trading profitability or future market edge. That distinction is intentionally enforced in the 6.8 UI.
