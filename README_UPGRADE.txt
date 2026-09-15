@@ -1,35 +1,37 @@
-APEX SCALP GOD 6.8.1 — CONSISTENCY HOTFIX
+APEX SCALP GOD 6.8.2 — ENTRY CLARITY
 
-HOTFIX SCOPE
-- No memory reset. Existing 6.8 forward-proof epoch, truth ledger, signal locks and stored research are preserved.
-- SCALP EDGE ENGINE legacy path-cost display can no longer show a bare PASS when broker costs are unverified. It now distinguishes RESEARCH PROXY from LIVE VERIFIED authority and explicitly shows LIVE VETO when appropriate.
-- LIVE NEWS RADAR now uses one canonical relevant-headline total for the badge, count, high-impact tally and score. The list may show the top six while clearly stating the full relevant total.
-- BEST NOW ranking is explicitly readiness-first: FIRE > PROOF > ARMED > WATCH > setup score. Each row shows its rank priority so a lower setup score cannot look like a sorting bug.
-- Added regression self-tests for cost-authority semantics, canonical news counts and BEST NOW ranking semantics.
+UPGRADE SCOPE
+- No memory reset. Existing 6.8 forward-proof epoch, truth ledger, signal locks, journal, Memory Vault and stored research remain on the same browser/site.
+- The internal proof engine still uses its existing FIRE-state flag for backward compatibility, but the user-facing live action is now explicit: ENTER BUY NOW or ENTER SELL NOW.
+- ARMED is now displayed as RESEARCH ARMED so it cannot be mistaken for permission to trade.
+- Trigger Readiness now says ACTIVE THESIS / THESIS READY instead of ACTIVE EDGE, because the forward Proof Status remains the authority on whether an edge is empirically proven.
+- BEST NOW ranking now shows ENTER > PROOF > RESEARCH ARMED > WATCH > setup score.
+- Execution Authority now displays ENTER NOW only when the live-entry gates have actually cleared; otherwise it remains NO LIVE ENTRY / PROOF ONLY / RESEARCH ARMED / WATCH.
+- Harvest truth status uses ENTRY READY for a fully authorized live setup.
+- User-facing FIRE wording was removed from risk/circuit-breaker labels and replaced with LIVE ENTRY terminology.
+
+WHEN APEX WILL SHOW ENTER
+APEX displays ENTER BUY NOW or ENTER SELL NOW only when the selected opportunity has all required live authority:
+1. Fresh trigger / entry geometry.
+2. Verified broker-cost inputs.
+3. Required forward proof / effective evidence gates.
+4. Positive bootstrap and purged holdout evidence plus FDR pass.
+5. Fortress data/execution checks pass.
+6. Hydra/state-freshness checks pass.
+7. Circuit breaker is clear.
+
+Until those conditions clear, APEX can still show WATCH, RESEARCH ARMED or PROOF ONLY, but those are not live-entry instructions.
 
 DEPLOY OVER YOUR CURRENT GITHUB PAGES BUILD
 1. Keep the same repository/site. Do NOT delete browser storage.
 2. Replace index.html, manifest.webmanifest, sw.js and apple-touch-icon.png with the files in this ZIP.
 3. Commit the changes and wait for GitHub Pages to redeploy.
-4. Re-open the same site URL. The new service worker is network-first for navigation and clears old APEX caches.
+4. Re-open the same site URL. The 6.8.2 service worker clears the old APEX cache and uses network-first navigation.
 
-MEMORY PRESERVATION
-- Existing titan_journal_v2, titan_state_v2, signal locks, path memory, Memory Vault and the 6.7.1 truth-ledger database are preserved.
-- 6.7.1 evidence remains available for research/context.
-- FIRE authority in 6.8 starts a new FORWARD PROOF era on first 6.8 load. Old evidence cannot silently qualify a 6.8 FIRE.
-
-MAJOR 6.8 CHANGES
-- Fail-closed broker-cost authority: FIRE requires fresh broker spread plus non-zero tick size and tick value. Feed spread is RESEARCH ONLY.
-- Canonical merged news state: Global Coverage Radar and Live News Radar read from one coherent news state.
-- Forward-only proof gate: exact post-entry M1 outcomes created after the 6.8 upgrade are the only outcomes eligible for 6.8 live proof.
-- Effective sample penalty: nominal episode count is reduced for serial dependence and same-day clustering.
-- Block bootstrap + purged chronological holdout + FDR remain required before live promotion.
-- Counter trades are explicitly labelled COUNTER BUY / COUNTER SELL when they run against the parent thesis.
-- Market Microstructure language was corrected to MARKET FLOW PROXY / OHLC-tick-volume proxy language. No L2/L3 claims.
-- Memory learning now decays stale outcomes rather than weighting all old outcomes equally.
-- Alpha retirement/reactivation lifecycle added for deteriorating mode-specific expectancy.
-- Heuristic state evidence half-life can veto stale closed-bar evidence.
-- New Proof Status card separates CODE SELF-TEST from EDGE PROVEN.
+MEMORY / PROOF PRESERVATION
+- Storage keys and APEX_PROOF_EPOCH are unchanged from 6.8/6.8.1.
+- Existing 6.8 forward episodes continue to count under the same proof epoch.
+- Legacy 6.7.1 evidence remains research/context only and cannot silently qualify a live entry.
 
 IMPORTANT
-A software self-test or fuzz test does not prove profitability. 6.8 deliberately keeps live authority fail-closed until forward evidence and broker-cost inputs justify it.
+ENTER is an execution-authority label from the model, not a guarantee of profit or future price direction. Setup score is not a probability. Code self-tests verify implementation behavior, not profitability.

@@ -1,30 +1,34 @@
-APEX SCALP GOD 6.8.1 — CONSISTENCY HOTFIX
+APEX SCALP GOD 6.8.2 — ENTRY CLARITY
 TEST REPORT — 15 September 2026
 
-HOTFIX TARGETS
-1. COST AUTHORITY CONSISTENCY
-   PASS — legacy 0–30m path-cost proxy no longer displays a bare PASS when broker costs are unverified.
-   PASS — research proxy pass is explicitly labeled "RESEARCH PROXY PASS • LIVE VETO".
-   PASS — only verified broker-cost inputs can display LIVE VERIFIED PASS.
+ENTRY CLARITY TARGETS
+1. LIVE ENTRY WORDING
+   PASS — when the internal live-ready state is reached, SCALP COMMAND CENTER action is ENTER BUY NOW or ENTER SELL NOW (including COUNTER direction wording where applicable).
+   PASS — Execution Authority badge becomes ENTER NOW only when sg.fire + Fortress + Hydra live authority all pass.
+   PASS — non-live states remain NO LIVE ENTRY, PROOF ONLY, RESEARCH ARMED, WATCH or NO TRADE.
 
-2. CANONICAL NEWS COUNT CONSISTENCY
-   PASS — LIVE NEWS RADAR badge and Relevant News field use the same canonical symbol-relevant total.
-   PASS — High Impact count is calculated over the full canonical relevant set, not only the six displayed headlines.
-   PASS — if more than six relevant headlines exist, UI says how many are displayed and confirms all are included in scoring.
+2. EDGE / THESIS SEMANTICS
+   PASS — Trigger Readiness uses ACTIVE THESIS / THESIS READY, not ACTIVE EDGE.
+   PASS — Proof Status remains the separate authority for EDGE UNPROVEN / SCOUT / CONFIRMED.
+   PASS — ARMED is user-facing RESEARCH ARMED, preventing it from looking like an entry instruction.
 
-3. BEST NOW RANKING CONSISTENCY
-   PASS — ranking comparator is explicitly readiness-first: FIRE > PROOF > ARMED > WATCH > setup score.
-   PASS — regression test confirms ARMED 60 outranks WATCH 90.
-   PASS — within the same readiness state, higher setup score ranks first.
-   PASS — UI now displays each candidate's rank priority and explains the ranking rule.
+3. BEST NOW SEMANTICS
+   PASS — public ranking label is ENTER > PROOF > RESEARCH ARMED > WATCH > setup score.
+   PASS — internal FIRE NOW state is retained only for backward-compatible logic/ranking and is translated to ENTER in the UI.
+
+4. COST / NEWS / PROOF REGRESSION
+   PASS — 6.8.1 cost-authority distinction remains: RESEARCH PROXY PASS • LIVE VETO when broker costs are unverified.
+   PASS — canonical news count logic remains unchanged.
+   PASS — APEX_PROOF_EPOCH and existing storage keys remain unchanged, so this hotfix does not reset forward proof or memory.
 
 STATIC / PACKAGE CHECKS
 PASS — node --check app.js
+PASS — node --check embedded index.html JavaScript
 PASS — node --check sw.js
 PASS — manifest.webmanifest parses as valid JSON
 PASS — 313 unique HTML IDs; 0 duplicate IDs
-PASS — 260 literal JS DOM references checked; 0 missing IDs
-PASS — proof-era/storage keys preserved so 6.8 forward evidence and existing browser memory are not reset by this hotfix
+PASS — 259 literal JS DOM references checked; 0 missing IDs
+PASS — page title/version constants are 6.8.2
 
 IMPORTANT
-These tests verify implementation consistency and fail-closed semantics. They do not prove trading profitability or future market direction.
+These tests verify implementation consistency and entry-label behavior. They do not prove trading profitability or future market direction.

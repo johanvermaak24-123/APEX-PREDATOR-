@@ -1,12 +1,12 @@
 {
-  "name": "APEX SCALP GOD 6.8.1 — CONSISTENCY HOTFIX",
-  "short_name": "APEX 6.8.1",
+  "name": "APEX SCALP GOD 6.8.2 — ENTRY CLARITY",
+  "short_name": "APEX 6.8.2",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#05080c",
   "theme_color": "#071018",
-  "description": "Forward-proof, fail-closed short-horizon market research prototype with canonical news, explicit cost authority, and readiness-first ranking.",
+  "description": "Forward-proof, fail-closed short-horizon market research prototype with canonical news, explicit cost authority, and readiness-first ranking and explicit ENTER BUY/SELL live-entry wording.",
   "icons": [
     {
       "src": "apple-touch-icon.png",
