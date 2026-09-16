@@ -1,11 +1,63 @@
-APEX SCALP GOD 7.3.2 — MOBILE CALENDAR RELAY TEST
+APEX 7.3.3 — FRESH ENTRY BETA TEST CHECKLIST
+============================================
 
-[ ] Deploy to the SAME GitHub Pages site/origin as 7.3/7.3.1.
-[ ] Do NOT clear browser/site data.
-[ ] Confirm app title/version shows 7.3.2.
-[ ] Confirm your existing resolved/learned count is still present.
-[ ] Select XAU/USD and SCAN.
-[ ] NEWS RISK RADAR should show a provider instead of OFFLINE when at least one direct/relay route works.
-[ ] If a high-impact USD event is within 15 minutes before/after, main command must WAIT.
-[ ] If every route genuinely fails, radar must remain UNKNOWN and block ENTER.
-[ ] Confirm normal ENTER freshness / MISSED anti-chase rules still behave as before.
+Run these tests before any commercial release.
+
+1. FRESH LOAD
+   Refresh the page. It must open in SIMPLE MODE and the button must say
+   SHOW ADVANCED DETAILS. Technical cards must not be visible.
+
+2. WAIT
+   Scan a market that returns WAIT. Entry, Stop Loss and Take Profit must remain
+   blank. No large unapproved BUY/SELL instruction may appear on the normal screen.
+
+3. FRESH ENTER
+   If a fully authorized setup appears, the large answer must say exactly
+   ENTER BUY NOW or ENTER SELL NOW. Entry / Stop Loss / Take Profit must populate.
+   The explanation must state that the live price is still in the fresh-entry zone.
+
+4. MISSED ENTRY
+   Reproduce or simulate a setup where live price has already travelled beyond the
+   allowed fresh zone. The screen must say MISSED — DO NOT CHASE. Entry / SL / TP
+   must be hidden. It must NOT rebase a new ENTER from the later live price.
+
+5. PULLBACK RECHECK
+   If price pulls back into the valid zone while the same 90-second M5 trigger is
+   still alive, scan again. The setup ID / original trigger reference must remain the
+   same. A new ENTER is allowed only if all other gates still pass.
+
+6. STALE TRIGGER
+   Scan the same setup after the closed-M5 trigger is older than 90 seconds. It must
+   show WAIT / SETUP EXPIRED and never ENTER from that old setup.
+
+7. DISPLAY EXPIRY
+   Leave a live ENTER untouched. It must expire no later than 60 seconds after it was
+   displayed, and earlier if the underlying 90-second trigger expires. Entry levels
+   must be cleared and the screen must require a new scan.
+
+8. OPEN TRADE MANAGEMENT
+   Tap I ENTERED THIS TRADE. On later scans the manager may say HOLD, TAKE PROFIT NOW
+   or EXIT NOW. It must never create a second ENTER instruction for the open trade.
+
+9. FIND A TRADE
+   Scan all markets. If nothing is ready, show WAIT — NO TRADE READY. If a live trade
+   is ready, show only an actually fresh authorized trade in Consumer Mode.
+
+10. ADVANCED DETAILS
+    Tap SHOW ADVANCED DETAILS. Research panels may appear. Refresh and confirm the
+    app returns to SIMPLE MODE automatically.
+
+11. MEMORY / UPGRADE
+    Deploy 7.3 over the old version without clearing site data. Existing journal,
+    signal locks and research memory must remain. Legacy proof may remain visible as
+    history, but must not count toward the new 7.3 live proof authority.
+
+12. 7.3 PROOF COLLECTION
+    Confirm new truth-ledger rows carry setup ID, original trigger price/time,
+    freshness status/age and target-used metrics. Only fresh-entry rows with verified
+    broker costs may count toward 7.3 live proof.
+
+13. REAL-BROKER PILOT
+    Use demo or very small risk first. Record spread, slippage, actual fill, trigger
+    age, original trigger price, live entry price, stop/target behavior and every
+    HOLD/EXIT instruction. Do not market a win-rate claim from the software audit.

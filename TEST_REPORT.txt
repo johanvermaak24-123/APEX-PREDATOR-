@@ -1,40 +1,35 @@
-APEX SCALP GOD 7.3.2 — MOBILE CALENDAR RELAY PATCH
-==========================================================
+APEX SCALP GOD 7.3.3 — CALENDAR ROLLBACK TEST REPORT
+==============================================================
 
-WHY THIS PATCH EXISTS
-The 7.3.1 News Risk Radar behaved correctly fail-closed on the phone, but the browser could not retrieve either direct calendar source and therefore showed CALENDAR OFFLINE / NEWS RISK UNKNOWN.
+SOURCE
+- Base: original APEX 7.3.0 Fresh Entry build from before the economic-calendar patch.
+- Runtime version bumped to 7.3.3 to force a fresh service-worker shell.
 
-WHAT 7.3.2 CHANGES
-- Preserves the 7.3/7.3.1 learning and active-signal storage keys.
-- Adds PRE-7.3.2 safety snapshot before patch logic uses current storage.
-- Calendar route order:
-  1. ForexFactory CDN direct
-  2. ForexFactory legacy host direct
-  3. TradingEconomics direct
-  4. AllOrigins relay to ForexFactory CDN
-  5. CodeTabs relay to ForexFactory CDN
-  6. CorsProxy relay to ForexFactory CDN
-- Relay requests contain only the public calendar URL; no journal, learning state, account values, or API keys are sent.
-- Each feed is rejected if malformed, too small, outside the active date window, or missing USD events.
-- If every route fails, APEX still fails closed and will not authorize ENTER.
+ROLLBACK
+PASS — News Risk Radar panel absent
+PASS — economic-calendar functions absent
+PASS — ForexFactory calendar endpoints absent
+PASS — TradingEconomics calendar endpoints absent
+PASS — relay fallback code absent
+PASS — calendar OFFLINE / UNKNOWN veto absent
+PASS — Fresh Entry logic matches 7.3.0 after version-only normalization: True
 
-TESTS
-PASS — JavaScript syntax check
-PASS — Static audit: 27 / 27
-PASS — 1,000,000 execution scenarios
+MEMORY / LEARNING COMPATIBILITY
+PASS — titan_journal_v2 key preserved
+PASS — titan_state_v2 key preserved
+PASS — titan_active_signals_v2 key preserved
+PASS — apex_path_ledger_v4 key preserved
+No existing storage key is renamed by this rollback.
+
+REGRESSION TESTS
+PASS — Static audit: 29/29
+PASS — 1M decision audit: 1,000,000 scenarios
 PASS — 1M invariant failures: 0
-PASS — Calendar BLOCK/UNKNOWN cannot authorize ENTER
-PASS — Mock mobile failure path: direct feeds fail, AllOrigins relay succeeds
-PASS — Relay-fed +10m high-impact USD event produces BLOCK
-PASS — Stale/malformed calendar payload rejected
-PASS — Existing learning migration: 120 / 120 seeded journal records preserved
-PASS — Existing active signal lock preserved
-PASS — Existing path records preserved: 17 / 17
-PASS — Runtime/source SHA alignment
-
-APP SHA256
-ca43cf004e352693293b92cbff007ab54ccc6dc36672512ee4897e0324c99c05
+PASS — Runtime app SHA256 matches 1M report: 25d02ec90b448acf267b81c13e4377c8ad4c986c7791571722d0cf2782261dc2
 
 IMPORTANT
-Deploy over the SAME GitHub Pages site/origin and do not clear site/browser data if you want the current learned state to remain available.
-This validates software behavior and migration invariants; it does not prove future market accuracy or profitability.
+This rollback does NOT loosen entry thresholds just to create more trades.
+After deployment, if APEX still says WAIT, that WAIT comes from the original 7.3 Fresh Entry / execution / proof logic rather than the removed forex calendar.
+Deploy over the same site/origin and do not clear browser/site data if you want browser-stored learning to remain.
+
+These tests validate software rules and compatibility; they do not prove profitability, forecast accuracy, or future market performance.

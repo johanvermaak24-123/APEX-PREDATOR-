@@ -1,0 +1,23 @@
+{
+  "version": "APEX-SCALP-GOD-7.3.3",
+  "sourceBase": "APEX-SCALP-GOD-7.3.0 pre-calendar Fresh Entry",
+  "calendarPatchRuntimeAbsent": true,
+  "freshEntryLogicByteEquivalentTo730AfterVersionNormalization": true,
+  "persistentStorageKeysPresent": {
+    "titan_journal_v2": true,
+    "titan_state_v2": true,
+    "titan_active_signals_v2": true,
+    "apex_path_ledger_v4": true
+  },
+  "staticAudit": {
+    "passed": true,
+    "checksPassed": 29,
+    "checksTotal": 29
+  },
+  "millionScenarioAudit": {
+    "passed": true,
+    "scenarios": 1000000,
+    "sourceSha256": "25d02ec90b448acf267b81c13e4377c8ad4c986c7791571722d0cf2782261dc2"
+  },
+  "note": "This audit validates software/source invariants and rollback isolation. It does not prove trading profitability or signal accuracy."
+}
