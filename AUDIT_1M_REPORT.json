@@ -1,21 +1,39 @@
 {
-  "version": "APEX-SCALP-GOD-7.2.0",
-  "sourceSha256": "e0b88131cabe733bf52348cb640dd15d01040b210dcde8f1b10cec14c7123221",
+  "version": "APEX-SCALP-GOD-7.3.0",
+  "sourceSha256": "0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096",
   "scenarios": 1000000,
-  "seed": "0x7200cafe",
-  "elapsedMs": 827,
+  "seed": "0x7300cafe",
+  "elapsedMs": 2427,
   "passed": true,
-  "liveCount": 26183,
-  "waitCount": 973817,
-  "tradeHold": 402765,
-  "tradeExit": 557531,
-  "tradeSwitch": 39704,
+  "counts": {
+    "live": 39329,
+    "nonLive": 960671,
+    "fresh": 216231,
+    "missed": 219083,
+    "stale": 499391,
+    "invalidated": 63381,
+    "unverified": 1914,
+    "missedUiAssertions": 40946,
+    "tradeHold": 402924,
+    "tradeExit": 557167,
+    "tradeSwitch": 39909
+  },
+  "limits": {
+    "triggerFreshMaxMs": 90000,
+    "commandMaxAgeMs": 60000,
+    "maxTargetConsumed": 0.35,
+    "maxFavorableATR": "dynamic 0.08–0.18 ATR"
+  },
   "invariants": [
-    "ENTER iff final execution authority is complete",
-    "Every non-live new-trade command is WAIT — DO NOT ENTER",
-    "No entry/SL/TP levels leak while WAIT",
+    "ENTER requires final authority AND explicit fresh-entry pass",
+    "Missing freshness metadata fails closed",
+    "Original trigger identity is tied to closed M5 bar, not rescan time",
+    "Price > fresh-zone / >35% target consumed becomes MISSED — DO NOT CHASE",
+    "Trigger older than 90s becomes STALE",
+    "Excess adverse displacement invalidates the old trigger",
+    "No entry/SL/TP levels leak while non-live",
     "BEST NOW cannot create ENTER independently",
-    "Open trade manager only emits HOLD / EXIT / SWITCH",
-    "Target, stop-loss and opposite live direction force EXIT"
+    "Open-trade manager only emits HOLD / EXIT / SWITCH",
+    "Live command has a hard 60s maximum display life and may expire sooner with the trigger"
   ]
 }

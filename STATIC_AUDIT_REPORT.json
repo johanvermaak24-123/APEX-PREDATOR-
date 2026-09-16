@@ -1,0 +1,157 @@
+{
+  "version": "APEX-SCALP-GOD-7.3.0",
+  "passed": true,
+  "checksPassed": 29,
+  "checksTotal": 29,
+  "htmlIds": 336,
+  "literalDomRefs": 300,
+  "missingDomRefs": [],
+  "appSha256": "0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096",
+  "checks": [
+    {
+      "name": "HTML parsed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unique IDs",
+      "passed": true,
+      "detail": "336 total / 336 unique"
+    },
+    {
+      "name": "literal DOM refs resolved",
+      "passed": true,
+      "detail": "300 refs; missing=[]"
+    },
+    {
+      "name": "inline app.js byte-equivalent",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "version title",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "app version constant",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "manifest version",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "service worker cache bumped",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "simple mode forced on load",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "freshness constants present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "original trigger identity present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "favorable anti-chase gate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "adverse invalidation gate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "stale trigger gate",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "future timestamp fail-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "final ENTER requires freshness",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "missing freshness fails closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "MISSED user action present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "non-live hides levels",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "command expiry uses trigger expiry",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "old 121s expiry removed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "7.3 proof epoch isolated",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "legacy proof era not live-counted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "proof recorder requires fresh entry",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "proof rows store freshness metadata",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "self-test includes missed fail-closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no 7.2 version remnants in runtime files",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "1M report passed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "1M report matches source SHA",
+      "passed": true,
+      "detail": "report=0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096 source=0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096"
+    }
+  ]
+}

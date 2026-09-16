@@ -1,30 +1,52 @@
-APEX SCALP GOD 7.2.0 — CONSUMER TEST REPORT
-====================================================
+APEX SCALP GOD 7.3.0 — FRESH ENTRY TEST REPORT
+================================================
 
+PASS — JavaScript syntax check
 PASS — HTML parsed
-PASS — unique IDs
-PASS — literal DOM refs resolved
-PASS — Consumer/Simple Mode is default
-PASS — Consumer/Simple Mode forced on every load
-PASS — Advanced display choice is session-only
-PASS — all technical brain cards hidden in simple mode
-PASS — basket ranking hidden in simple mode
-PASS — WAIT basket does not tease closest candidate
-PASS — WAIT main command does not tease BUY/SELL candidate
-PASS — WAIT hides entry levels
-PASS — main action labels present
-PASS — version consistent
-PASS — service-worker cache bumped
-PASS — 1M invariant audit passed
+PASS — 336 / 336 HTML IDs unique
+PASS — 300 literal DOM references resolved
+PASS — inline JavaScript matches app.js
+PASS — Consumer/Simple Mode forced ON at load
+PASS — version consistent across HTML / app / manifest
+PASS — service-worker cache bumped to 7.3.0
+PASS — original closed-M5 trigger identity implemented
+PASS — fixed original trigger price/time used for freshness comparison
+PASS — >35% modeled target consumption blocks entry
+PASS — dynamic favorable anti-chase gate blocks late entries
+PASS — excessive adverse movement invalidates old trigger
+PASS — >90-second trigger age blocks entry
+PASS — unverifiable / future trigger timestamps fail closed
+PASS — final ENTER gate requires explicit freshness PASS
+PASS — missing freshness metadata cannot ENTER
+PASS — MISSED — DO NOT CHASE has no Entry / SL / TP leakage
+PASS — live command expires in <=60 seconds and may expire sooner with trigger
+PASS — old 121-second display window removed
+PASS — pre-7.3 proof excluded from 7.3 live authority
+PASS — new 7.3 proof rows require a fresh entry
+PASS — new proof rows retain trigger/freshness audit metadata
+PASS — exact-source 1,000,000 randomized scenario audit
+PASS — 1,000,000 audit failures: 0
+PASS — audit report SHA256 matches exact app.js source
+PASS — static package audit: 29 / 29
 
-HTML IDs: 336 total / 336 unique
-Literal JS DOM references checked: 291
-Duplicate IDs: none
-Missing literal DOM refs: none
-1M scenarios: 1,000,000
-1M failures: 0
-1M result: PASS
+1M RUN SUMMARY
+--------------
+Scenarios:      1,000,000
+Fresh:            216,231
+Missed:           219,083
+Stale:            499,391
+Invalidated:       63,381
+Unverified:         1,914
+Live commands:     39,329
+Non-live:         960,671
+Failures:               0
 
-JS SHA256: e0b88131cabe733bf52348cb640dd15d01040b210dcde8f1b10cec14c7123221
+SOURCE SHA256
+-------------
+0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096
 
-NOTE: This validates software invariants and consumer UI rules. It does not prove profitability, forecast accuracy, or a near-100% win rate.
+NOTE
+----
+This validates code paths, fail-closed behavior and UI/execution invariants. It does
+NOT prove profitability, market prediction accuracy, or a near-100% win rate. The
+1,000,000 scenarios are synthetic randomized software states, not historical trades.
