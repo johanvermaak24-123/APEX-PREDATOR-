@@ -1,3 +1,8 @@
+APEX SCALP GOD 7.3.1 — CURRENT UPGRADE NOTE
+============================================================
+7.3.1 retains every 7.3.0 fresh-entry / anti-chase rule below and adds the News Risk Radar described in README_7_3_1_NEWS_RISK.txt.
+The 7.3.0 section below is retained as upgrade history.
+
 APEX SCALP GOD 7.3.0 — FRESH ENTRY / ANTI-CHASE UPGRADE
 =========================================================
 
@@ -116,5 +121,5 @@ Upload the CONTENTS of this ZIP over the existing GitHub Pages repository files.
 Do not clear browser/site data if you want to preserve the user's existing memory,
 journal and research history.
 
-The service-worker cache name was bumped to 7.3.0 so the upgraded shell replaces the
+Historical note: in 7.3.0 the service-worker cache name was bumped so that shell replaced the
 old cached version.

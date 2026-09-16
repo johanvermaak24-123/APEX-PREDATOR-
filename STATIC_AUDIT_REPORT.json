@@ -1,12 +1,12 @@
 {
-  "version": "APEX-SCALP-GOD-7.3.0",
+  "version": "APEX-SCALP-GOD-7.3.1",
   "passed": true,
-  "checksPassed": 29,
-  "checksTotal": 29,
-  "htmlIds": 336,
-  "literalDomRefs": 300,
+  "checksPassed": 35,
+  "checksTotal": 35,
+  "htmlIds": 342,
+  "literalDomRefs": 306,
   "missingDomRefs": [],
-  "appSha256": "0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096",
+  "appSha256": "3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400",
   "checks": [
     {
       "name": "HTML parsed",
@@ -16,12 +16,12 @@
     {
       "name": "unique IDs",
       "passed": true,
-      "detail": "336 total / 336 unique"
+      "detail": "342 total / 342 unique"
     },
     {
       "name": "literal DOM refs resolved",
       "passed": true,
-      "detail": "300 refs; missing=[]"
+      "detail": "306 refs; missing=[]"
     },
     {
       "name": "inline app.js byte-equivalent",
@@ -45,6 +45,31 @@
     },
     {
       "name": "service worker cache bumped",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar radar UI",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar providers present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar execution veto",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "legacy memory keys preserved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "pre-patch memory snapshot",
       "passed": true,
       "detail": ""
     },
@@ -144,6 +169,11 @@
       "detail": ""
     },
     {
+      "name": "no 7.3.0 runtime self-test remnants",
+      "passed": true,
+      "detail": ""
+    },
+    {
       "name": "1M report passed",
       "passed": true,
       "detail": ""
@@ -151,7 +181,7 @@
     {
       "name": "1M report matches source SHA",
       "passed": true,
-      "detail": "report=0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096 source=0062d70e80a2a9de0e45f0cbc62f660e6564e018538af71d3ff2325e845c0096"
+      "detail": "report=3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400 source=3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400"
     }
   ]
 }

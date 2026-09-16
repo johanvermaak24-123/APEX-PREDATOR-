@@ -1,63 +1,43 @@
-APEX 7.3.0 — FRESH ENTRY BETA TEST CHECKLIST
-============================================
+APEX SCALP GOD 7.3.1 — NEWS RISK RADAR
+BETA TEST CHECKLIST
+============================================================
 
-Run these tests before any commercial release.
+BEFORE DEPLOY
+[ ] Keep the current 7.3.0 ZIP as rollback copy.
+[ ] Do not clear Safari/Chrome site data or browser storage.
+[ ] Deploy 7.3.1 to the same site/origin currently holding the learned state.
 
-1. FRESH LOAD
-   Refresh the page. It must open in SIMPLE MODE and the button must say
-   SHOW ADVANCED DETAILS. Technical cards must not be visible.
+FIRST LOAD AFTER UPGRADE
+[ ] Confirm the app title/version shows 7.3.1.
+[ ] Confirm your existing learned/resolved count is still present.
+[ ] Confirm existing active signal/lock state has not unexpectedly reset.
+[ ] Confirm the News Risk Radar is visible in Simple Mode above the main execution command.
+[ ] If feed cannot load, confirm it says NEWS RISK UNKNOWN rather than NEWS CLEAR.
 
-2. WAIT
-   Scan a market that returns WAIT. Entry, Stop Loss and Take Profit must remain
-   blank. No large unapproved BUY/SELL instruction may appear on the normal screen.
+NORMAL CALENDAR STATE
+[ ] With no relevant imminent event, confirm NEWS CLEAR or the appropriate upcoming/watch state.
+[ ] Confirm the next relevant event shows event title, currency and time when available.
+[ ] Switch symbols and confirm the relevant-currency filter changes appropriately.
 
-3. FRESH ENTER
-   If a fully authorized setup appears, the large answer must say exactly
-   ENTER BUY NOW or ENTER SELL NOW. Entry / Stop Loss / Take Profit must populate.
-   The explanation must state that the live price is still in the fresh-entry zone.
+HIGH-IMPACT EVENT TEST
+[ ] 60–30 min before: radar warns/upcoming; normal scan logic remains available.
+[ ] 30–15 min before: radar escalates caution/watch.
+[ ] 15 min before through 15 min after: fresh ENTER must be blocked.
+[ ] During block, main instruction must clearly say WAIT — BIG NEWS / DO NOT ENTER.
+[ ] After protected window, confirm the engine only re-enters when normal setup/freshness gates pass.
+[ ] Confirm an already-open manual trade is NOT auto-closed merely because news appeared.
 
-4. MISSED ENTRY
-   Reproduce or simulate a setup where live price has already travelled beyond the
-   allowed fresh zone. The screen must say MISSED — DO NOT CHASE. Entry / SL / TP
-   must be hidden. It must NOT rebase a new ENTER from the later live price.
+LEARNING / JOURNAL
+[ ] Resolve several new post-upgrade signals.
+[ ] Confirm resolved-learning count continues increasing from the old count rather than restarting.
+[ ] Confirm old journal/history remains visible after closing and reopening the app.
+[ ] Confirm new records include calendar context where applicable.
 
-5. PULLBACK RECHECK
-   If price pulls back into the valid zone while the same 90-second M5 trigger is
-   still alive, scan again. The setup ID / original trigger reference must remain the
-   same. A new ENTER is allowed only if all other gates still pass.
+FAIL-CLOSED TEST
+[ ] Temporarily disable network or calendar access.
+[ ] Confirm the app does not claim NEWS CLEAR from an unknown feed state.
+[ ] Confirm fresh ENTER is blocked when calendar status is UNKNOWN.
+[ ] Restore network and confirm calendar state recovers without deleting learning.
 
-6. STALE TRIGGER
-   Scan the same setup after the closed-M5 trigger is older than 90 seconds. It must
-   show WAIT / SETUP EXPIRED and never ENTER from that old setup.
-
-7. DISPLAY EXPIRY
-   Leave a live ENTER untouched. It must expire no later than 60 seconds after it was
-   displayed, and earlier if the underlying 90-second trigger expires. Entry levels
-   must be cleared and the screen must require a new scan.
-
-8. OPEN TRADE MANAGEMENT
-   Tap I ENTERED THIS TRADE. On later scans the manager may say HOLD, TAKE PROFIT NOW
-   or EXIT NOW. It must never create a second ENTER instruction for the open trade.
-
-9. FIND A TRADE
-   Scan all markets. If nothing is ready, show WAIT — NO TRADE READY. If a live trade
-   is ready, show only an actually fresh authorized trade in Consumer Mode.
-
-10. ADVANCED DETAILS
-    Tap SHOW ADVANCED DETAILS. Research panels may appear. Refresh and confirm the
-    app returns to SIMPLE MODE automatically.
-
-11. MEMORY / UPGRADE
-    Deploy 7.3 over the old version without clearing site data. Existing journal,
-    signal locks and research memory must remain. Legacy proof may remain visible as
-    history, but must not count toward the new 7.3 live proof authority.
-
-12. 7.3 PROOF COLLECTION
-    Confirm new truth-ledger rows carry setup ID, original trigger price/time,
-    freshness status/age and target-used metrics. Only fresh-entry rows with verified
-    broker costs may count toward 7.3 live proof.
-
-13. REAL-BROKER PILOT
-    Use demo or very small risk first. Record spread, slippage, actual fill, trigger
-    age, original trigger price, live entry price, stop/target behavior and every
-    HOLD/EXIT instruction. Do not market a win-rate claim from the software audit.
+PASS CRITERION
+No beta failure should be accepted if it resets old learning, permits ENTER during a calendar BLOCK/UNKNOWN state, or displays NEWS CLEAR when the calendar feed is not verified.

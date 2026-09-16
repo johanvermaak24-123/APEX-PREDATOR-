@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX SCALP GOD 7.3.0 — CONSUMER TEST HUD</title>
+<title>APEX SCALP GOD 7.3.1 — CONSUMER TEST HUD</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -156,11 +156,18 @@ body.simpleMode #oppsTab .small{font-size:11px}
 .bestNowGrid{grid-template-columns:repeat(4,1fr)}
 @media(max-width:700px){body.simpleMode #commandAction{font-size:42px}.bestNowGrid{grid-template-columns:repeat(2,1fr)}}
 
+/* 7.3.1 economic-calendar risk radar */
+.calendarRiskCard{border:1px solid #245a43;background:linear-gradient(135deg,rgba(7,32,26,.98),rgba(6,18,26,.98));padding:13px 14px}
+.calendarRiskCard.calendarWatch{border-color:#76632e;background:linear-gradient(135deg,rgba(39,31,8,.98),rgba(12,20,27,.98))}
+.calendarRiskCard.calendarBlock{border:2px solid #8d3e4d;background:linear-gradient(135deg,rgba(50,14,23,.98),rgba(16,17,24,.99));box-shadow:0 0 30px rgba(255,82,102,.10)}
+.calendarRiskTop{display:flex;justify-content:space-between;align-items:center;gap:10px}.calendarRiskTop b{font-size:12px;letter-spacing:.6px}.calendarRiskTitle{font-size:17px;font-weight:1000;margin-top:8px;line-height:1.25}.calendarRiskDetail{font-size:11px;color:#b8cad7;line-height:1.45;margin-top:5px}.calendarRiskMeta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.calendarRiskMeta .k{min-height:54px}
+@media(max-width:600px){.calendarRiskTitle{font-size:15px}.calendarRiskMeta{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body class="simpleMode">
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 7.3.0 • CONSUMER TEST HUD</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 7.3.1 • NEWS RISK RADAR</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WHAT DO I DO?</button>
    <button data-tab="opps">FIND A TRADE</button>
@@ -183,6 +190,13 @@ body.simpleMode #oppsTab .small{font-size:11px}
    <button id="scan">🔄 SCAN & TELL ME WHAT TO DO</button>
    <div class="small" style="margin-top:8px">Press SCAN whenever you want a fresh answer. Do not trade from an old answer — scan again before entering.</div>
    <div class="grid2 simpleStatus" style="margin-top:10px"><div class="k"><span>LAST SCAN</span><b id="manualLastUpdate">NEVER</b></div><div class="k"><span>MODE</span><b>MANUAL SCAN</b></div></div>
+  </div>
+
+  <div class="card calendarRiskCard simpleKeep" id="calendarRiskCard">
+   <div class="calendarRiskTop"><b>🗓️ NEWS RISK RADAR</b><span id="calendarRiskBadge" class="badge">NOT SCANNED</span></div>
+   <div id="calendarRiskTitle" class="calendarRiskTitle">SCAN TO CHECK FOREX CALENDAR</div>
+   <div id="calendarRiskDetail" class="calendarRiskDetail">APEX will check scheduled economic news before it can authorize a fresh entry.</div>
+   <div class="calendarRiskMeta"><div class="k"><span>NEAREST RELEVANT EVENT</span><b id="calendarRiskNext">—</b></div><div class="k"><span>CALENDAR FEED</span><b id="calendarRiskFeed">—</b></div></div>
   </div>
 
   <div class="executionCommand" id="executionCommandCard">
@@ -738,7 +752,6 @@ body.simpleMode #oppsTab .small{font-size:11px}
  <div class="note">APEX Precision Trader HUD prioritizes selectivity over trade frequency. It cannot guarantee future price direction or a near-100% win rate. Coverage is deliberately broad and multilingual through GDELT's global index, but no system can literally access every private, paywalled, unpublished or unindexed article on Earth.</div>
 </div>
 <script>
-
 const $=x=>document.getElementById(x), must=x=>{const e=$(x);if(!e)throw new Error("UI element missing: #"+x);return e}, clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
 function safeJSON(raw,fallback){try{const v=JSON.parse(raw);return v??fallback}catch(e){return fallback}}
 function readStoredJSON(key,fallback,legacyKey=null){const raw=localStorage.getItem(key)??(legacyKey?localStorage.getItem(legacyKey):null);return raw==null?fallback:safeJSON(raw,fallback)}
@@ -749,7 +762,7 @@ function persistJSON(key,value){
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
-const APEX_APP_VERSION="APEX-SCALP-GOD-7.3.0";
+const APEX_APP_VERSION="APEX-SCALP-GOD-7.3.1";
 const APEX_TRIGGER_FRESH_MAX_MS=90000;
 const APEX_COMMAND_MAX_AGE_MS=60000;
 const APEX_VAULT_KEY="apex_memory_vault_v4_0";
@@ -781,7 +794,7 @@ function vaultSave(reason="AUTO"){
 function snapshotStrength(s){const d=s?.digest||memoryDigest(s?.journal,s?.state,s?.activeSignals,s?.pathLedger);return (d.journal||0)*100+(d.resolved||0)*20+(d.path||0)*35+(d.state||0)*3+(d.locks||0)*5+(d.newest?1:0)}
 function bestRecoverySnapshot(){
  const c=[];const v=vaultRead();for(const x of v.snapshots||[])if(x)c.push(x);
- for(const key of ["apex_upgrade_god_3_0_snapshot","apex_upgrade_2_0_snapshot"]){try{const x=safeJSON(localStorage.getItem(key),null);if(x)c.push(x)}catch(_e){}}
+ for(const key of ["apex_upgrade_7_3_1_snapshot","apex_upgrade_god_3_0_snapshot","apex_upgrade_2_0_snapshot"]){try{const x=safeJSON(localStorage.getItem(key),null);if(x)c.push(x)}catch(_e){}}
  return c.filter(x=>Array.isArray(x?.journal)&&x?.state&&typeof x.state==="object").sort((a,b)=>snapshotStrength(b)-snapshotStrength(a)||Number(b.savedAt||0)-Number(a.savedAt||0))[0]||null;
 }
 function mergeJournalSafe(a,b){
@@ -823,11 +836,20 @@ function captureUpgradeSafetySnapshot(){
  }catch(e){console.warn("APEX GOD pre-upgrade snapshot skipped",e)}
 }
 captureUpgradeSafetySnapshot();
+function captureNewsPatchSafetySnapshot(){
+ try{
+  if(localStorage.getItem("apex_upgrade_7_3_1_snapshot"))return;
+  const journal=readStoredJSON("titan_journal_v2",[]),state=readStoredJSON("titan_state_v2",{}),activeSignals=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),pathLedger=readStoredJSON(APEX_PATH_KEY,[]);
+  const snap={version:"PRE-7.3.1-NEWS-RADAR",savedAt:Date.now(),journal,state,activeSignals,pathLedger,digest:memoryDigest(journal,state,activeSignals,pathLedger)};
+  const raw=JSON.stringify(snap);if(raw.length<4500000)localStorage.setItem("apex_upgrade_7_3_1_snapshot",raw);
+ }catch(e){console.warn("APEX 7.3.1 pre-patch snapshot skipped",e)}
+}
+captureNewsPatchSafetySnapshot();
 function recoverUpgradeSafetySnapshotIfNeeded(){
  try{
   const j=readStoredJSON("titan_journal_v2",[]),st=readStoredJSON("titan_state_v2",{}),ac=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1");
   const hasCurrent=j.length||Object.keys(st).length||Object.keys(ac).length;if(hasCurrent)return false;
-  const raw=localStorage.getItem("apex_upgrade_god_3_0_snapshot")||localStorage.getItem("apex_upgrade_2_0_snapshot");if(!raw)return false;const snap=safeJSON(raw,null);if(!snap)return false;
+  const raw=localStorage.getItem("apex_upgrade_7_3_1_snapshot")||localStorage.getItem("apex_upgrade_god_3_0_snapshot")||localStorage.getItem("apex_upgrade_2_0_snapshot");if(!raw)return false;const snap=safeJSON(raw,null);if(!snap)return false;
   if(Array.isArray(snap.journal)&&snap.journal.length)persistJSON("titan_journal_v2",snap.journal);
   if(snap.state&&typeof snap.state==="object")persistJSON("titan_state_v2",snap.state);
   if(snap.activeSignals&&typeof snap.activeSignals==="object")persistJSON("titan_active_signals_v2",snap.activeSignals);
@@ -1035,6 +1057,67 @@ async function resilientNews(q,hours,maxrecords=80){
  const a=await freeNews(q,hours,maxrecords);if(a!==null)return a;
  const b=await gdelt(q,hours,Math.min(120,maxrecords));return b||[]
 }
+
+// 7.3.1 ECONOMIC CALENDAR / NEWS RISK RADAR -------------------------------
+const APEX_CALENDAR_CACHE_KEY="apex_calendar_cache_v1";
+const APEX_CALENDAR_TTL_MS=45*60*1000;
+const APEX_CALENDAR_STALE_MAX_MS=12*60*60*1000;
+let apexCalendarRuntime={t:0,events:[],provider:"NONE",reachable:false,stale:false,error:""};
+function calendarImpact(v){const s=String(v??"").toLowerCase();if(s.includes("high")||s==="3")return 3;if(s.includes("med")||s.includes("medium")||s==="2")return 2;if(s.includes("low")||s==="1")return 1;return 0}
+function calendarCurrency(country){
+ const s=String(country||"").trim().toUpperCase();if(/^[A-Z]{3}$/.test(s))return s;
+ const m={"UNITED STATES":"USD","US":"USD","U.S.":"USD","EURO AREA":"EUR","EUROZONE":"EUR","UNITED KINGDOM":"GBP","UK":"GBP","JAPAN":"JPY","SWITZERLAND":"CHF","AUSTRALIA":"AUD","CANADA":"CAD","NEW ZEALAND":"NZD"};return m[s]||s.slice(0,3)
+}
+function parseCalendarTime(v){
+ const raw=String(v||"").trim();if(!raw)return NaN;let ms=Date.parse(raw);if(Number.isFinite(ms))return ms;
+ const m=raw.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);return m?Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+(m[6]||0)):NaN
+}
+function normalizeCalendarEvent(x,provider){
+ const title=x?.title||x?.Event||x?.event||x?.Category||"Economic event",country=x?.country||x?.Country||x?.currency||"",impact=calendarImpact(x?.impact??x?.Importance??x?.importance),time=parseCalendarTime(x?.date||x?.Date||x?.datetime||x?.time);
+ return {title:String(title),currency:calendarCurrency(country),impact,time,actual:String(x?.actual??x?.Actual??""),forecast:String(x?.forecast??x?.Forecast??x?.Consensus??""),previous:String(x?.previous??x?.Previous??""),provider}
+}
+async function fetchForexFactoryCalendar(){
+ const r=await fetch("https://nfs.faireconomy.media/ff_calendar_thisweek.json",{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw new Error(`Forex calendar HTTP ${r.status}`);const j=await r.json();if(!Array.isArray(j))throw new Error("Forex calendar malformed");const events=j.map(x=>normalizeCalendarEvent(x,"ForexFactory")).filter(x=>Number.isFinite(x.time)&&x.currency&&x.title);if(!events.length)throw new Error("Forex calendar returned no usable events");return events
+}
+async function fetchTradingEconomicsCalendar(){
+ const r=await fetch("https://api.tradingeconomics.com/calendar?c=guest%3Aguest&f=json",{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw new Error(`Economic calendar fallback HTTP ${r.status}`);const j=await r.json();if(!Array.isArray(j))throw new Error("Economic calendar fallback malformed");const events=j.map(x=>normalizeCalendarEvent(x,"TradingEconomics")).filter(x=>Number.isFinite(x.time)&&x.currency&&x.title);if(!events.length)throw new Error("Economic calendar fallback returned no usable events");return events
+}
+function readCalendarCache(){try{const x=readStoredJSON(APEX_CALENDAR_CACHE_KEY,null);return x&&Array.isArray(x.events)?x:null}catch(_e){return null}}
+function writeCalendarCache(x){try{persistJSON(APEX_CALENDAR_CACHE_KEY,{t:x.t,events:x.events,provider:x.provider})}catch(_e){}}
+async function economicCalendar(force=false){
+ const now=Date.now();if(!force&&apexCalendarRuntime.events.length&&now-apexCalendarRuntime.t<APEX_CALENDAR_TTL_MS)return apexCalendarRuntime;
+ const saved=readCalendarCache();if(!force&&saved?.events?.length&&now-Number(saved.t||0)<APEX_CALENDAR_TTL_MS){apexCalendarRuntime={t:+saved.t,events:saved.events,provider:saved.provider||"CACHE",reachable:true,stale:false,error:""};return apexCalendarRuntime}
+ const errors=[];for(const p of [["ForexFactory",fetchForexFactoryCalendar],["TradingEconomics",fetchTradingEconomicsCalendar]]){try{const events=await p[1]();apexCalendarRuntime={t:now,events,provider:p[0],reachable:true,stale:false,error:""};writeCalendarCache(apexCalendarRuntime);return apexCalendarRuntime}catch(e){errors.push(`${p[0]}: ${e?.message||e}`)}}
+ if(saved?.events?.length&&now-Number(saved.t||0)<=APEX_CALENDAR_STALE_MAX_MS){apexCalendarRuntime={t:+saved.t,events:saved.events,provider:(saved.provider||"CACHE")+" STALE",reachable:false,stale:true,error:errors.join(" | ")};return apexCalendarRuntime}
+ apexCalendarRuntime={t:now,events:[],provider:"OFFLINE",reachable:false,stale:false,error:errors.join(" | ")};return apexCalendarRuntime
+}
+function calendarCurrenciesForSymbol(sym){
+ const s=String(sym||"").toUpperCase();if(/XAU|XAG/.test(s))return["USD"];if(s.includes("/")){const [a,b]=s.split("/");if(/^[A-Z]{3}$/.test(a)&&/^[A-Z]{3}$/.test(b))return [...new Set([a,b])];if(/BTC|ETH|SOL|XRP/.test(a))return["USD"]}if(/AAPL|MSFT|NVDA|TSLA|AMZN|META|GOOGL/.test(s))return["USD"];return["USD"]
+}
+function calendarRiskForSymbol(sym,calendar,now=Date.now()){
+ const currencies=calendarCurrenciesForSymbol(sym),all=Array.isArray(calendar?.events)?calendar.events:[],rel=all.filter(e=>currencies.includes(String(e.currency||"").toUpperCase())&&Number.isFinite(+e.time)).sort((a,b)=>Math.abs(a.time-now)-Math.abs(b.time-now));
+ const unknown=!calendar?.reachable&&!calendar?.stale&&!rel.length;if(unknown)return{state:"UNKNOWN",level:4,blockEntries:true,unknown:true,title:"CALENDAR OFFLINE — NEWS RISK UNKNOWN",detail:"Live entry paused because high-impact economic-event timing could not be verified.",provider:calendar?.provider||"OFFLINE",currencies,relevant:0,event:null,minutes:null};
+ let best=null,bestRank=-1;
+ for(const e of rel){const d=(e.time-now)/60000,impact=e.impact||0,ad=Math.abs(d);let rank=0,state="CLEAR",block=false;
+  if(impact>=3&&d>=-15&&d<=15){rank=100-ad;state=d>=0?"BLOCK":"COOLDOWN";block=true}
+  else if(impact>=3&&d>15&&d<=30){rank=80-d/10;state="CAUTION"}
+  else if(impact>=3&&d>30&&d<=60){rank=65-d/20;state="WATCH"}
+  else if(impact>=3&&d<-15&&d>=-30){rank=60-ad/20;state="COOLDOWN"}
+  else if(impact>=2&&d>=-5&&d<=10){rank=45-ad/15;state="WATCH"}
+  else if(impact>=3&&d>60&&d<=240){rank=30-d/100;state="UPCOMING"}
+  if(rank>bestRank){bestRank=rank;best={e,d,state,block,rank}}
+ }
+ if(!best||bestRank<=0){const next=rel.filter(e=>e.time>=now).sort((a,b)=>a.time-b.time)[0]||null;return{state:calendar?.stale?"STALE":"CLEAR",level:calendar?.stale?2:0,blockEntries:false,unknown:false,title:calendar?.stale?"CALENDAR CACHE STALE — VERIFY BEFORE ENTRY":"NEWS CLEAR — NO NEARBY HIGH-IMPACT EVENT",detail:next?`Next ${next.currency} event: ${next.title} at ${new Date(next.time).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}.`:`No relevant scheduled event found in the current calendar window.`,provider:calendar?.provider||"—",currencies,relevant:rel.length,event:next,minutes:next?Math.round((next.time-now)/60000):null}}
+ const e=best.e,d=best.d,mins=Math.max(0,Math.round(Math.abs(d))),when=d>=0?`IN ${mins} MIN`:`${mins} MIN AGO`,high=e.impact>=3?"HIGH":"MEDIUM";
+ const prefix=best.block?"BIG NEWS":best.state==="CAUTION"?"BIG NEWS SOON":best.state==="WATCH"?"NEWS WATCH":"NEWS UPCOMING";
+ return{state:best.state,level:best.block?4:best.state==="CAUTION"?3:2,blockEntries:best.block,unknown:false,title:`${prefix}: ${e.currency} ${e.title} • ${when}`,detail:`${high} impact • ${e.currency} • ${new Date(e.time).toLocaleString()}${e.forecast?` • Forecast ${e.forecast}`:""}${e.previous?` • Previous ${e.previous}`:""}.`,provider:calendar?.provider||e.provider||"—",currencies,relevant:rel.length,event:e,minutes:Math.round(d)}
+}
+function renderCalendarRisk(risk){
+ const x=risk||{state:"UNKNOWN",title:"CALENDAR NOT SCANNED",detail:"Run SCAN to check scheduled economic news.",provider:"—",blockEntries:false};window.__APEX_LAST_CALENDAR_RISK=x;
+ const card=$("calendarRiskCard"),badge=$("calendarRiskBadge"),title=$("calendarRiskTitle"),detail=$("calendarRiskDetail"),next=$("calendarRiskNext"),feed=$("calendarRiskFeed");if(!card)return x;
+ card.classList.toggle("calendarBlock",!!x.blockEntries);card.classList.toggle("calendarWatch",!x.blockEntries&&x.level>=2);if(badge)badge.textContent=x.state||"UNKNOWN";if(title)title.textContent=x.title||"CALENDAR UNKNOWN";if(detail)detail.textContent=x.detail||"";if(next)next.textContent=x.event?`${x.event.currency} • ${x.event.title}`:"—";if(feed)feed.textContent=x.provider||"—";return x
+}
+// --------------------------------------------------------------------------
 function newsHealth(events){
  const attempted=newsFetchHealth.attempts>0,reachable=newsFetchHealth.successes>0;
  const degraded=attempted&&!reachable,partial=reachable&&newsFetchHealth.failures>0;
@@ -1591,7 +1674,7 @@ function renderNewsRadar(r,events){
  const v=newsRadarView(r,events),state=v.state,rel=v.shown,high=v.high,bias=(r.news?.score||0)>.2?"BULLISH":(r.news?.score||0)<-.2?"BEARISH":"NEUTRAL",nh=newsHealth(state.events);
  $("newsLiveBadge").textContent=nh.degraded?"NEWS FEED OFFLINE":`NEWS CONTEXT • ${v.totalRelevant} RELEVANT / ${v.global} GLOBAL`;$("newsLiveCount").textContent=String(v.totalRelevant);$("newsLiveBias").textContent=bias;$("newsLiveHigh").textContent=String(high);$("newsLiveTime").textContent=new Date(state.updatedAt||Date.now()).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});$("newsLiveList").innerHTML=rel.length?rel.map(x=>`<div class="item"><b>${esc(x.title)}</b><p>${esc(x.source||"unknown source")} • ${esc(x.cat||"News")} • priority ${Number(x.priority||1).toFixed(2)}× • impact ${(x.severity||0).toFixed(1)} • freshness ${Math.round((x.fresh||0)*100)}%</p></div>`).join("")+((v.totalRelevant>rel.length)?`<div class="item"><p>Showing top ${rel.length} of ${v.totalRelevant} canonical symbol-relevant headlines. All ${v.totalRelevant} are included in the news score.</p></div>`:""):nh.degraded?`<div class="item"><p>NEWS FEED DEGRADED — APEX could not verify the external world-news feed. This is not treated as “no relevant news”.</p></div>`:`<div class="item"><p>Canonical global feed has ${state.events.length} headline(s), but no directly relevant headline was found for this symbol in the selected lookback.</p></div>`
 }
-function render(r,events){window.__apexLastRenderedResult=r;
+function render(r,events){window.__apexLastRenderedResult=r;renderCalendarRisk(r?.calendarRisk||null);
  r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;
  r.consensus=decisionConsensus(r,events);
  r.v=r.consensus.finalVerdict;r.conf=r.consensus.confidence;
@@ -2457,7 +2540,7 @@ function harvestEconomics(r,p,d){
  return{bal,goal,goalPct,rr:t.netRR??null,grossRR:t.grossRR??null,maxLoss,riskPct,authority:d?.grade||"WAIT",verdict,be,surplus,ev,empP,friction:Number.isFinite(t.frictionShare)?t.frictionShare:null,target:d?.target||null,price:+(r.feedMeta?.spot??r.main?.price)||0,mem};
 }
 function lotSizingAuthority(r,d,h){
- const minLot=Math.max(.001,Number($("minLot")?.value)||.01),tickSize=Number($("tickSize")?.value),tickValue=Number($("tickValue")?.value),step=minLot>=.01?.01:.001,mem=d?.bestMem||{},t=d?.trigger||{},proofStrong=(mem.effectiveN||0)>=50&&Number.isFinite(mem.expLower)&&mem.expLower>.05&&Number.isFinite(mem.holdoutAvg)&&mem.holdoutAvg>.05&&mem.fdrPass===true&&(mem.avg||0)>=.10&&Number.isFinite(t.netRR)&&t.netRR>=1.25,finalLive=executionCommandFromParts(d,r?.fortress||{},r?.hydra||{}).liveReady;
+ const minLot=Math.max(.001,Number($("minLot")?.value)||.01),tickSize=Number($("tickSize")?.value),tickValue=Number($("tickValue")?.value),step=minLot>=.01?.01:.001,mem=d?.bestMem||{},t=d?.trigger||{},proofStrong=(mem.effectiveN||0)>=50&&Number.isFinite(mem.expLower)&&mem.expLower>.05&&Number.isFinite(mem.holdoutAvg)&&mem.holdoutAvg>.05&&mem.fdrPass===true&&(mem.avg||0)>=.10&&Number.isFinite(t.netRR)&&t.netRR>=1.25,finalLive=executionCommandFromParts(d,r?.fortress||{},r?.hydra||{},r?.calendarRisk||null).liveReady;
  let authority=!finalLive?"NO LIVE LOT":proofStrong?"CONFIRMED FORWARD EDGE — NORMAL RISK ONLY":"MINIMUM / BASE RISK ONLY",suggested=null,riskDollar=null,verified=false;const stopDist=Math.abs((+t.entry||0)-(+t.stop||0));
  if(finalLive&&tickSize>0&&tickValue>0&&stopDist>0){const riskPerLot=(stopDist/tickSize)*tickValue,raw=h.maxLoss/Math.max(riskPerLot,1e-9),floor=x=>Math.floor(x/step+1e-9)*step;verified=true;if(raw<minLot){authority="SKIP — MIN LOT EXCEEDS RISK";suggested=0;riskDollar=riskPerLot*minLot}else{suggested=proofStrong?Math.max(minLot,floor(raw)):minLot;riskDollar=riskPerLot*suggested;if(riskDollar>h.maxLoss*1.001){authority="SKIP — RISK TOO HIGH";suggested=0}}}else if(finalLive&&!verified){authority=proofStrong?"BROKER SPECS REQUIRED":"NO LOT — $RISK UNVERIFIED"}return{authority,suggested,riskDollar,verified,proofStrong,minLot,finalLive}
 }
@@ -2496,7 +2579,7 @@ function renderProofAuthority(r,d){
 
 function renderScalpGod(r,p){
  resolveDuelTape(r);const d=scalpGodDecision(r,p);r.scalpGod=d;r.opportunityDuel=d;recordDuelCandidates(r,d);renderRobustCourt(r,p);renderProofAuthority(r,d);renderMicroCourt(r,p);renderTimingTrapCourt(r,p);renderSniper(r,p);renderHydraCourt(r,p);renderFortress(r,p);renderHarvestVault(r,p,d);
- const dirText=x=>x>0?"BUY":x<0?"SELL":"WAIT",finalCmd=executionCommandFromParts(d,r.fortress||{},r.hydra||{}),a=$("scalpAction"),c=$("scalpConf"),m=$("scalpMeter"),displayAction=finalCmd.liveReady?finalCmd.action:(String(d.action||"").startsWith("ENTER")?`WAIT — ${finalCmd.stage}`:d.action);a.textContent=displayAction;a.className="sig "+(finalCmd.liveReady?(finalCmd.direction>0?"buy":"sell"):"wait");c.textContent=Math.round((d.edge||0)*100)+"/100";m.style.width=`${clamp((d.edge||0)*100,0,100)}%`;$("scalpBadge").textContent=finalCmd.liveReady?"LIVE ENTRY":d.grade;$("scalpParent").textContent=dirText(d.parent);$("scalpFirst").textContent=d.mode||"WAIT";$("scalpWindow").textContent=d.window||"0–30m";$("scalpEvidence").textContent=`${d.evidence||0} forward / ${d.effectiveEvidence||0} effective`;$("scalpEntry").textContent=d.entry?fmt(d.entry):"—";$("scalpTarget").textContent=d.target?fmt(d.target):"—";$("scalpInvalid").textContent=d.invalid?fmt(d.invalid):"—";$("scalpLiveAuth").textContent=finalCmd.liveReady?"AUTHORIZED":`NO LIVE ENTRY • ${finalCmd.stage}`;$("scalpCost").textContent=d.trigger?.costVerified?"VERIFIED PASS":d.trigger?.costPass?"PROXY ONLY":"UNVERIFIED / FAIL";$("scalpReason").textContent=finalCmd.liveReady?finalCmd.reason:d.reason;
+ const dirText=x=>x>0?"BUY":x<0?"SELL":"WAIT",finalCmd=executionCommandFromParts(d,r.fortress||{},r.hydra||{},r.calendarRisk||null),a=$("scalpAction"),c=$("scalpConf"),m=$("scalpMeter"),displayAction=finalCmd.liveReady?finalCmd.action:(String(d.action||"").startsWith("ENTER")?`WAIT — ${finalCmd.stage}`:d.action);a.textContent=displayAction;a.className="sig "+(finalCmd.liveReady?(finalCmd.direction>0?"buy":"sell"):"wait");c.textContent=Math.round((d.edge||0)*100)+"/100";m.style.width=`${clamp((d.edge||0)*100,0,100)}%`;$("scalpBadge").textContent=finalCmd.liveReady?"LIVE ENTRY":d.grade;$("scalpParent").textContent=dirText(d.parent);$("scalpFirst").textContent=d.mode||"WAIT";$("scalpWindow").textContent=d.window||"0–30m";$("scalpEvidence").textContent=`${d.evidence||0} forward / ${d.effectiveEvidence||0} effective`;$("scalpEntry").textContent=d.entry?fmt(d.entry):"—";$("scalpTarget").textContent=d.target?fmt(d.target):"—";$("scalpInvalid").textContent=d.invalid?fmt(d.invalid):"—";$("scalpLiveAuth").textContent=finalCmd.liveReady?"AUTHORIZED":`NO LIVE ENTRY • ${finalCmd.stage}`;$("scalpCost").textContent=d.trigger?.costVerified?"VERIFIED PASS":d.trigger?.costPass?"PROXY ONLY":"UNVERIFIED / FAIL";$("scalpReason").textContent=finalCmd.liveReady?finalCmd.reason:d.reason;
  $("scalpNarrative").innerHTML=`<b>${esc(displayAction)}</b><p>6.8 uses closed M5 data for setup timing, M1 post-entry resolution and a clean mode-specific ledger. Setup score ${Math.round((d.edge||0)*100)}/100 is NOT a probability. Forward ${esc(d.mode||"NONE")} cases ${d.evidence||0} nominal / ${d.effectiveEvidence||0} effective; bootstrap floor ${Number.isFinite(d.bestMem?.expLower)?d.bestMem.expLower.toFixed(2)+'R':'—'}; holdout ${Number.isFinite(d.bestMem?.holdoutAvg)?d.bestMem.holdoutAvg.toFixed(2)+'R':'—'}; FDR ${d.bestMem?.fdrPass?'PASS':'WAIT'}. ENTER requires empirical authority and verified broker-cost inputs; zero-history triggers are PROOF ONLY, never ENTER.</p>`;return d;
 }
 // --------------------------------------------------------------------------
@@ -2548,6 +2631,8 @@ function plainCommandReason(stage,candidateDir){
  if(stage==="FRESHNESS BLOCK")return "The old entry is no longer safe to use. Wait and scan again.";
  if(stage==="HARD BLOCK")return "Market data is not safe enough to use right now. Do not enter. Scan again.";
  if(stage==="EXECUTION VETO")return `A possible ${d||"trade"} setup exists, but it is not ready yet. Do not enter.`;
+ if(stage==="NEWS BLOCK")return "High-impact scheduled economic news is inside the protected entry window. Wait for the release window to clear and scan again.";
+ if(stage==="NEWS UNKNOWN")return "The economic calendar could not be verified. DO NOT ENTER while scheduled-news risk is unknown. Scan again or verify the calendar.";
  if(stage==="HYDRA VETO")return "The market is too unstable right now. Do not enter.";
  if(stage==="PROOF ONLY")return `A possible ${d||"trade"} move was detected, but APEX does not have enough confirmed results yet. Wait.`;
  if(stage==="RESEARCH ARMED")return `A possible ${d||"trade"} setup is forming, but it is not ready. Wait.`;
@@ -2560,11 +2645,12 @@ function plainStageLabel(stage,liveReady,direction){
  if(stage==="MISSED ENTRY")return "MISSED";
  return "WAIT";
 }
-function executionCommandFromParts(sg,fortress,hydra){
- const f=fortress||{},h=hydra||{},dir=Math.sign(Number(sg?.counter)||0),geometryReady=[sg?.entry,sg?.target,sg?.invalid].every(x=>Number.isFinite(+x)&&+x>0),hydraPass=!h.retired&&!h.staleEdge&&Number(h.toxicity)<.78&&Number(h.fragility)<.84,freshness=sg?.trigger?.freshness||null,freshnessPass=freshness?.pass===true;
- const liveReady=!!(sg?.fire===true&&f.pass===true&&f.integrityPass===true&&f.execOK===true&&hydraPass&&geometryReady&&freshnessPass&&(dir===1||dir===-1));
+function executionCommandFromParts(sg,fortress,hydra,calendarRisk=null){
+ const f=fortress||{},h=hydra||{},cal=calendarRisk||{},calendarPass=cal.blockEntries!==true,dir=Math.sign(Number(sg?.counter)||0),geometryReady=[sg?.entry,sg?.target,sg?.invalid].every(x=>Number.isFinite(+x)&&+x>0),hydraPass=!h.retired&&!h.staleEdge&&Number(h.toxicity)<.78&&Number(h.fragility)<.84,freshness=sg?.trigger?.freshness||null,freshnessPass=freshness?.pass===true;
+ const liveReady=!!(sg?.fire===true&&f.pass===true&&f.integrityPass===true&&f.execOK===true&&hydraPass&&geometryReady&&freshnessPass&&calendarPass&&(dir===1||dir===-1));
  let stage='WAIT',rankTier=5;
  if(liveReady){stage='ENTER';rankTier=0}
+ else if(sg?.fire===true&&!calendarPass){stage=cal.unknown?'NEWS UNKNOWN':'NEWS BLOCK';rankTier=6}
  else if(f.integrityPass===false){stage='HARD BLOCK';rankTier=6}
  else if(f.execOK===false){stage='EXECUTION VETO';rankTier=5}
  else if(sg?.preFreshFire&&freshness?.status==='MISSED'){stage='MISSED ENTRY';rankTier=4}
@@ -2576,13 +2662,13 @@ function executionCommandFromParts(sg,fortress,hydra){
  else if(sg?.state==='ARMED'){stage='RESEARCH ARMED';rankTier=2}
  else if(sg?.state==='WATCH'){stage='WATCH';rankTier=3}
  else if(sg?.fire===true&&!geometryReady){stage='GEOMETRY BLOCK';rankTier=5}
- const action=liveReady?(dir>0?'ENTER BUY NOW':'ENTER SELL NOW'):stage==='MISSED ENTRY'?'MISSED — DO NOT CHASE':stage==='STALE SETUP'?'WAIT — SETUP EXPIRED':'WAIT — DO NOT ENTER';
+ const action=liveReady?(dir>0?'ENTER BUY NOW':'ENTER SELL NOW'):stage==='NEWS BLOCK'?'WAIT — BIG NEWS':stage==='NEWS UNKNOWN'?'WAIT — NEWS CHECK FAILED':stage==='MISSED ENTRY'?'MISSED — DO NOT CHASE':stage==='STALE SETUP'?'WAIT — SETUP EXPIRED':'WAIT — DO NOT ENTER';
  const candidateDir=dir>0?'BUY':dir<0?'SELL':'NONE',isCounter=!!sg?.isCounter,descriptor=candidateDir==='NONE'?'NO DIRECTION':`${isCounter?'COUNTER ':''}${candidateDir} ${sg?.mode||'SETUP'}`;
- const reason=liveReady?`${sg?.mode||'Opportunity'} cleared proof, verified execution costs, Fortress, Hydra, final geometry and the entry-freshness gate.`:stage==='MISSED ENTRY'?`The setup passed the underlying trade gates, but live price has already travelled too far from the original trigger. Do not chase.`:stage==='STALE SETUP'?`The original closed-M5 trigger has aged beyond the live-entry window.`:stage==='FRESHNESS BLOCK'?`Original trigger price/time is no longer valid for a live entry.`:stage==='HARD BLOCK'?`Market/data integrity is blocked: ${(f.reasons||[]).join('; ')||'fail-closed integrity gate'}.`:stage==='EXECUTION VETO'?`Candidate exists, but verified execution-cost geometry has not cleared.`:stage==='HYDRA VETO'?`Candidate proof passed, but state/flow freshness or fragility vetoed live execution.`:stage==='PROOF ONLY'?`Trigger fired, but forward evidence is not yet sufficient for live authority.`:stage==='RESEARCH ARMED'?`Research setup is armed, but the live trigger/proof stack is incomplete.`:stage==='WATCH'?`Directional setup is being watched; no live trigger is authorized.`:stage==='GEOMETRY BLOCK'?`A promoted setup has invalid or incomplete live entry geometry.`:(sg?.reason||'No promoted live opportunity.');
- return{liveReady,action,stage,rankTier,direction:dir,candidateDir,descriptor,showLevels:liveReady,entry:liveReady?+sg.entry:null,target:liveReady?+sg.target:null,invalid:liveReady?+sg.invalid:null,reason,freshness,freshnessPass,setupId:freshness?.setupId||null,originalTriggerPrice:freshness?.originalEntry??null,originalTriggerTs:freshness?.triggerTs??null,expiresAt:liveReady?Math.min(Number(freshness?.expiresAt)||0,Date.now()+APEX_COMMAND_MAX_AGE_MS):0};
+ const reason=liveReady?`${sg?.mode||'Opportunity'} cleared proof, verified execution costs, Fortress, Hydra, economic-calendar risk, final geometry and the entry-freshness gate.`:stage==='NEWS BLOCK'?`${cal.title||'High-impact economic news'} — live entry paused until the event window clears.`:stage==='NEWS UNKNOWN'?`${cal.title||'Economic calendar unavailable'} — APEX will not call the news window clear when calendar timing is unknown.`:stage==='MISSED ENTRY'?`The setup passed the underlying trade gates, but live price has already travelled too far from the original trigger. Do not chase.`:stage==='STALE SETUP'?`The original closed-M5 trigger has aged beyond the live-entry window.`:stage==='FRESHNESS BLOCK'?`Original trigger price/time is no longer valid for a live entry.`:stage==='HARD BLOCK'?`Market/data integrity is blocked: ${(f.reasons||[]).join('; ')||'fail-closed integrity gate'}.`:stage==='EXECUTION VETO'?`Candidate exists, but verified execution-cost geometry has not cleared.`:stage==='HYDRA VETO'?`Candidate proof passed, but state/flow freshness or fragility vetoed live execution.`:stage==='PROOF ONLY'?`Trigger fired, but forward evidence is not yet sufficient for live authority.`:stage==='RESEARCH ARMED'?`Research setup is armed, but the live trigger/proof stack is incomplete.`:stage==='WATCH'?`Directional setup is being watched; no live trigger is authorized.`:stage==='GEOMETRY BLOCK'?`A promoted setup has invalid or incomplete live entry geometry.`:(sg?.reason||'No promoted live opportunity.');
+ return{liveReady,action,stage,rankTier,direction:dir,candidateDir,descriptor,showLevels:liveReady,entry:liveReady?+sg.entry:null,target:liveReady?+sg.target:null,invalid:liveReady?+sg.invalid:null,reason,freshness,freshnessPass,calendarRisk:cal,calendarPass,setupId:freshness?.setupId||null,originalTriggerPrice:freshness?.originalEntry??null,originalTriggerTs:freshness?.triggerTs??null,expiresAt:liveReady?Math.min(Number(freshness?.expiresAt)||0,Date.now()+APEX_COMMAND_MAX_AGE_MS):0};
 }
 function executionCommandDecision(r,p,sgOverride=null,fortressOverride=null,hydraOverride=null){
- const sg=sgOverride||r?.opportunityDuel||scalpGodDecision(r,p),fortress=fortressOverride||r?.fortress||fortressKernel(r,p),hydra=hydraOverride||r?.hydra||hydraCourt(r,p),cmd=executionCommandFromParts(sg,fortress,hydra);return{...cmd,sg,fortress,hydra};
+ const sg=sgOverride||r?.opportunityDuel||scalpGodDecision(r,p),fortress=fortressOverride||r?.fortress||fortressKernel(r,p),hydra=hydraOverride||r?.hydra||hydraCourt(r,p),cmd=executionCommandFromParts(sg,fortress,hydra,r?.calendarRisk||null);return{...cmd,sg,fortress,hydra};
 }
 let APEX_COMMAND_EXPIRY_TIMER=null,APEX_BESTNOW_EXPIRY_TIMER=null;
 function expireLiveCommandUI(reason='Freshness window expired — run UPDATE / SCAN MARKET again.'){
@@ -2598,9 +2684,9 @@ function renderExecutionCommand(r,p,cmd=null){
  const c=cmd||executionCommandDecision(r,p),sg=c.sg||r?.opportunityDuel||{},a=$("commandAction"),b=$("commandBadge");if(!a||!b)return c;
  a.textContent=c.action;a.className='commandAction '+(c.liveReady?(c.direction>0?'buy':'sell'):'wait');b.textContent=plainStageLabel(c.stage,c.liveReady,c.direction);
  const parent=sg.parent>0?'BUY':sg.parent<0?'SELL':'WAIT',candidate=c.candidateDir&&c.candidateDir!=='NONE'?c.candidateDir:'';
- $("commandContext").textContent=c.liveReady?`ENTER ${c.direction>0?'BUY':'SELL'} NOW • then tap I ENTERED THIS TRADE`:c.stage==='MISSED ENTRY'?`MISSED — DO NOT CHASE • wait for a pullback and scan again`:c.stage==='STALE SETUP'?`WAIT • OLD ENTRY EXPIRED — scan again`:`WAIT • NO TRADE IS READY YET`;
+ $("commandContext").textContent=c.liveReady?`ENTER ${c.direction>0?'BUY':'SELL'} NOW • then tap I ENTERED THIS TRADE`:c.stage==='NEWS BLOCK'?`WAIT • HIGH-IMPACT NEWS WINDOW ACTIVE`:c.stage==='NEWS UNKNOWN'?`WAIT • ECONOMIC CALENDAR NOT VERIFIED`:c.stage==='MISSED ENTRY'?`MISSED — DO NOT CHASE • wait for a pullback and scan again`:c.stage==='STALE SETUP'?`WAIT • OLD ENTRY EXPIRED — scan again`:`WAIT • NO TRADE IS READY YET`; 
  $("commandEntry").textContent=c.showLevels?fmt(c.entry):'—';$("commandInvalid").textContent=c.showLevels?fmt(c.invalid):'—';$("commandTarget").textContent=c.showLevels?fmt(c.target):'—';$("commandProof").textContent=`${sg.evidence||0} forward / ${sg.effectiveEvidence||0} effective`;
- $("commandReason").textContent=c.liveReady?`APEX says ENTER ${c.direction>0?'BUY':'SELL'} NOW. This price is still inside the fresh-entry zone. Use the entry, stop loss and take-profit prices shown. After you are filled, tap I ENTERED THIS TRADE.`:c.stage==='MISSED ENTRY'?`MISSED — DO NOT CHASE. ${plainCommandReason(c.stage,'NONE')}`:`DO NOT ENTER. ${plainCommandReason(c.stage,'NONE')} Scan again later for a fresh answer.`;
+ $("commandReason").textContent=c.liveReady?`APEX says ENTER ${c.direction>0?'BUY':'SELL'} NOW. This price is still inside the fresh-entry zone and the scheduled-news gate is clear. Use the entry, stop loss and take-profit prices shown. After you are filled, tap I ENTERED THIS TRADE.`:(c.stage==='NEWS BLOCK'||c.stage==='NEWS UNKNOWN')?`DO NOT ENTER. ${c.reason}`:c.stage==='MISSED ENTRY'?`MISSED — DO NOT CHASE. ${plainCommandReason(c.stage,'NONE')}`:`DO NOT ENTER. ${plainCommandReason(c.stage,'NONE')} Scan again later for a fresh answer.`;
  window.__apexLastCommandSnapshot={sym:r?.sym||'',direction:c.direction,entry:c.entry,target:c.target,invalid:c.invalid,liveReady:c.liveReady,t:Date.now()};renderManualTradeManager(r,c);scheduleLiveCommandExpiry(c.liveReady,c.expiresAt);
  return c;
 }
@@ -2816,7 +2902,7 @@ function recordJournal(r,b){
  const shadowV=r.v==="WAIT"?actionableDirection(r.consensus?.biasLabel||r.rawV||""):null,shadowPlan=shadowV?planForDirection(r,shadowV):null;
  const fullEvidence=(r.news?.items||[]).slice(0,r.v==="WAIT"?4:10).map(x=>({title:x.title||"",source:x.source||x.domain||"",date:x.date||"",severity:x.severity||0,trust:x.trust||0,fresh:x.fresh||0,priority:x.priority||1}));
  const eventVector=eventVectorObject(r.news?.items?.length?r.news.items:[]);
- titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:APEX_APP_VERSION,proofEpoch:APEX_PROOF_EPOCH,t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,scalpAtDecision:r.scalpGod?{state:r.scalpGod.state,action:r.scalpGod.action,edge:r.scalpGod.edge,parent:r.scalpGod.parent,counter:r.scalpGod.counter,evidence:r.scalpGod.evidence,target:r.scalpGod.target,invalid:r.scalpGod.invalid}:null,timingAtDecision:r.timingTrap?{state:r.timingTrap.state,adverseATR:r.timingTrap.adverseATR,maxAdverseATR:r.timingTrap.maxAdverseATR,recoveryATR:r.timingTrap.recoveryATR,counterWindow:r.timingTrap.counterWindow,parentActivating:r.timingTrap.parentActivating}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
+ titanJournal.unshift({id:"APEX-"+now.toString(36).toUpperCase(),modelVersion:APEX_APP_VERSION,proofEpoch:APEX_PROOF_EPOCH,t:now,sym:r.sym,v:r.v,rawV:r.rawV||r.v,conf:r.conf,quality:b.quality,entry:r.main.price||0,barTime:r.main.barTime||"",news:r.news.score,newsRaw:r.news.rawScore??r.news.score,newsCausal:r.news.causalScore??0,newsEvidence:fullEvidence,eventVector,market:r.market,dna:r._dna||null,gate:r._gate||"UNKNOWN",waitFingerprint:waitFp,shadowV,shadowPlan:planValid(shadowPlan)?shadowPlan:null,trigger:r.trigger?{pct:r.trigger.pct,stage:r.trigger.stage,blocker:r.trigger.blocker?.k||null}:null,proof:r.proof?{state:r.proof.state,cohortN:r.proof.cohort?.n||0,cohortHit:r.proof.cohort?.hit??null,cohortExp:r.proof.cohort?.exp??null,calibrationError:r.proof.calibration?.ece??null}:null,pathAtDecision:r.pathEngine?{state:r.pathEngine.state,counterP:r.pathEngine.counterP??null,expectedAdvATR:r.pathEngine.expectedAdvATR??null,continuationRisk:r.pathEngine.continuationRisk??null,samples:r.pathEngine.mem?.n||0}:null,scalpAtDecision:r.scalpGod?{state:r.scalpGod.state,action:r.scalpGod.action,edge:r.scalpGod.edge,parent:r.scalpGod.parent,counter:r.scalpGod.counter,evidence:r.scalpGod.evidence,target:r.scalpGod.target,invalid:r.scalpGod.invalid}:null,timingAtDecision:r.timingTrap?{state:r.timingTrap.state,adverseATR:r.timingTrap.adverseATR,maxAdverseATR:r.timingTrap.maxAdverseATR,recoveryATR:r.timingTrap.recoveryATR,counterWindow:r.timingTrap.counterWindow,parentActivating:r.timingTrap.parentActivating}:null,bias:r.consensus?.biasLabel||r.rawV||r.v,consensus:r.consensus?{gate:r.consensus.gate,reason:r.consensus.reason,uncertainty:r.consensus.uncertainty,conflictRatio:r.consensus.cf?.ratio,newsDegraded:r.consensus.nh?.degraded}:null,calendarAtDecision:r.calendarRisk?{state:r.calendarRisk.state,blockEntries:!!r.calendarRisk.blockEntries,unknown:!!r.calendarRisk.unknown,provider:r.calendarRisk.provider||"",minutes:r.calendarRisk.minutes??null,event:r.calendarRisk.event?{title:r.calendarRisk.event.title||"",currency:r.calendarRisk.event.currency||"",impact:r.calendarRisk.event.impact||0,time:r.calendarRisk.event.time||0,actual:r.calendarRisk.event.actual||"",forecast:r.calendarRisk.event.forecast||"",previous:r.calendarRisk.event.previous||""}:null}:null,signalLock:r.activeSignal?{id:r.activeSignal.id,startedAt:r.activeSignal.startedAt,minHoldMs:r.activeSignal.minHoldMs,planVersion:r.activeSignal.planVersion||1,originalEntry:r.activeSignal.originalEntry??r.activeSignal.entry}:null,plan});
  titanJournal=pruneJournalSmart(titanJournal);persistJSON("titan_journal_v2",titanJournal);setTimeout(()=>vaultSave("JOURNAL"),0);
 }
 
@@ -2833,7 +2919,7 @@ function renderEvents(events){
 }
 const _lastManual=+readStoredText("titan_last_manual_update","0")||0;if(_lastManual&&$("manualLastUpdate"))$("manualLastUpdate").textContent=new Date(_lastManual).toLocaleString();
 $("refreshEvents").onclick=async()=>{$("eventList").innerHTML='<div class="item"><p>Refreshing world news...</p></div>';cachedEvents=await worldEvents(true);renderEvents(cachedEvents)}
-$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";scheduleLiveCommandExpiry(false);const ca0=$("commandAction");if(ca0){ca0.textContent="SCANNING — DO NOT ENTER";ca0.className="commandAction wait"}const cb0=$("commandBadge");if(cb0)cb0.textContent="WAIT";const cr0=$("commandReason");if(cr0)cr0.textContent="APEX is checking the market. Do not enter until the final answer appears.";for(const id of ["commandEntry","commandInvalid","commandTarget"]){const e=$(id);if(e)e.textContent="—"}const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym);const [base,specific]=await Promise.all([basePromise,specificPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);render(r,ev);renderCoverage(ev);persistText("titan_last_manual_update",Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+readStoredText("titan_last_manual_update","0")).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("conf");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds.";const ca=$("commandAction");if(ca){ca.textContent="WAIT — DO NOT ENTER";ca.className="commandAction wait"}const cb=$("commandBadge");if(cb)cb.textContent="WAIT";const cr=$("commandReason");if(cr)cr.textContent="WHY: APEX could not get safe fresh market data. Do not trade from this result. Try the scan again."}finally{b.disabled=false;b.textContent="🔄 SCAN & TELL ME WHAT TO DO"}}
+$("scan").onclick=async()=>{const b=$("scan");b.disabled=true;b.textContent="UPDATING MARKET...";scheduleLiveCommandExpiry(false);const ca0=$("commandAction");if(ca0){ca0.textContent="SCANNING — DO NOT ENTER";ca0.className="commandAction wait"}const cb0=$("commandBadge");if(cb0)cb0.textContent="WAIT";const cr0=$("commandReason");if(cr0)cr0.textContent="APEX is checking the market. Do not enter until the final answer appears.";for(const id of ["commandEntry","commandInvalid","commandTarget"]){const e=$(id);if(e)e.textContent="—"}const lp=$("livePrice");if(lp)lp.textContent="UPDATING…";const lpt=$("livePriceTime");if(lpt)lpt.textContent="FETCHING FRESH MARKET DATA";const ls=$("liveSource");if(ls)ls.textContent="SOURCE CHECKING…";try{const sym=$("symbol").value,tf=$("tf").value;const basePromise=ensureEvents(),specificPromise=symbolWorldEvents(sym),calendarPromise=economicCalendar();const [base,specific,calendar]=await Promise.all([basePromise,specificPromise,calendarPromise]);const merged=[...specific,...base],seen=new Set(),ev=merged.filter(x=>{const k=x.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,130);if(seen.has(k))return false;seen.add(k);return true});const r=await scanSymbol(sym,tf,ev);r.calendarRisk=calendarRiskForSymbol(sym,calendar);renderCalendarRisk(r.calendarRisk);render(r,ev);renderCoverage(ev);persistText("titan_last_manual_update",Date.now());const m=$("manualLastUpdate");if(m)m.textContent=new Date(+readStoredText("titan_last_manual_update","0")).toLocaleString()}catch(e){const sym=$("symbol").value,tf=$("tf").value;$("signal").textContent="NO TRADE";$("signal").className="sig wait";$("status").textContent=e.message;$("riskBox").className="warn";$("riskBox").textContent=e.message;const ls=$("liveSource");if(ls)ls.textContent="SOURCE INVALID — NO TRADE";const lsy=$("liveSymbol");if(lsy)lsy.textContent=sym;const ltf=$("liveTf");if(ltf)ltf.textContent=tf.replace("min","min")+" • DATA BLOCKED";const sc=$("conf");if(sc)sc.textContent="—";const lp=$("livePrice");if(lp)lp.textContent="—";const lb=$("lockBadge");if(lb)lb.textContent="DATA UNVERIFIED — LOCK PAUSED";const ln=$("lockNarrative");if(ln)ln.textContent="Existing thesis is preserved in memory, but no live action is valid until a fresh verified market scan succeeds.";const ca=$("commandAction");if(ca){ca.textContent="WAIT — DO NOT ENTER";ca.className="commandAction wait"}const cb=$("commandBadge");if(cb)cb.textContent="WAIT";const cr=$("commandReason");if(cr)cr.textContent="WHY: APEX could not get safe fresh market data. Do not trade from this result. Try the scan again."}finally{b.disabled=false;b.textContent="🔄 SCAN & TELL ME WHAT TO DO"}}
 
 
 function deepGateForBest(r,events){
@@ -2861,15 +2947,15 @@ function bestNowCompare(a,b){
  return bestNowStateRank(a)-bestNowStateRank(b)||((b?.scalp?.edge||0)-(a?.scalp?.edge||0))||((b?.scalp?.trigger?.score||0)-(a?.scalp?.trigger?.score||0));
 }
 function bestNowRankLabel(x){const c=x?.command;if(c?.liveReady)return "ENTER";if(c?.stage==="MISSED ENTRY")return "MISSED";if(c?.stage==="PROOF ONLY"||c?.stage==="RESEARCH ARMED")return "BUILDING";if(c?.stage==="WATCH")return "WATCH";return "WAIT";}
-function bestNowDisplayAction(x){const c=x?.command,sg=x?.scalp||{};if(c?.liveReady)return c.action;if(c?.stage==='MISSED ENTRY')return 'MISSED — DO NOT CHASE';if(c?.stage==='STALE SETUP')return 'WAIT — SETUP EXPIRED';const dir=sg.counter>0?'BUY':sg.counter<0?'SELL':'';return dir?`WAIT — ${dir} NOT READY`:'WAIT — NOT READY';}
+function bestNowDisplayAction(x){const c=x?.command,sg=x?.scalp||{};if(c?.liveReady)return c.action;if(c?.stage==='MISSED ENTRY')return 'MISSED — DO NOT CHASE';if(c?.stage==='NEWS BLOCK')return 'WAIT — NEWS RISK';if(c?.stage==='NEWS UNKNOWN')return 'WAIT — NEWS UNKNOWN';if(c?.stage==='STALE SETUP')return 'WAIT — SETUP EXPIRED';const dir=sg.counter>0?'BUY':sg.counter<0?'SELL':'';return dir?`WAIT — ${dir} NOT READY`:'WAIT — NOT READY';}
 async function authoritativeBestScan(sym,tf,baseEvents){
  const specific=await symbolWorldEvents(sym).catch(()=>[]),events=mergeEventFeeds(baseEvents,specific);
- const r=await scanSymbol(sym,tf,events);r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;r.consensus=decisionConsensus(r,events);
+ const r=await scanSymbol(sym,tf,events);const calendar=await economicCalendar();r.calendarRisk=calendarRiskForSymbol(sym,calendar);r.rawTechnicalV=r.v;r.rawTechnicalConf=r.conf;r.consensus=decisionConsensus(r,events);
  const dg=deepGateForBest(r,events),storedLock=signalLockStatus(sym),lockInvalid=storedLock?shouldHardInvalidate(storedLock,{...r,rawV:r.rawTechnicalV,v:r.consensus.finalVerdict}):null;
  const lock=lockInvalid?null:storedLock;
  const final=unifiedFinalVerdict(r.consensus,lock);
  const displayVerdict=final.verdict,displayConf=final.confidence;
- const brain=buildBrain(r,events),dna=makeDNA(r,events,brain);gradePathLearning(r);resolveDuelTape(r);const path=counterPathEngine(r,events,brain,dna),scalp=scalpGodDecision(r,path);r.opportunityDuel=scalp;r.scalpGod=scalp;const fortress=fortressKernel(r,path,{raceCheck:false}),hydra=hydraCourt(r,path),command=executionCommandFromParts(scalp,fortress,hydra);
+ const brain=buildBrain(r,events),dna=makeDNA(r,events,brain);gradePathLearning(r);resolveDuelTape(r);const path=counterPathEngine(r,events,brain,dna),scalp=scalpGodDecision(r,path);r.opportunityDuel=scalp;r.scalpGod=scalp;const fortress=fortressKernel(r,path,{raceCheck:false}),hydra=hydraCourt(r,path),command=executionCommandFromParts(scalp,fortress,hydra,r.calendarRisk);
  return {...r,...dg,events,displayVerdict,displayConf,final,lock,lockInvalid,path,scalp,fortress,hydra,command};
 }
 $("scanAll").onclick=async()=>{
@@ -2896,7 +2982,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 7.3.0 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 7.3.1 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -2967,11 +3053,11 @@ renderJournal();renderVaultStatus();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("7.3.0")&&APEX_APP_VERSION==="APEX-SCALP-GOD-7.3.0","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
+  req(document.title.includes("7.3.1")&&APEX_APP_VERSION==="APEX-SCALP-GOD-7.3.1","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
   req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
-  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","7.3 single final execution command loaded");req(typeof renderManualTradeManager==="function"&&typeof tradeManagementDecision==="function"&&typeof setSimpleMode==="function","7.3 consumer HUD + trade manager loaded");req(!!document.getElementById("commandExitAction")&&!!document.getElementById("commandEntered")&&!!document.getElementById("simpleModeToggle"),"7.3 consumer HUD controls loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","7.3 live-command freshness expiry loaded");
+  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","7.3 single final execution command loaded");req(typeof renderManualTradeManager==="function"&&typeof tradeManagementDecision==="function"&&typeof setSimpleMode==="function","7.3 consumer HUD + trade manager loaded");req(!!document.getElementById("commandExitAction")&&!!document.getElementById("commandEntered")&&!!document.getElementById("simpleModeToggle"),"7.3 consumer HUD controls loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","7.3 live-command freshness expiry loaded");req(typeof economicCalendar==="function"&&typeof calendarRiskForSymbol==="function"&&typeof renderCalendarRisk==="function","7.3.1 economic-calendar radar loaded");
   const _cmdWait=executionCommandFromParts({fire:false,state:"PROOF",counter:1,entry:100,target:101,invalid:99},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdWait.liveReady&&_cmdWait.action==="WAIT — DO NOT ENTER"&&!_cmdWait.showLevels,"PROOF can never masquerade as ENTER");
-  const _fresh={pass:true,status:'FRESH',setupId:'TEST',originalEntry:100,triggerTs:Date.now()-1000,expiresAt:Date.now()+30000};const _cmdLive=executionCommandFromParts({fire:true,preFreshFire:true,state:"FIRE NOW",counter:-1,entry:100,target:99,invalid:101,trigger:{freshness:_fresh}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(_cmdLive.liveReady&&_cmdLive.action==="ENTER SELL NOW"&&_cmdLive.showLevels,"ENTER requires complete final authority + fresh entry");const _cmdMiss=executionCommandFromParts({fire:false,preFreshFire:true,state:'MISSED',counter:1,entry:100,target:101,invalid:99,trigger:{freshness:{..._fresh,pass:false,status:'MISSED'}}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdMiss.liveReady&&_cmdMiss.action==='MISSED — DO NOT CHASE'&&!_cmdMiss.showLevels,"missed setup can never masquerade as ENTER");
+  const _calBlock={state:'BLOCK',blockEntries:true,title:'TEST NEWS'};const _cmdNews=executionCommandFromParts({fire:true,state:'FIRE NOW',counter:1,entry:100,target:101,invalid:99,trigger:{freshness:{pass:true,status:'FRESH',setupId:'CAL',originalEntry:100,triggerTs:Date.now(),expiresAt:Date.now()+30000}}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1},_calBlock);req(!_cmdNews.liveReady&&_cmdNews.stage==='NEWS BLOCK','calendar block can never masquerade as ENTER');const _fresh={pass:true,status:'FRESH',setupId:'TEST',originalEntry:100,triggerTs:Date.now()-1000,expiresAt:Date.now()+30000};const _cmdLive=executionCommandFromParts({fire:true,preFreshFire:true,state:"FIRE NOW",counter:-1,entry:100,target:99,invalid:101,trigger:{freshness:_fresh}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(_cmdLive.liveReady&&_cmdLive.action==="ENTER SELL NOW"&&_cmdLive.showLevels,"ENTER requires complete final authority + fresh entry");const _cmdMiss=executionCommandFromParts({fire:false,preFreshFire:true,state:'MISSED',counter:1,entry:100,target:101,invalid:99,trigger:{freshness:{..._fresh,pass:false,status:'MISSED'}}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdMiss.liveReady&&_cmdMiss.action==='MISSED — DO NOT CHASE'&&!_cmdMiss.showLevels,"missed setup can never masquerade as ENTER");
   req(pathCostAuthorityLabel({costKnown:true,costPass:true},false).includes("LIVE VETO"),"research proxy cost PASS cannot masquerade as live cost authority");
   const _nr=newsRadarView({news:{items:[{severity:3},{severity:0}]}},[{title:"a"},{title:"b"}]);req(_nr.totalRelevant===2&&_nr.global===2&&_nr.high===1,"canonical news totals use one relevant set");
   req(bestNowCompare({command:{rankTier:2},scalp:{state:"ARMED",edge:.60,trigger:{score:.60}}},{command:{rankTier:3},scalp:{state:"WATCH",edge:.90,trigger:{score:.90}}})<0,"BEST NOW readiness-first ranking semantics");req(bestNowRankLabel({command:{liveReady:false,stage:"PROOF ONLY"},scalp:{state:"FIRE NOW"}})!=="ENTER","BEST NOW cannot display ENTER from scalp state alone");
@@ -2980,12 +3066,12 @@ renderJournal();renderVaultStatus();
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
   req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","Counter-First Dual Clock Engine loaded");req(typeof renderMicroCourt==="function","6.2 Flow Proxy Court loaded");req(typeof renderHydraCourt==="function"&&typeof hydraCourt==="function","6.3 Epistemic Hydra loaded");req(typeof renderTimingTrapCourt==="function"&&typeof thesisTimingTrap==="function","6.8 Thesis Timing Trap loaded");req(typeof fortressKernel==="function"&&typeof renderFortress==="function","6.8 Adversarial Fortress loaded");req(typeof opportunityDuel==="function"&&typeof universalTrigger==="function","6.8 Measurement Truth Duel loaded");req(typeof renderHarvestVault==="function"&&typeof harvestEconomics==="function","6.2 Net Edge Harvest Vault loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"7.3.0"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 7.3.0");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"7.3.1"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 7.3.1");
 })();
 
 (function titanIntegrityCheck(){
- const required=["signal","status","conf","meter","riskBox","commandBadge","commandAction","commandContext","commandEntry","commandInvalid","commandTarget","commandProof","commandReason","bestNowBadge","bestNowAction","bestNowReason","bestNowMarket","bestNowEntry","bestNowStop","bestNowTarget","scalpLiveAuth","covHeadlines","covSources","covThemes","covKeywords",
+ const required=["signal","status","conf","meter","riskBox","calendarRiskCard","calendarRiskBadge","calendarRiskTitle","calendarRiskDetail","calendarRiskNext","calendarRiskFeed","commandBadge","commandAction","commandContext","commandEntry","commandInvalid","commandTarget","commandProof","commandReason","bestNowBadge","bestNowAction","bestNowReason","bestNowMarket","bestNowEntry","bestNowStop","bestNowTarget","scalpLiveAuth","covHeadlines","covSources","covThemes","covKeywords",
  "proofAuthBadge","proofCodeStatus","proofForwardStatus","proofCostStatus","proofEdgeStatus","proofValidationNarrative","ensBadge","wTech","wNews","wCausal","wTF","scenarioBadge","scBull","scBase","scBear",
  "driftBadge","fhWin","fhLoss","expR","driftState","memoryBadge","memN","memHit","memMove","memVote","proofBadge","proofSample","proofHit","proofExp","proofCal","proofDna","proofNarrative","waitAuditBadge","waitAudN","waitSaved","waitMiss","waitShadow","waitNarrative",
  "lockBadge","lockSignal","lockHold","lockAge","lockRaw","lockNarrative","triggerBadge","triggerBias","triggerReady","triggerBlocker","triggerStage","triggerMeter","triggerNarrative","triggerGates","edgeBadge","edgeState","edgeRisk","edgeGate","edgeEvidence","metaBadge","metaUnc","metaRegime","metaConflict","metaCal",
@@ -3002,7 +3088,7 @@ renderJournal();renderVaultStatus();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX SCALP GOD 7.3.0 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX SCALP GOD 7.3.1 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);

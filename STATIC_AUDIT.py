@@ -22,11 +22,16 @@ missing=sorted(r for r in refs if r not in set(ids))
 chk('literal DOM refs resolved', not missing, f'{len(refs)} refs; missing={missing[:12]}')
 # inline equals app
 m=re.search(r'<script>\n(.*?)\n</script>\n</body>',idx,re.S)
-chk('inline app.js byte-equivalent', bool(m and m.group(1)==app.rstrip('\n')))
-chk('version title', '<title>APEX SCALP GOD 7.3.0' in idx)
-chk('app version constant', 'APEX_APP_VERSION="APEX-SCALP-GOD-7.3.0"' in app)
-chk('manifest version', 'APEX SCALP GOD 7.3.0' in man and 'APEX 7.3' in man)
-chk('service worker cache bumped', 'apex-scalp-god-7-3-0-fresh-entry-v1' in sw)
+chk('inline app.js byte-equivalent', bool(m and m.group(1).strip('\n')==app.strip('\n')))
+chk('version title', '<title>APEX SCALP GOD 7.3.1' in idx)
+chk('app version constant', 'APEX_APP_VERSION="APEX-SCALP-GOD-7.3.1"' in app)
+chk('manifest version', 'APEX SCALP GOD 7.3.1' in man and 'APEX 7.3.1' in man)
+chk('service worker cache bumped', 'apex-scalp-god-7-3-1-news-risk-v1' in sw)
+chk('calendar radar UI', all(x in idx for x in ['calendarRiskCard','calendarRiskBadge','calendarRiskTitle','calendarRiskDetail']))
+chk('calendar providers present', 'ff_calendar_thisweek.json' in app and 'TradingEconomics' in app)
+chk('calendar execution veto', 'calendarPass' in app and "stage=cal.unknown?'NEWS UNKNOWN':'NEWS BLOCK'" in app)
+chk('legacy memory keys preserved', all(x in app for x in ['titan_journal_v2','titan_state_v2','titan_active_signals_v2','apex_path_ledger_v4']))
+chk('pre-patch memory snapshot', 'apex_upgrade_7_3_1_snapshot' in app)
 chk('simple mode forced on load', 'setSimpleMode(true);' in app)
 chk('freshness constants present', 'APEX_TRIGGER_FRESH_MAX_MS=90000' in app and 'APEX_COMMAND_MAX_AGE_MS=60000' in app)
 chk('original trigger identity present', 'setupId=`${r?.sym' in app and 'originalEntry=Number(cur?.close)' in app and 'triggerTs=Number.isFinite(openTs)?openTs+5*60000' in app)
@@ -34,7 +39,7 @@ chk('favorable anti-chase gate', "status='MISSED'" in app and 'targetUsed>.35' i
 chk('adverse invalidation gate', "status='INVALIDATED'" in app and 'adverseATR>maxAdverseATR' in app)
 chk('stale trigger gate', "status='STALE'" in app and 'ageMs>APEX_TRIGGER_FRESH_MAX_MS' in app)
 chk('future timestamp fail-closed', 'triggerTs>now+5000' in app)
-chk('final ENTER requires freshness', '&&freshnessPass&&(dir===1||dir===-1)' in app)
+chk('final ENTER requires freshness', '&&freshnessPass&&calendarPass&&(dir===1||dir===-1)' in app)
 chk('missing freshness fails closed', 'freshnessPass=freshness?.pass===true' in app)
 chk('MISSED user action present', "'MISSED — DO NOT CHASE'" in app)
 chk('non-live hides levels', 'entry:liveReady?+sg.entry:null' in app and 'target:liveReady?+sg.target:null' in app and 'invalid:liveReady?+sg.invalid:null' in app)
@@ -46,6 +51,7 @@ chk('proof recorder requires fresh entry', "t.freshnessPass===true" in app and "
 chk('proof rows store freshness metadata', 'originalTriggerPrice:t.originalTriggerPrice' in app and 'freshnessStatus:t.freshness?.status' in app and 'targetUsed:t.freshness?.targetUsed' in app)
 chk('self-test includes missed fail-closed', 'missed setup can never masquerade as ENTER' in app)
 chk('no 7.2 version remnants in runtime files', '7.2.0' not in app and '7.2.0' not in idx and '7.2.0' not in man and '7-2-0' not in sw)
+chk('no 7.3.0 runtime self-test remnants', 'document.title.includes(\"7.3.0\")' not in app and 'version:\"7.3.0\"' not in app and 'SELF-TEST PASS 7.3.0' not in app)
 # audit report validation
 rep=json.loads((wd/'AUDIT_1M_REPORT.json').read_text())
 sha=hashlib.sha256(app.encode()).hexdigest()
@@ -54,7 +60,7 @@ chk('1M report matches source SHA', rep.get('sourceSha256')==sha, f"report={rep.
 
 passed=sum(1 for _,ok,_ in checks if ok)
 report={
- 'version':'APEX-SCALP-GOD-7.3.0',
+ 'version':'APEX-SCALP-GOD-7.3.1',
  'passed':passed==len(checks),
  'checksPassed':passed,
  'checksTotal':len(checks),
