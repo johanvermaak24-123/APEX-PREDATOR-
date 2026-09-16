@@ -1,0 +1,35 @@
+APEX SCALP GOD 7.4.0 — OPPORTUNITY CAPTURE + WHIPSAW GUARD
+FINAL SOFTWARE TEST REPORT
+
+SOURCE
+- Base: APEX SCALP GOD 7.3.3 Calendar Removed / pre-calendar trading brain
+- Existing learning/storage keys preserved
+- Forex calendar patch remains absent
+
+MAJOR CHANGES
+- Forward proof is confidence tier: EARLY / DEVELOPING / VERIFIED
+- Low sample count alone no longer blocks a strong live opportunity
+- Mature materially negative exact-bucket evidence can still block
+- M5 closed-trigger usability increased from 90 seconds to 4 minutes
+- Existing anti-chase displacement limits remain active
+- Multi-candle extension / RSI exhaustion / reversal-fitness / rejection-wick whipsaw guard added
+- Existing counter-first path engine now participates in continuation timing
+- Pullback + fresh resumption can re-authorize the original direction
+- Repeated continuation opportunities can occur inside the same larger trend
+- Live MT5 spread can use a conservative slippage + commission reserve when manual broker specs are absent
+- XAU USD-strength cross-market confirmation retained as a modifier, not a guaranteed inverse rule
+
+TESTS
+- JavaScript syntax: PASS (app.js and inline app)
+- HTML/DOM/static audit: 32 / 32 PASS
+- 1,000,000 software invariant scenarios: PASS
+- Final ENTER cannot pass WHIPSAW GUARD: PASS
+- Extended continuation + counter-first risk => WAIT: PASS
+- Pullback/resumption recognition: PASS
+- Strong live opportunity with EARLY proof can issue ENTER: PASS
+- Mature materially negative proof still blocks: PASS
+- Existing critical memory/storage keys preserved: PASS
+- Calendar patch absent: PASS
+
+IMPORTANT LIMITATION
+These tests validate implementation and safety invariants. They do NOT prove profitability, win rate, or that whipsaws will be eliminated. The patch must be forward-tested on real scans.

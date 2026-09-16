@@ -1,0 +1,170 @@
+{
+  "version": "APEX-SCALP-GOD-7.4.0",
+  "passed": true,
+  "checksPassed": 32,
+  "checksTotal": 32,
+  "appSha256": "8140d5b1049992c1fe9d9a0330ff613e22e6bdaf928ae88f84c7a5802f8d2550",
+  "missingDomRefs": [],
+  "checks": [
+    {
+      "name": "HTML parsed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "unique IDs",
+      "passed": true,
+      "detail": "336"
+    },
+    {
+      "name": "DOM refs",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "name": "inline/app byte-equivalent",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "version title",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "app version",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "manifest",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cache bumped",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "same memory journal key",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "same state key",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "same active signal key",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "same path key",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "same proof epoch",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "4-minute M5 freshness",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "60s displayed command max",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "anti-chase displacement retained",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-bar extension measured",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "RSI squeeze risk",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "counter-first integrated",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "pullback re-entry recognized",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "whipsaw hard blocks ENTER",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "clear whipsaw user action",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "proof is tier not low-sample padlock",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mature negative evidence block",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "more opportunities recorded",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "MT5 conservative cost authority",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "manual broker inputs still priority",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "XAU USD cross-market retained",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "cross-market not hard inverse",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar patch absent",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "1M audit passed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "1M source checksum",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

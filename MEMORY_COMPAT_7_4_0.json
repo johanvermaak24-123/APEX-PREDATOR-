@@ -1,0 +1,36 @@
+{
+  "oldLiteralStorageKeys": [
+    "titan_active_signals_v1",
+    "titan_active_signals_v2",
+    "titan_hours",
+    "titan_journal_v2",
+    "titan_last_manual_update",
+    "titan_min",
+    "titan_news_mode",
+    "titan_state_v2",
+    "titan_td"
+  ],
+  "newLiteralStorageKeys": [
+    "titan_active_signals_v1",
+    "titan_active_signals_v2",
+    "titan_hours",
+    "titan_journal_v2",
+    "titan_last_manual_update",
+    "titan_min",
+    "titan_news_mode",
+    "titan_state_v2",
+    "titan_td"
+  ],
+  "removedKeys": [],
+  "addedKeys": [],
+  "criticalKeysPreserved": {
+    "titan_journal_v2": true,
+    "titan_state_v2": true,
+    "titan_active_signals_v2": true,
+    "apex_path_ledger_v4": true,
+    "apex_truth_duel_tape_v671": true,
+    "apex_7_3_fresh_forward_proof_epoch": true,
+    "apex_memory_vault_v4_0": true
+  },
+  "passed": true
+}

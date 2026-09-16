@@ -1,0 +1,18 @@
+APEX SCALP GOD 7.4.0 — FORWARD TEST CHECKLIST
+
+1. Deploy over the SAME GitHub Pages origin. Do not clear browser/site data.
+2. Confirm existing resolved learning / signal history is still present.
+3. Scan BTC/USD and XAU/USD repeatedly through active market movement.
+4. Record each final Simple Mode command:
+   - ENTER BUY NOW / ENTER SELL NOW
+   - WAIT — COUNTER MOVE RISK
+   - WAIT — WATCHING FOR ... ENTRY
+   - MISSED — DO NOT CHASE
+5. For every WAIT, review the next 5 / 10 / 15 / 30 minutes for missed tradable movement.
+6. For every ENTER, review maximum favorable and adverse excursion before target/invalidation.
+7. Specifically flag the old failure mode:
+   strong thesis -> ENTER -> large opposite squeeze -> original direction resumes.
+   7.4 should normally issue WAIT — COUNTER MOVE RISK when the extension/squeeze evidence is high, then allow a fresh resumption entry after the pullback.
+8. Do not judge the patch from one trade. Compare opportunity capture and whipsaw frequency across a meaningful forward sample.
+
+This software does not guarantee profit. The 1M audit validates logic invariants, not market edge.

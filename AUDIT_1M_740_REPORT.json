@@ -1,0 +1,24 @@
+{
+  "version": "APEX-SCALP-GOD-7.4.0",
+  "sourceSha256": "8140d5b1049992c1fe9d9a0330ff613e22e6bdaf928ae88f84c7a5802f8d2550",
+  "scenarios": 1000000,
+  "seed": "0x7400cafe",
+  "passed": true,
+  "counts": {
+    "fresh": 288361,
+    "stale": 332655,
+    "missed": 293634,
+    "invalid": 85350,
+    "live": 236392,
+    "blockedWhip": 179838
+  },
+  "invariants": [
+    "M5 trigger can remain eligible up to 4 minutes only while price displacement remains fresh",
+    "Final ENTER is impossible when whipsawBlock is true",
+    "Extended continuation with counter-first risk waits for a pullback/squeeze",
+    "Pullback + fresh resumption can re-authorize the original direction",
+    "Zero/low forward proof does not automatically suppress a strong live opportunity",
+    "Mature materially negative exact-bucket evidence can still block",
+    "No levels are shown while WHIPSAW GUARD is active"
+  ]
+}
