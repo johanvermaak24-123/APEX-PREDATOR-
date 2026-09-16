@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071018"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<title>APEX SCALP GOD 7.3.1 — CONSUMER TEST HUD</title>
+<title>APEX SCALP GOD 7.3.2 — CONSUMER TEST HUD</title>
 <style>
 :root{--bg:#05080c;--card:#0b131b;--line:#1a2b3b;--text:#f4f7fb;--mut:#8ba0b3;--green:#19de83;--red:#ff5266;--amber:#ffc857;--cyan:#5be8ff;--blue:#5e9cff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#17324a 0,#081019 28%,#05080c 65%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -156,7 +156,7 @@ body.simpleMode #oppsTab .small{font-size:11px}
 .bestNowGrid{grid-template-columns:repeat(4,1fr)}
 @media(max-width:700px){body.simpleMode #commandAction{font-size:42px}.bestNowGrid{grid-template-columns:repeat(2,1fr)}}
 
-/* 7.3.1 economic-calendar risk radar */
+/* 7.3.2 economic-calendar risk radar */
 .calendarRiskCard{border:1px solid #245a43;background:linear-gradient(135deg,rgba(7,32,26,.98),rgba(6,18,26,.98));padding:13px 14px}
 .calendarRiskCard.calendarWatch{border-color:#76632e;background:linear-gradient(135deg,rgba(39,31,8,.98),rgba(12,20,27,.98))}
 .calendarRiskCard.calendarBlock{border:2px solid #8d3e4d;background:linear-gradient(135deg,rgba(50,14,23,.98),rgba(16,17,24,.99));box-shadow:0 0 30px rgba(255,82,102,.10)}
@@ -167,7 +167,7 @@ body.simpleMode #oppsTab .small{font-size:11px}
 </head>
 <body class="simpleMode">
 <div class="app">
- <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 7.3.1 • NEWS RISK RADAR</div></div>
+ <div class="top"><div class="brand">APEX <span>PREDATOR</span></div><div class="lab">APEX SCALP GOD 7.3.2 • NEWS RISK RADAR</div></div>
  <div class="tabs">
    <button class="active" data-tab="brain">WHAT DO I DO?</button>
    <button data-tab="opps">FIND A TRADE</button>
@@ -762,7 +762,7 @@ function persistJSON(key,value){
 function readStoredText(key,fallback=""){try{const v=localStorage.getItem(key);return v==null?fallback:v}catch(e){return fallback}}
 function persistText(key,value){try{localStorage.setItem(key,String(value));return true}catch(e){console.warn("APEX storage text write failed",key,e);return false}}
 function removeStored(key){try{localStorage.removeItem(key);return true}catch(e){return false}}
-const APEX_APP_VERSION="APEX-SCALP-GOD-7.3.1";
+const APEX_APP_VERSION="APEX-SCALP-GOD-7.3.2";
 const APEX_TRIGGER_FRESH_MAX_MS=90000;
 const APEX_COMMAND_MAX_AGE_MS=60000;
 const APEX_VAULT_KEY="apex_memory_vault_v4_0";
@@ -794,7 +794,7 @@ function vaultSave(reason="AUTO"){
 function snapshotStrength(s){const d=s?.digest||memoryDigest(s?.journal,s?.state,s?.activeSignals,s?.pathLedger);return (d.journal||0)*100+(d.resolved||0)*20+(d.path||0)*35+(d.state||0)*3+(d.locks||0)*5+(d.newest?1:0)}
 function bestRecoverySnapshot(){
  const c=[];const v=vaultRead();for(const x of v.snapshots||[])if(x)c.push(x);
- for(const key of ["apex_upgrade_7_3_1_snapshot","apex_upgrade_god_3_0_snapshot","apex_upgrade_2_0_snapshot"]){try{const x=safeJSON(localStorage.getItem(key),null);if(x)c.push(x)}catch(_e){}}
+ for(const key of ["apex_upgrade_7_3_2_snapshot","apex_upgrade_7_3_1_snapshot","apex_upgrade_god_3_0_snapshot","apex_upgrade_2_0_snapshot"]){try{const x=safeJSON(localStorage.getItem(key),null);if(x)c.push(x)}catch(_e){}}
  return c.filter(x=>Array.isArray(x?.journal)&&x?.state&&typeof x.state==="object").sort((a,b)=>snapshotStrength(b)-snapshotStrength(a)||Number(b.savedAt||0)-Number(a.savedAt||0))[0]||null;
 }
 function mergeJournalSafe(a,b){
@@ -838,18 +838,18 @@ function captureUpgradeSafetySnapshot(){
 captureUpgradeSafetySnapshot();
 function captureNewsPatchSafetySnapshot(){
  try{
-  if(localStorage.getItem("apex_upgrade_7_3_1_snapshot"))return;
+  if(localStorage.getItem("apex_upgrade_7_3_2_snapshot"))return;
   const journal=readStoredJSON("titan_journal_v2",[]),state=readStoredJSON("titan_state_v2",{}),activeSignals=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1"),pathLedger=readStoredJSON(APEX_PATH_KEY,[]);
-  const snap={version:"PRE-7.3.1-NEWS-RADAR",savedAt:Date.now(),journal,state,activeSignals,pathLedger,digest:memoryDigest(journal,state,activeSignals,pathLedger)};
-  const raw=JSON.stringify(snap);if(raw.length<4500000)localStorage.setItem("apex_upgrade_7_3_1_snapshot",raw);
- }catch(e){console.warn("APEX 7.3.1 pre-patch snapshot skipped",e)}
+  const snap={version:"PRE-7.3.2-CALENDAR-RELAY",savedAt:Date.now(),journal,state,activeSignals,pathLedger,digest:memoryDigest(journal,state,activeSignals,pathLedger)};
+  const raw=JSON.stringify(snap);if(raw.length<4500000)localStorage.setItem("apex_upgrade_7_3_2_snapshot",raw);
+ }catch(e){console.warn("APEX 7.3.2 pre-patch snapshot skipped",e)}
 }
 captureNewsPatchSafetySnapshot();
 function recoverUpgradeSafetySnapshotIfNeeded(){
  try{
   const j=readStoredJSON("titan_journal_v2",[]),st=readStoredJSON("titan_state_v2",{}),ac=readStoredJSON("titan_active_signals_v2",{},"titan_active_signals_v1");
   const hasCurrent=j.length||Object.keys(st).length||Object.keys(ac).length;if(hasCurrent)return false;
-  const raw=localStorage.getItem("apex_upgrade_7_3_1_snapshot")||localStorage.getItem("apex_upgrade_god_3_0_snapshot")||localStorage.getItem("apex_upgrade_2_0_snapshot");if(!raw)return false;const snap=safeJSON(raw,null);if(!snap)return false;
+  const raw=localStorage.getItem("apex_upgrade_7_3_2_snapshot")||localStorage.getItem("apex_upgrade_7_3_1_snapshot")||localStorage.getItem("apex_upgrade_god_3_0_snapshot")||localStorage.getItem("apex_upgrade_2_0_snapshot");if(!raw)return false;const snap=safeJSON(raw,null);if(!snap)return false;
   if(Array.isArray(snap.journal)&&snap.journal.length)persistJSON("titan_journal_v2",snap.journal);
   if(snap.state&&typeof snap.state==="object")persistJSON("titan_state_v2",snap.state);
   if(snap.activeSignals&&typeof snap.activeSignals==="object")persistJSON("titan_active_signals_v2",snap.activeSignals);
@@ -1058,36 +1058,66 @@ async function resilientNews(q,hours,maxrecords=80){
  const b=await gdelt(q,hours,Math.min(120,maxrecords));return b||[]
 }
 
-// 7.3.1 ECONOMIC CALENDAR / NEWS RISK RADAR -------------------------------
+// 7.3.2 ECONOMIC CALENDAR / NEWS RISK RADAR — MOBILE RELAY HARDENING -------------------------------
 const APEX_CALENDAR_CACHE_KEY="apex_calendar_cache_v1";
 const APEX_CALENDAR_TTL_MS=45*60*1000;
 const APEX_CALENDAR_STALE_MAX_MS=12*60*60*1000;
+const APEX_CALENDAR_FETCH_TIMEOUT_MS=9000;
 let apexCalendarRuntime={t:0,events:[],provider:"NONE",reachable:false,stale:false,error:""};
 function calendarImpact(v){const s=String(v??"").toLowerCase();if(s.includes("high")||s==="3")return 3;if(s.includes("med")||s.includes("medium")||s==="2")return 2;if(s.includes("low")||s==="1")return 1;return 0}
 function calendarCurrency(country){
  const s=String(country||"").trim().toUpperCase();if(/^[A-Z]{3}$/.test(s))return s;
- const m={"UNITED STATES":"USD","US":"USD","U.S.":"USD","EURO AREA":"EUR","EUROZONE":"EUR","UNITED KINGDOM":"GBP","UK":"GBP","JAPAN":"JPY","SWITZERLAND":"CHF","AUSTRALIA":"AUD","CANADA":"CAD","NEW ZEALAND":"NZD"};return m[s]||s.slice(0,3)
+ const m={"UNITED STATES":"USD","UNITED STATES OF AMERICA":"USD","US":"USD","USA":"USD","U.S.":"USD","EURO AREA":"EUR","EUROZONE":"EUR","EURO ZONE":"EUR","UNITED KINGDOM":"GBP","UK":"GBP","GREAT BRITAIN":"GBP","JAPAN":"JPY","SWITZERLAND":"CHF","AUSTRALIA":"AUD","CANADA":"CAD","NEW ZEALAND":"NZD"};return m[s]||s.slice(0,3)
 }
 function parseCalendarTime(v){
  const raw=String(v||"").trim();if(!raw)return NaN;let ms=Date.parse(raw);if(Number.isFinite(ms))return ms;
  const m=raw.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);return m?Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+(m[6]||0)):NaN
 }
 function normalizeCalendarEvent(x,provider){
- const title=x?.title||x?.Event||x?.event||x?.Category||"Economic event",country=x?.country||x?.Country||x?.currency||"",impact=calendarImpact(x?.impact??x?.Importance??x?.importance),time=parseCalendarTime(x?.date||x?.Date||x?.datetime||x?.time);
- return {title:String(title),currency:calendarCurrency(country),impact,time,actual:String(x?.actual??x?.Actual??""),forecast:String(x?.forecast??x?.Forecast??x?.Consensus??""),previous:String(x?.previous??x?.Previous??""),provider}
+ const title=x?.title||x?.Event||x?.event||x?.Category||x?.category||"Economic event",country=x?.country||x?.Country||x?.currency||x?.Currency||"",impact=calendarImpact(x?.impact??x?.Impact??x?.Importance??x?.importance),time=parseCalendarTime(x?.date||x?.Date||x?.datetime||x?.time||x?.Time);
+ return {title:String(title),currency:calendarCurrency(country),impact,time,actual:String(x?.actual??x?.Actual??""),forecast:String(x?.forecast??x?.Forecast??x?.Consensus??x?.consensus??""),previous:String(x?.previous??x?.Previous??""),provider}
 }
-async function fetchForexFactoryCalendar(){
- const r=await fetch("https://nfs.faireconomy.media/ff_calendar_thisweek.json",{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw new Error(`Forex calendar HTTP ${r.status}`);const j=await r.json();if(!Array.isArray(j))throw new Error("Forex calendar malformed");const events=j.map(x=>normalizeCalendarEvent(x,"ForexFactory")).filter(x=>Number.isFinite(x.time)&&x.currency&&x.title);if(!events.length)throw new Error("Forex calendar returned no usable events");return events
+function calendarHourBucket(now=Date.now()){const d=new Date(now);return `${d.getUTCFullYear()}${String(d.getUTCMonth()+1).padStart(2,"0")}${String(d.getUTCDate()).padStart(2,"0")}${String(d.getUTCHours()).padStart(2,"0")}`}
+function calendarTargetUrl(base,now=Date.now()){return `${base}${base.includes("?")?"&":"?"}apex_cb=${calendarHourBucket(now)}`}
+async function fetchCalendarJson(url,label,timeout=APEX_CALENDAR_FETCH_TIMEOUT_MS){
+ const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),timeout);
+ try{const r=await fetch(url,{cache:"no-store",credentials:"omit",signal:ctl.signal});if(!r.ok)throw new Error(`${label} HTTP ${r.status}`);const j=await r.json();if(!Array.isArray(j))throw new Error(`${label} malformed`);return j}
+ catch(e){if(e?.name==="AbortError")throw new Error(`${label} timeout`);throw e}
+ finally{clearTimeout(tm)}
+}
+function validateCalendarPayload(raw,provider,now=Date.now()){
+ if(!Array.isArray(raw))throw new Error(`${provider} malformed`);
+ const events=raw.map(x=>normalizeCalendarEvent(x,provider)).filter(x=>Number.isFinite(x.time)&&x.currency&&x.title&&x.title!=="Economic event");
+ if(events.length<3)throw new Error(`${provider} returned too few usable events`);
+ const near=events.filter(x=>x.time>=now-8*86400000&&x.time<=now+8*86400000);
+ if(near.length<2)throw new Error(`${provider} calendar dates look stale/out-of-window`);
+ if(!near.some(x=>x.currency==="USD"))throw new Error(`${provider} has no USD events in active window`);
+ return events
+}
+async function fetchForexFactoryCalendar(base="https://cdn-nfs.faireconomy.media/ff_calendar_thisweek.json",provider="ForexFactory CDN"){
+ const target=calendarTargetUrl(base),j=await fetchCalendarJson(target,provider);return validateCalendarPayload(j,provider)
 }
 async function fetchTradingEconomicsCalendar(){
- const r=await fetch("https://api.tradingeconomics.com/calendar?c=guest%3Aguest&f=json",{cache:"no-store",headers:{Accept:"application/json"}});if(!r.ok)throw new Error(`Economic calendar fallback HTTP ${r.status}`);const j=await r.json();if(!Array.isArray(j))throw new Error("Economic calendar fallback malformed");const events=j.map(x=>normalizeCalendarEvent(x,"TradingEconomics")).filter(x=>Number.isFinite(x.time)&&x.currency&&x.title);if(!events.length)throw new Error("Economic calendar fallback returned no usable events");return events
+ const u=calendarTargetUrl("https://api.tradingeconomics.com/calendar/country/united%20states?c=guest%3Aguest&f=json"),j=await fetchCalendarJson(u,"TradingEconomics");return validateCalendarPayload(j,"TradingEconomics")
+}
+async function fetchCalendarRelay(relayName,makeUrl){
+ const target=calendarTargetUrl("https://cdn-nfs.faireconomy.media/ff_calendar_thisweek.json"),url=makeUrl(target),j=await fetchCalendarJson(url,relayName);return validateCalendarPayload(j,relayName)
 }
 function readCalendarCache(){try{const x=readStoredJSON(APEX_CALENDAR_CACHE_KEY,null);return x&&Array.isArray(x.events)?x:null}catch(_e){return null}}
 function writeCalendarCache(x){try{persistJSON(APEX_CALENDAR_CACHE_KEY,{t:x.t,events:x.events,provider:x.provider})}catch(_e){}}
 async function economicCalendar(force=false){
  const now=Date.now();if(!force&&apexCalendarRuntime.events.length&&now-apexCalendarRuntime.t<APEX_CALENDAR_TTL_MS)return apexCalendarRuntime;
  const saved=readCalendarCache();if(!force&&saved?.events?.length&&now-Number(saved.t||0)<APEX_CALENDAR_TTL_MS){apexCalendarRuntime={t:+saved.t,events:saved.events,provider:saved.provider||"CACHE",reachable:true,stale:false,error:""};return apexCalendarRuntime}
- const errors=[];for(const p of [["ForexFactory",fetchForexFactoryCalendar],["TradingEconomics",fetchTradingEconomicsCalendar]]){try{const events=await p[1]();apexCalendarRuntime={t:now,events,provider:p[0],reachable:true,stale:false,error:""};writeCalendarCache(apexCalendarRuntime);return apexCalendarRuntime}catch(e){errors.push(`${p[0]}: ${e?.message||e}`)}}
+ const errors=[];
+ const providers=[
+  ["ForexFactory CDN",()=>fetchForexFactoryCalendar("https://cdn-nfs.faireconomy.media/ff_calendar_thisweek.json","ForexFactory CDN")],
+  ["ForexFactory",()=>fetchForexFactoryCalendar("https://nfs.faireconomy.media/ff_calendar_thisweek.json","ForexFactory")],
+  ["TradingEconomics",fetchTradingEconomicsCalendar],
+  ["AllOrigins relay",()=>fetchCalendarRelay("ForexFactory via AllOrigins",target=>`https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`)],
+  ["CodeTabs relay",()=>fetchCalendarRelay("ForexFactory via CodeTabs",target=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`)],
+  ["CorsProxy relay",()=>fetchCalendarRelay("ForexFactory via CorsProxy",target=>`https://corsproxy.io/?url=${encodeURIComponent(target)}`)]
+ ];
+ for(const p of providers){try{const events=await p[1]();apexCalendarRuntime={t:now,events,provider:p[0],reachable:true,stale:false,error:""};writeCalendarCache(apexCalendarRuntime);return apexCalendarRuntime}catch(e){errors.push(`${p[0]}: ${e?.message||e}`)}}
  if(saved?.events?.length&&now-Number(saved.t||0)<=APEX_CALENDAR_STALE_MAX_MS){apexCalendarRuntime={t:+saved.t,events:saved.events,provider:(saved.provider||"CACHE")+" STALE",reachable:false,stale:true,error:errors.join(" | ")};return apexCalendarRuntime}
  apexCalendarRuntime={t:now,events:[],provider:"OFFLINE",reachable:false,stale:false,error:errors.join(" | ")};return apexCalendarRuntime
 }
@@ -1096,7 +1126,7 @@ function calendarCurrenciesForSymbol(sym){
 }
 function calendarRiskForSymbol(sym,calendar,now=Date.now()){
  const currencies=calendarCurrenciesForSymbol(sym),all=Array.isArray(calendar?.events)?calendar.events:[],rel=all.filter(e=>currencies.includes(String(e.currency||"").toUpperCase())&&Number.isFinite(+e.time)).sort((a,b)=>Math.abs(a.time-now)-Math.abs(b.time-now));
- const unknown=!calendar?.reachable&&!calendar?.stale&&!rel.length;if(unknown)return{state:"UNKNOWN",level:4,blockEntries:true,unknown:true,title:"CALENDAR OFFLINE — NEWS RISK UNKNOWN",detail:"Live entry paused because high-impact economic-event timing could not be verified.",provider:calendar?.provider||"OFFLINE",currencies,relevant:0,event:null,minutes:null};
+ const unknown=!calendar?.reachable&&!calendar?.stale&&!rel.length;if(unknown)return{state:"UNKNOWN",level:4,blockEntries:true,unknown:true,title:"CALENDAR OFFLINE — NEWS RISK UNKNOWN",detail:"Live entry paused because high-impact economic-event timing could not be verified. Calendar relay fallbacks also failed.",provider:calendar?.provider||"OFFLINE",currencies,relevant:0,event:null,minutes:null};
  let best=null,bestRank=-1;
  for(const e of rel){const d=(e.time-now)/60000,impact=e.impact||0,ad=Math.abs(d);let rank=0,state="CLEAR",block=false;
   if(impact>=3&&d>=-15&&d<=15){rank=100-ad;state=d>=0?"BLOCK":"COOLDOWN";block=true}
@@ -2982,7 +3012,7 @@ function renderAutoMemoryStatus(savedAt=null){
  const L=componentLearning();
  if(badge)badge.textContent="AUTO MEMORY ACTIVE";if(st)st.textContent="ON";if(rec)rec.textContent=String(titanJournal.length);if(ln){const shadow=titanJournal.filter(x=>x.shadowFirstHit?.resolved).length;ln.textContent=`${L.n||0} + ${shadow} shadow`;}
  if(last&&savedAt)last.textContent=new Date(savedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"});
- if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 7.3.1 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
+ if(nar)nar.textContent=`Brain snapshots, signal locks, resolved outcomes and learned weights are preserved under the same storage keys. ${L.adaptive?"Adaptive learning is active":"Learning activates after 12 resolved outcomes"}; APEX SCALP GOD 7.3.2 preserves existing evidence and maintains a versioned Memory Vault. API keys are excluded from backups.`;
 }
 async function titanAutoMemorySave(){
  try{const snap=titanMemorySnapshot();const db=await titanMemoryOpen();const tx=db.transaction(TITAN_AUTO_MEMORY_STORE,"readwrite");tx.objectStore(TITAN_AUTO_MEMORY_STORE).put(snap,TITAN_AUTO_MEMORY_KEY);await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close();renderAutoMemoryStatus(snap.savedAt);vaultSave("AUTO-MEMORY") }catch(e){const b=document.getElementById("autoMemBadge");if(b)b.textContent="MEMORY SAVE WARNING";console.warn("APEX auto-memory save skipped",e)}
@@ -3053,9 +3083,9 @@ renderJournal();renderVaultStatus();
   req(_sellHostile.opposeRisk>_sellHostile.supportRisk,"SELL hostile event must oppose direction");
   req(clamp(5,0,3)===3&&clamp(-1,0,3)===0,"clamp");
   req(Array.isArray(titanJournal)&&titanState&&typeof titanState==="object"&&titanActiveSignals&&typeof titanActiveSignals==="object","memory schema");
-  req(document.title.includes("7.3.1")&&APEX_APP_VERSION==="APEX-SCALP-GOD-7.3.1","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
+  req(document.title.includes("7.3.2")&&APEX_APP_VERSION==="APEX-SCALP-GOD-7.3.2","page version/title consistency");req(typeof blockBootstrapMeanLower==="function"&&typeof effectiveEpisodeN==="function"&&typeof purgedChronologicalSplit==="function","6.8 proof statistics loaded");req(typeof setCanonicalNewsState==="function"&&typeof renderProofAuthority==="function","6.8 canonical news/proof authority loaded");
   req(typeof authoritativeBestScan==="function"&&typeof mergeEventFeeds==="function"&&typeof unifiedFinalVerdict==="function","BEST NOW / WORLD BRAIN shared final verdict engine");
-  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","7.3 single final execution command loaded");req(typeof renderManualTradeManager==="function"&&typeof tradeManagementDecision==="function"&&typeof setSimpleMode==="function","7.3 consumer HUD + trade manager loaded");req(!!document.getElementById("commandExitAction")&&!!document.getElementById("commandEntered")&&!!document.getElementById("simpleModeToggle"),"7.3 consumer HUD controls loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","7.3 live-command freshness expiry loaded");req(typeof economicCalendar==="function"&&typeof calendarRiskForSymbol==="function"&&typeof renderCalendarRisk==="function","7.3.1 economic-calendar radar loaded");
+  req(typeof executionCommandFromParts==="function"&&typeof renderExecutionCommand==="function","7.3 single final execution command loaded");req(typeof renderManualTradeManager==="function"&&typeof tradeManagementDecision==="function"&&typeof setSimpleMode==="function","7.3 consumer HUD + trade manager loaded");req(!!document.getElementById("commandExitAction")&&!!document.getElementById("commandEntered")&&!!document.getElementById("simpleModeToggle"),"7.3 consumer HUD controls loaded");req(typeof scheduleLiveCommandExpiry==="function"&&typeof expireLiveCommandUI==="function","7.3 live-command freshness expiry loaded");req(typeof economicCalendar==="function"&&typeof calendarRiskForSymbol==="function"&&typeof renderCalendarRisk==="function","7.3.2 economic-calendar radar loaded");
   const _cmdWait=executionCommandFromParts({fire:false,state:"PROOF",counter:1,entry:100,target:101,invalid:99},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdWait.liveReady&&_cmdWait.action==="WAIT — DO NOT ENTER"&&!_cmdWait.showLevels,"PROOF can never masquerade as ENTER");
   const _calBlock={state:'BLOCK',blockEntries:true,title:'TEST NEWS'};const _cmdNews=executionCommandFromParts({fire:true,state:'FIRE NOW',counter:1,entry:100,target:101,invalid:99,trigger:{freshness:{pass:true,status:'FRESH',setupId:'CAL',originalEntry:100,triggerTs:Date.now(),expiresAt:Date.now()+30000}}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1},_calBlock);req(!_cmdNews.liveReady&&_cmdNews.stage==='NEWS BLOCK','calendar block can never masquerade as ENTER');const _fresh={pass:true,status:'FRESH',setupId:'TEST',originalEntry:100,triggerTs:Date.now()-1000,expiresAt:Date.now()+30000};const _cmdLive=executionCommandFromParts({fire:true,preFreshFire:true,state:"FIRE NOW",counter:-1,entry:100,target:99,invalid:101,trigger:{freshness:_fresh}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(_cmdLive.liveReady&&_cmdLive.action==="ENTER SELL NOW"&&_cmdLive.showLevels,"ENTER requires complete final authority + fresh entry");const _cmdMiss=executionCommandFromParts({fire:false,preFreshFire:true,state:'MISSED',counter:1,entry:100,target:101,invalid:99,trigger:{freshness:{..._fresh,pass:false,status:'MISSED'}}},{pass:true,integrityPass:true,execOK:true},{retired:false,staleEdge:false,toxicity:.1,fragility:.1});req(!_cmdMiss.liveReady&&_cmdMiss.action==='MISSED — DO NOT CHASE'&&!_cmdMiss.showLevels,"missed setup can never masquerade as ENTER");
   req(pathCostAuthorityLabel({costKnown:true,costPass:true},false).includes("LIVE VETO"),"research proxy cost PASS cannot masquerade as live cost authority");
@@ -3066,8 +3096,8 @@ renderJournal();renderVaultStatus();
   req(typeof marketAnalyze==="function"&&typeof decisionConsensus==="function","GOD Opportunity Capture authority loaded");
   req(typeof gradePathLearning==="function"&&typeof counterPathEngine==="function"&&typeof pathMemory==="function","Counter-First Dual Clock Engine loaded");req(typeof renderMicroCourt==="function","6.2 Flow Proxy Court loaded");req(typeof renderHydraCourt==="function"&&typeof hydraCourt==="function","6.3 Epistemic Hydra loaded");req(typeof renderTimingTrapCourt==="function"&&typeof thesisTimingTrap==="function","6.8 Thesis Timing Trap loaded");req(typeof fortressKernel==="function"&&typeof renderFortress==="function","6.8 Adversarial Fortress loaded");req(typeof opportunityDuel==="function"&&typeof universalTrigger==="function","6.8 Measurement Truth Duel loaded");req(typeof renderHarvestVault==="function"&&typeof harvestEconomics==="function","6.2 Net Edge Harvest Vault loaded");
  }catch(e){failures.push(e.message||String(e))}
- window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"7.3.1"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
- if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 7.3.1");
+ window.APEX_SELF_TEST={passed:failures.length===0,failures,version:"7.3.2"};window.TITAN_SELF_TEST=window.APEX_SELF_TEST;
+ if(failures.length)console.error("APEX CORE SELF-TEST FAIL",failures);else console.info("APEX CORE SELF-TEST PASS 7.3.2");
 })();
 
 (function titanIntegrityCheck(){
@@ -3088,7 +3118,7 @@ renderJournal();renderVaultStatus();
      const t2=eventImpactDetail("XAU/USD","Gold surges as dollar weakens");
      const eventLogicPass=t1.sign===-1&&t2.sign===1;
      box.className=eventLogicPass?"good":"warn";
-     box.textContent=eventLogicPass?"APEX SCALP GOD 7.3.1 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
+     box.textContent=eventLogicPass?"APEX SCALP GOD 7.3.2 code integrity PASS ✓ Forward Proof ledger, fail-closed broker-cost authority, canonical news, capital defense and critical UI loaded. This does NOT prove trading edge.":"Decision integrity FAIL: event direction self-test.";
    }
  }
  if(missing.length) console.error("APEX UI integrity missing IDs:",missing);

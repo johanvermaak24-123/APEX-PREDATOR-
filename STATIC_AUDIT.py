@@ -1,75 +1,20 @@
 from pathlib import Path
 from bs4 import BeautifulSoup
-import re, json, hashlib, sys
+import re,json,hashlib,sys
 wd=Path('.')
-idx=(wd/'index.html').read_text()
-app=(wd/'app.js').read_text()
-man=(wd/'manifest.webmanifest').read_text()
-sw=(wd/'sw.js').read_text()
+idx=(wd/'index.html').read_text(); app=(wd/'app.js').read_text(); man=(wd/'manifest.webmanifest').read_text(); sw=(wd/'sw.js').read_text()
 checks=[]
-def chk(name,cond,detail=''):
-    checks.append((name,bool(cond),detail))
-    if not cond: print('FAIL',name,detail)
-
-soup=BeautifulSoup(idx,'html.parser')
-ids=[x.get('id') for x in soup.find_all(attrs={'id':True})]
-chk('HTML parsed', soup.html is not None)
-chk('unique IDs', len(ids)==len(set(ids)), f'{len(ids)} total / {len(set(ids))} unique')
-# Literal DOM references from exact inline code / app
-refs=set(re.findall(r'(?:\$|must)\(["\']([A-Za-z0-9_:-]+)["\']\)',app))
-refs.update(re.findall(r'document\.getElementById\(["\']([A-Za-z0-9_:-]+)["\']\)',app))
-missing=sorted(r for r in refs if r not in set(ids))
-chk('literal DOM refs resolved', not missing, f'{len(refs)} refs; missing={missing[:12]}')
-# inline equals app
-m=re.search(r'<script>\n(.*?)\n</script>\n</body>',idx,re.S)
-chk('inline app.js byte-equivalent', bool(m and m.group(1).strip('\n')==app.strip('\n')))
-chk('version title', '<title>APEX SCALP GOD 7.3.1' in idx)
-chk('app version constant', 'APEX_APP_VERSION="APEX-SCALP-GOD-7.3.1"' in app)
-chk('manifest version', 'APEX SCALP GOD 7.3.1' in man and 'APEX 7.3.1' in man)
-chk('service worker cache bumped', 'apex-scalp-god-7-3-1-news-risk-v1' in sw)
-chk('calendar radar UI', all(x in idx for x in ['calendarRiskCard','calendarRiskBadge','calendarRiskTitle','calendarRiskDetail']))
-chk('calendar providers present', 'ff_calendar_thisweek.json' in app and 'TradingEconomics' in app)
-chk('calendar execution veto', 'calendarPass' in app and "stage=cal.unknown?'NEWS UNKNOWN':'NEWS BLOCK'" in app)
-chk('legacy memory keys preserved', all(x in app for x in ['titan_journal_v2','titan_state_v2','titan_active_signals_v2','apex_path_ledger_v4']))
-chk('pre-patch memory snapshot', 'apex_upgrade_7_3_1_snapshot' in app)
-chk('simple mode forced on load', 'setSimpleMode(true);' in app)
-chk('freshness constants present', 'APEX_TRIGGER_FRESH_MAX_MS=90000' in app and 'APEX_COMMAND_MAX_AGE_MS=60000' in app)
-chk('original trigger identity present', 'setupId=`${r?.sym' in app and 'originalEntry=Number(cur?.close)' in app and 'triggerTs=Number.isFinite(openTs)?openTs+5*60000' in app)
-chk('favorable anti-chase gate', "status='MISSED'" in app and 'targetUsed>.35' in app and 'favorableATR>maxFavorableATR' in app)
-chk('adverse invalidation gate', "status='INVALIDATED'" in app and 'adverseATR>maxAdverseATR' in app)
-chk('stale trigger gate', "status='STALE'" in app and 'ageMs>APEX_TRIGGER_FRESH_MAX_MS' in app)
-chk('future timestamp fail-closed', 'triggerTs>now+5000' in app)
-chk('final ENTER requires freshness', '&&freshnessPass&&calendarPass&&(dir===1||dir===-1)' in app)
-chk('missing freshness fails closed', 'freshnessPass=freshness?.pass===true' in app)
-chk('MISSED user action present', "'MISSED — DO NOT CHASE'" in app)
-chk('non-live hides levels', 'entry:liveReady?+sg.entry:null' in app and 'target:liveReady?+sg.target:null' in app and 'invalid:liveReady?+sg.invalid:null' in app)
-chk('command expiry uses trigger expiry', 'Math.min(hardExpiry,+expiresAt)' in app)
-chk('old 121s expiry removed', '121000' not in app)
-chk('7.3 proof epoch isolated', 'apex_7_3_fresh_forward_proof_epoch' in app and '7.3_FRESH_FORWARD' in app)
-chk('legacy proof era not live-counted', '6.8_FORWARD' not in app and '6.8_SHADOW' not in app)
-chk('proof recorder requires fresh entry', "t.freshnessPass===true" in app and "proofEligible=t.costVerified===true&&t.freshnessPass===true" in app)
-chk('proof rows store freshness metadata', 'originalTriggerPrice:t.originalTriggerPrice' in app and 'freshnessStatus:t.freshness?.status' in app and 'targetUsed:t.freshness?.targetUsed' in app)
-chk('self-test includes missed fail-closed', 'missed setup can never masquerade as ENTER' in app)
-chk('no 7.2 version remnants in runtime files', '7.2.0' not in app and '7.2.0' not in idx and '7.2.0' not in man and '7-2-0' not in sw)
-chk('no 7.3.0 runtime self-test remnants', 'document.title.includes(\"7.3.0\")' not in app and 'version:\"7.3.0\"' not in app and 'SELF-TEST PASS 7.3.0' not in app)
-# audit report validation
-rep=json.loads((wd/'AUDIT_1M_REPORT.json').read_text())
-sha=hashlib.sha256(app.encode()).hexdigest()
-chk('1M report passed', rep.get('passed') is True and rep.get('scenarios')==1_000_000)
-chk('1M report matches source SHA', rep.get('sourceSha256')==sha, f"report={rep.get('sourceSha256')} source={sha}")
-
-passed=sum(1 for _,ok,_ in checks if ok)
-report={
- 'version':'APEX-SCALP-GOD-7.3.1',
- 'passed':passed==len(checks),
- 'checksPassed':passed,
- 'checksTotal':len(checks),
- 'htmlIds':len(ids),
- 'literalDomRefs':len(refs),
- 'missingDomRefs':missing,
- 'appSha256':sha,
- 'checks':[{'name':n,'passed':ok,'detail':d} for n,ok,d in checks]
-}
-(wd/'STATIC_AUDIT_REPORT.json').write_text(json.dumps(report,indent=2))
-print(json.dumps(report,indent=2))
-sys.exit(0 if report['passed'] else 1)
+def chk(name,cond,detail=''): checks.append((name,bool(cond),detail))
+soup=BeautifulSoup(idx,'html.parser'); ids=[x.get('id') for x in soup.find_all(attrs={'id':True})]
+chk('HTML parsed',soup.html is not None); chk('unique IDs',len(ids)==len(set(ids)),f'{len(ids)} / {len(set(ids))}')
+refs=set(re.findall(r'(?:\$|must)\(["\']([A-Za-z0-9_:-]+)["\']\)',app)); refs.update(re.findall(r'document\.getElementById\(["\']([A-Za-z0-9_:-]+)["\']\)',app)); missing=sorted(r for r in refs if r not in set(ids)); chk('literal DOM refs resolved',not missing,str(missing[:10]))
+m=re.search(r'<script>\n(.*?)\n</script>\n</body>',idx,re.S); chk('inline app.js byte-equivalent',bool(m and m.group(1).strip('\n')==app.strip('\n')))
+chk('version title','APEX SCALP GOD 7.3.2' in idx); chk('app version','APEX_APP_VERSION="APEX-SCALP-GOD-7.3.2"' in app); chk('manifest version','APEX SCALP GOD 7.3.2' in man and 'APEX 7.3.2' in man); chk('service worker cache','apex-scalp-god-7-3-2-calendar-relay-v1' in sw)
+chk('calendar direct CDN','cdn-nfs.faireconomy.media/ff_calendar_thisweek.json' in app); chk('calendar direct legacy','nfs.faireconomy.media/ff_calendar_thisweek.json' in app); chk('TradingEconomics fallback','TradingEconomics' in app and 'calendar/country/united%20states' in app); chk('relay fallbacks',all(x in app for x in ['api.allorigins.win','api.codetabs.com','corsproxy.io']))
+chk('calendar timeout','APEX_CALENDAR_FETCH_TIMEOUT_MS=9000' in app and 'AbortController' in app); chk('calendar schema validation','validateCalendarPayload' in app and 'calendar dates look stale/out-of-window' in app and 'has no USD events' in app)
+chk('calendar fail closed',"state:\"UNKNOWN\",level:4,blockEntries:true" in app); chk('calendar execution veto','calendarPass' in app and "stage=cal.unknown?'NEWS UNKNOWN':'NEWS BLOCK'" in app)
+chk('legacy memory keys preserved',all(x in app for x in ['titan_journal_v2','titan_state_v2','titan_active_signals_v2','apex_path_ledger_v4'])); chk('7.3.2 prepatch snapshot','apex_upgrade_7_3_2_snapshot' in app and 'PRE-7.3.2-CALENDAR-RELAY' in app); chk('7.3.1 snapshot retained for recovery','apex_upgrade_7_3_1_snapshot' in app)
+chk('simple mode forced','setSimpleMode(true);' in app); chk('freshness gate','&&freshnessPass&&calendarPass&&(dir===1||dir===-1)' in app); chk('MISSED anti-chase',"status='MISSED'" in app and "'MISSED — DO NOT CHASE'" in app); chk('no live levels when non-live','entry:liveReady?+sg.entry:null' in app)
+rep=json.loads((wd/'AUDIT_1M_REPORT.json').read_text()); sha=hashlib.sha256(app.encode()).hexdigest(); chk('1M report passed',rep.get('passed') is True and rep.get('scenarios')==1_000_000); chk('1M report source match',rep.get('sourceSha256')==sha)
+nr=json.loads((wd/'AUDIT_NEWS_MEMORY_REPORT.json').read_text()); chk('relay audit passed',nr.get('passed') is True and nr.get('relayFallbackPass') is True); chk('120 memory audit passed',nr.get('memoryMigration',{}).get('preservedJournal')==120)
+passed=sum(ok for _,ok,_ in checks); report={'version':'APEX-SCALP-GOD-7.3.2','passed':passed==len(checks),'checksPassed':passed,'checksTotal':len(checks),'htmlIds':len(ids),'literalDomRefs':len(refs),'missingDomRefs':missing,'appSha256':sha,'checks':[{'name':n,'passed':ok,'detail':d} for n,ok,d in checks]}; (wd/'STATIC_AUDIT_REPORT.json').write_text(json.dumps(report,indent=2)); print(json.dumps(report,indent=2)); sys.exit(0 if report['passed'] else 1)

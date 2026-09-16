@@ -1,64 +1,40 @@
-APEX SCALP GOD 7.3.1 — NEWS RISK RADAR PATCH
-FINAL TEST REPORT
-============================================================
+APEX SCALP GOD 7.3.2 — MOBILE CALENDAR RELAY PATCH
+==========================================================
 
-BASE BUILD
-- Patched from: APEX_SCALP_GOD_7_3_0_FRESH_ENTRY_GITHUB_READY.zip
-- Runtime version: APEX-SCALP-GOD-7.3.1
-- app.js SHA256: 3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400
+WHY THIS PATCH EXISTS
+The 7.3.1 News Risk Radar behaved correctly fail-closed on the phone, but the browser could not retrieve either direct calendar source and therefore showed CALENDAR OFFLINE / NEWS RISK UNKNOWN.
 
-CORE SOFTWARE TESTS
-PASS — JavaScript syntax: node --check app.js
-PASS — Static audit: 35 / 35 checks
-PASS — HTML IDs: 342 total / 342 unique
-PASS — Literal DOM references: 306 checked / 0 missing
-PASS — index.html inline runtime is byte-equivalent to app.js
-PASS — version, manifest and service-worker cache bumped consistently
-PASS — no stale 7.3.0 browser self-test version assertions remain
+WHAT 7.3.2 CHANGES
+- Preserves the 7.3/7.3.1 learning and active-signal storage keys.
+- Adds PRE-7.3.2 safety snapshot before patch logic uses current storage.
+- Calendar route order:
+  1. ForexFactory CDN direct
+  2. ForexFactory legacy host direct
+  3. TradingEconomics direct
+  4. AllOrigins relay to ForexFactory CDN
+  5. CodeTabs relay to ForexFactory CDN
+  6. CorsProxy relay to ForexFactory CDN
+- Relay requests contain only the public calendar URL; no journal, learning state, account values, or API keys are sent.
+- Each feed is rejected if malformed, too small, outside the active date window, or missing USD events.
+- If every route fails, APEX still fails closed and will not authorize ENTER.
 
-1,000,000-SCENARIO EXECUTION AUDIT
-PASS — Scenarios: 1,000,000
-PASS — Failures: 0
-PASS — Calendar BLOCK/UNKNOWN can never authorize ENTER
-PASS — ENTER requires final authority + calendar clearance + fresh-entry pass
-PASS — Missing freshness metadata fails closed
-PASS — BEST NOW cannot independently manufacture ENTER
-PASS — Open-trade manager remains HOLD / EXIT / SWITCH only
-Calendar-blocked scenarios exercised: 69,726
-Calendar-unknown scenarios exercised: 9,839
-
-NEWS RISK RADAR TESTS
-PASS — 8 deterministic calendar/risk-window tests
-PASS — Relevant-currency mapping is symbol aware
-PASS — High-impact protection blocks fresh entries from 15 min before to 15 min after
-PASS — 15–60 min pre-event states warn without silently erasing an existing setup
-PASS — No usable calendar feed = NEWS RISK UNKNOWN, never false NEWS CLEAR
-PASS — Existing open manual trades are not auto-closed solely by a news event
-PASS — New decision records can archive calendar context for later learning
-
-MEMORY / MIGRATION SAFETY TEST
-PASS — Seeded legacy journal records: 120
-PASS — Preserved after 7.3.1 startup logic: 120 / 120
-PASS — Seeded path-ledger records: 17
-PASS — Preserved path-ledger records: 17 / 17
+TESTS
+PASS — JavaScript syntax check
+PASS — Static audit: 27 / 27
+PASS — 1,000,000 execution scenarios
+PASS — 1M invariant failures: 0
+PASS — Calendar BLOCK/UNKNOWN cannot authorize ENTER
+PASS — Mock mobile failure path: direct feeds fail, AllOrigins relay succeeds
+PASS — Relay-fed +10m high-impact USD event produces BLOCK
+PASS — Stale/malformed calendar payload rejected
+PASS — Existing learning migration: 120 / 120 seeded journal records preserved
 PASS — Existing active signal lock preserved
-PASS — PRE-7.3.1 snapshot captured all 120 journal records
-PASS — Existing storage keys unchanged:
-       titan_journal_v2
-       titan_state_v2
-       titan_active_signals_v2
-       apex_path_ledger_v4
-PASS — New calendar storage is additive only: apex_calendar_cache_v1
+PASS — Existing path records preserved: 17 / 17
+PASS — Runtime/source SHA alignment
 
-DEPLOYMENT SAFETY
-- Deploy over the SAME site/origin as the current 7.3 app.
-- Do NOT clear browser/site data if you want the browser's accumulated learning to remain available.
-- The patch also writes a one-time pre-upgrade snapshot in apex_upgrade_7_3_1_snapshot before normal startup recovery writes.
-
-LIVE-FEED LIMITATION OF THIS TEST ENVIRONMENT
-- The container used for the build cannot reach external calendar endpoints, so live provider connectivity could not be proven here.
-- The runtime is deliberately fail-closed: if neither a current feed nor usable stale cache exists, it shows NEWS RISK UNKNOWN and does not permit a fresh ENTER because of an assumed 'clear' calendar.
-- First real-world beta test should confirm the deployed browser can fetch the calendar provider and that event times display correctly in the user's local browser time.
+APP SHA256
+ca43cf004e352693293b92cbff007ab54ccc6dc36672512ee4897e0324c99c05
 
 IMPORTANT
-These tests validate software behavior, memory migration and execution invariants. They do not prove profitability, forecast accuracy, or that any news event will move a market in a particular direction.
+Deploy over the SAME GitHub Pages site/origin and do not clear site/browser data if you want the current learned state to remain available.
+This validates software behavior and migration invariants; it does not prove future market accuracy or profitability.

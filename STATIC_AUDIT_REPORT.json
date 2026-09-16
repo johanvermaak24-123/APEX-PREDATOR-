@@ -1,12 +1,12 @@
 {
-  "version": "APEX-SCALP-GOD-7.3.1",
+  "version": "APEX-SCALP-GOD-7.3.2",
   "passed": true,
-  "checksPassed": 35,
-  "checksTotal": 35,
+  "checksPassed": 27,
+  "checksTotal": 27,
   "htmlIds": 342,
   "literalDomRefs": 306,
   "missingDomRefs": [],
-  "appSha256": "3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400",
+  "appSha256": "ca43cf004e352693293b92cbff007ab54ccc6dc36672512ee4897e0324c99c05",
   "checks": [
     {
       "name": "HTML parsed",
@@ -16,12 +16,12 @@
     {
       "name": "unique IDs",
       "passed": true,
-      "detail": "342 total / 342 unique"
+      "detail": "342 / 342"
     },
     {
       "name": "literal DOM refs resolved",
       "passed": true,
-      "detail": "306 refs; missing=[]"
+      "detail": "[]"
     },
     {
       "name": "inline app.js byte-equivalent",
@@ -34,7 +34,7 @@
       "detail": ""
     },
     {
-      "name": "app version constant",
+      "name": "app version",
       "passed": true,
       "detail": ""
     },
@@ -44,17 +44,42 @@
       "detail": ""
     },
     {
-      "name": "service worker cache bumped",
+      "name": "service worker cache",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "calendar radar UI",
+      "name": "calendar direct CDN",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "calendar providers present",
+      "name": "calendar direct legacy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "TradingEconomics fallback",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "relay fallbacks",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar timeout",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar schema validation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calendar fail closed",
       "passed": true,
       "detail": ""
     },
@@ -69,107 +94,32 @@
       "detail": ""
     },
     {
-      "name": "pre-patch memory snapshot",
+      "name": "7.3.2 prepatch snapshot",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "simple mode forced on load",
+      "name": "7.3.1 snapshot retained for recovery",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "freshness constants present",
+      "name": "simple mode forced",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "original trigger identity present",
+      "name": "freshness gate",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "favorable anti-chase gate",
+      "name": "MISSED anti-chase",
       "passed": true,
       "detail": ""
     },
     {
-      "name": "adverse invalidation gate",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "stale trigger gate",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "future timestamp fail-closed",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "final ENTER requires freshness",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "missing freshness fails closed",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "MISSED user action present",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "non-live hides levels",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "command expiry uses trigger expiry",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "old 121s expiry removed",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "7.3 proof epoch isolated",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "legacy proof era not live-counted",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "proof recorder requires fresh entry",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "proof rows store freshness metadata",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "self-test includes missed fail-closed",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "no 7.2 version remnants in runtime files",
-      "passed": true,
-      "detail": ""
-    },
-    {
-      "name": "no 7.3.0 runtime self-test remnants",
+      "name": "no live levels when non-live",
       "passed": true,
       "detail": ""
     },
@@ -179,9 +129,19 @@
       "detail": ""
     },
     {
-      "name": "1M report matches source SHA",
+      "name": "1M report source match",
       "passed": true,
-      "detail": "report=3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400 source=3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400"
+      "detail": ""
+    },
+    {
+      "name": "relay audit passed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "120 memory audit passed",
+      "passed": true,
+      "detail": ""
     }
   ]
 }

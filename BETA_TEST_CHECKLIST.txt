@@ -1,43 +1,11 @@
-APEX SCALP GOD 7.3.1 — NEWS RISK RADAR
-BETA TEST CHECKLIST
-============================================================
+APEX SCALP GOD 7.3.2 — MOBILE CALENDAR RELAY TEST
 
-BEFORE DEPLOY
-[ ] Keep the current 7.3.0 ZIP as rollback copy.
-[ ] Do not clear Safari/Chrome site data or browser storage.
-[ ] Deploy 7.3.1 to the same site/origin currently holding the learned state.
-
-FIRST LOAD AFTER UPGRADE
-[ ] Confirm the app title/version shows 7.3.1.
-[ ] Confirm your existing learned/resolved count is still present.
-[ ] Confirm existing active signal/lock state has not unexpectedly reset.
-[ ] Confirm the News Risk Radar is visible in Simple Mode above the main execution command.
-[ ] If feed cannot load, confirm it says NEWS RISK UNKNOWN rather than NEWS CLEAR.
-
-NORMAL CALENDAR STATE
-[ ] With no relevant imminent event, confirm NEWS CLEAR or the appropriate upcoming/watch state.
-[ ] Confirm the next relevant event shows event title, currency and time when available.
-[ ] Switch symbols and confirm the relevant-currency filter changes appropriately.
-
-HIGH-IMPACT EVENT TEST
-[ ] 60–30 min before: radar warns/upcoming; normal scan logic remains available.
-[ ] 30–15 min before: radar escalates caution/watch.
-[ ] 15 min before through 15 min after: fresh ENTER must be blocked.
-[ ] During block, main instruction must clearly say WAIT — BIG NEWS / DO NOT ENTER.
-[ ] After protected window, confirm the engine only re-enters when normal setup/freshness gates pass.
-[ ] Confirm an already-open manual trade is NOT auto-closed merely because news appeared.
-
-LEARNING / JOURNAL
-[ ] Resolve several new post-upgrade signals.
-[ ] Confirm resolved-learning count continues increasing from the old count rather than restarting.
-[ ] Confirm old journal/history remains visible after closing and reopening the app.
-[ ] Confirm new records include calendar context where applicable.
-
-FAIL-CLOSED TEST
-[ ] Temporarily disable network or calendar access.
-[ ] Confirm the app does not claim NEWS CLEAR from an unknown feed state.
-[ ] Confirm fresh ENTER is blocked when calendar status is UNKNOWN.
-[ ] Restore network and confirm calendar state recovers without deleting learning.
-
-PASS CRITERION
-No beta failure should be accepted if it resets old learning, permits ENTER during a calendar BLOCK/UNKNOWN state, or displays NEWS CLEAR when the calendar feed is not verified.
+[ ] Deploy to the SAME GitHub Pages site/origin as 7.3/7.3.1.
+[ ] Do NOT clear browser/site data.
+[ ] Confirm app title/version shows 7.3.2.
+[ ] Confirm your existing resolved/learned count is still present.
+[ ] Select XAU/USD and SCAN.
+[ ] NEWS RISK RADAR should show a provider instead of OFFLINE when at least one direct/relay route works.
+[ ] If a high-impact USD event is within 15 minutes before/after, main command must WAIT.
+[ ] If every route genuinely fails, radar must remain UNKNOWN and block ENTER.
+[ ] Confirm normal ENTER freshness / MISSED anti-chase rules still behave as before.

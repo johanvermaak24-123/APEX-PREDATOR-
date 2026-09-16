@@ -1,9 +1,9 @@
 {
-  "version": "APEX-SCALP-GOD-7.3.1",
-  "sourceSha256": "3a3dd43967fda11d1105da6c47c39d17d457a8d358e034fd077feb4d89348400",
+  "version": "APEX-SCALP-GOD-7.3.2",
+  "sourceSha256": "ca43cf004e352693293b92cbff007ab54ccc6dc36672512ee4897e0324c99c05",
   "scenarios": 1000000,
   "seed": "0x7300cafe",
-  "elapsedMs": 3960,
+  "elapsedMs": 2475,
   "passed": true,
   "counts": {
     "live": 35936,
